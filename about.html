@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — BioSandbox</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-nav">
+    <a href="index.html" class="brand">
+      <span class="brand-icon" aria-hidden="true">🧬</span>
+      BioSandbox
+    </a>
+    <div class="track-toggle" role="group" aria-label="Audience level">
+      <button class="track-option" data-track="middle" type="button">Middle</button>
+      <button class="track-option" data-track="high" type="button">High</button>
+    </div>
+    <a href="index.html" class="nav-link">Home</a>
+  </header>
+
+  <article class="prose">
+    <h1>About BioSandbox</h1>
+    <p>BioSandbox is an interactive biology learning app for middle and high schoolers. Instead of reading static textbook diagrams, you explore — clicking organelles, stepping through DNA replication, matching base pairs, and testing yourself with quizzes.</p>
+
+    <h2>Why</h2>
+    <p>Biology is one of the most visual sciences, but most online resources are passive videos or dense text. BioSandbox closes that gap by letting you actually interact with the content — building real intuition for how cells, DNA, and proteins work.</p>
+
+    <h2>How it's built</h2>
+    <p>The whole app is a multi-page static website — just HTML, CSS, and JavaScript. Interactive diagrams use SVG with click and hover handlers. Quizzes are JS objects pulled into multiple-choice questions. Progress saves to your browser's <code>localStorage</code> — no account needed.</p>
+
+    <h2>For the Congressional App Challenge</h2>
+    <p>BioSandbox is being built as a 2026 Congressional App Challenge submission. The curriculum maps to AP Bio and NGSS standards.</p>
+  </article>
+
+  <footer class="site-footer">Built for Congressional App Challenge 2026</footer>
+
+  <script src="data/modules.js"></script>
+  <script src="js/progress.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

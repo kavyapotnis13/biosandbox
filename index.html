@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BioSandbox — Explore biology, hands-on</title>
+  <meta name="description" content="An interactive biology learning app for middle and high schoolers. Click organelles, step through DNA replication, decode proteins, and test your knowledge.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-nav">
+    <a href="index.html" class="brand">
+      <span class="brand-icon" aria-hidden="true">🧬</span>
+      BioSandbox
+    </a>
+    <div class="track-toggle" role="group" aria-label="Audience level">
+      <button class="track-option" data-track="middle" type="button">Middle</button>
+      <button class="track-option" data-track="high" type="button">High</button>
+    </div>
+    <a href="about.html" class="nav-link">About</a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Explore biology, hands-on</h1>
+      <p>Click. Drag. Learn. Quiz yourself.</p>
+      <a href="cell.html" class="cta-button">Start with the cell →</a>
+    </section>
+
+    <!-- The module grid is rendered by js/app.js from data/modules.js.
+         Add new units by editing data/modules.js — no HTML changes needed here. -->
+    <section class="module-grid" aria-label="Learning modules"></section>
+
+    <section class="progress-strip" aria-label="Your progress">
+      <p class="progress-summary">
+        <span id="mastered-count">0</span> of <span id="module-count">0</span> mastered ·
+        <span id="badges-count">0</span> badges earned ·
+        <span id="explored-pct">0</span>% explored
+      </p>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    Built for Congressional App Challenge 2026
+  </footer>
+
+  <script src="data/modules.js"></script>
+  <script src="js/progress.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

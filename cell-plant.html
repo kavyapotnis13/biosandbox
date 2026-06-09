@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plant Cell — BioSandbox</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-cell-type="plant">
+  <header class="site-nav">
+    <a href="index.html" class="brand">
+      <span class="brand-icon" aria-hidden="true">🧬</span>
+      BioSandbox
+    </a>
+    <div class="track-toggle" role="group" aria-label="Audience level">
+      <button class="track-option" data-track="middle" type="button">Middle</button>
+      <button class="track-option" data-track="high" type="button">High</button>
+    </div>
+    <a href="about.html" class="nav-link">About</a>
+  </header>
+
+  <nav class="breadcrumb"><a href="index.html">Home</a> / Cell Explorer / Plant</nav>
+
+  <main>
+    <div class="cell-layout">
+
+      <div class="diagram-pane">
+
+        <div class="cell-type-tabs" role="group" aria-label="Cell type">
+          <a href="cell.html" class="cell-tab">🐰 Animal cell</a>
+          <a href="cell-plant.html" class="cell-tab" aria-current="page">🌱 Plant cell</a>
+        </div>
+
+        <svg viewBox="0 0 600 500" class="cell-diagram"
+             xmlns="http://www.w3.org/2000/svg"
+             role="img"
+             aria-label="Plant cell diagram. Click any organelle to learn about it.">
+
+          <!-- Cytoplasm (rounded rect, green tint) -->
+          <g data-organelle="cytoplasm" class="organelle" tabindex="0" role="button" aria-label="Cytoplasm">
+            <title>Cytoplasm</title>
+            <rect x="48" y="55" width="504" height="395" rx="30" fill="#E8F5E9"/>
+          </g>
+
+          <!-- Cytoskeleton -->
+          <g data-organelle="cytoskeleton" class="organelle" tabindex="0" role="button" aria-label="Cytoskeleton">
+            <title>Cytoskeleton</title>
+            <line x1="80" y1="125" x2="520" y2="375" stroke="#A484D9" stroke-width="2" opacity="0.5" stroke-dasharray="6 5"/>
+            <line x1="80" y1="375" x2="520" y2="125" stroke="#A484D9" stroke-width="2" opacity="0.5" stroke-dasharray="6 5"/>
+            <line x1="55" y1="250" x2="545" y2="250" stroke="#A484D9" stroke-width="2" opacity="0.4" stroke-dasharray="6 5"/>
+            <line x1="300" y1="65" x2="300" y2="445" stroke="#A484D9" stroke-width="2" opacity="0.4" stroke-dasharray="6 5"/>
+            <line x1="80" y1="125" x2="520" y2="375" stroke="transparent" stroke-width="10"/>
+            <line x1="80" y1="375" x2="520" y2="125" stroke="transparent" stroke-width="10"/>
+          </g>
+
+          <!-- Cell membrane (rounded rect outline — suggests cell wall) -->
+          <g data-organelle="membrane" class="organelle" tabindex="0" role="button" aria-label="Cell Membrane">
+            <title>Cell Membrane</title>
+            <rect x="40" y="47" width="520" height="411" rx="36" fill="none" stroke="#2D2154" stroke-width="6"/>
+            <rect x="48" y="55" width="504" height="395" rx="30" fill="none" stroke="#F07C99" stroke-width="2.5" opacity="0.65"/>
+          </g>
+
+          <!-- ER -->
+          <g data-organelle="er" class="organelle" tabindex="0" role="button" aria-label="Endoplasmic Reticulum">
+            <title>Endoplasmic Reticulum</title>
+            <path d="M385 195 C430 195, 465 230, 460 275 C455 320, 410 335, 380 320 C360 313, 360 295, 380 285"
+                  fill="none" stroke="#A484D9" stroke-width="13" stroke-linecap="round"/>
+            <path d="M385 195 C430 195, 465 230, 460 275 C455 320, 410 335, 380 320 C360 313, 360 295, 380 285"
+                  fill="none" stroke="#2D2154" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M215 200 C175 210, 165 245, 195 270"
+                  fill="none" stroke="#A484D9" stroke-width="11" stroke-linecap="round"/>
+            <path d="M215 200 C175 210, 165 245, 195 270"
+                  fill="none" stroke="#2D2154" stroke-width="2.5" stroke-linecap="round"/>
+          </g>
+
+          <!-- Nucleus (center) -->
+          <g data-organelle="nucleus" class="organelle" tabindex="0" role="button" aria-label="Nucleus">
+            <title>Nucleus</title>
+            <ellipse cx="300" cy="250" rx="82" ry="70" fill="#A484D9" stroke="#2D2154" stroke-width="4"/>
+            <ellipse cx="280" cy="225" rx="27" ry="18" fill="#C7A8F0" opacity="0.65"/>
+            <circle cx="315" cy="265" r="18" fill="#7A5BB8" stroke="#2D2154" stroke-width="2.5"/>
+            <circle cx="310" cy="259" r="6" fill="#9B7FCE"/>
+          </g>
+
+          <!-- Golgi -->
+          <g data-organelle="golgi" class="organelle" tabindex="0" role="button" aria-label="Golgi Apparatus">
+            <title>Golgi Apparatus</title>
+            <path d="M240 365 Q300 350 360 370 L355 382 Q300 362 245 378 Z" fill="#FFB870" stroke="#2D2154" stroke-width="3" stroke-linejoin="round"/>
+            <path d="M245 387 Q305 372 365 392 L360 404 Q305 384 250 400 Z" fill="#FFD5A8" stroke="#2D2154" stroke-width="3" stroke-linejoin="round"/>
+            <path d="M250 409 Q310 394 370 414 L365 426 Q310 406 255 422 Z" fill="#FFB870" stroke="#2D2154" stroke-width="3" stroke-linejoin="round"/>
+            <circle cx="385" cy="395" r="5" fill="#FFD5A8" stroke="#2D2154" stroke-width="2"/>
+            <circle cx="395" cy="420" r="4" fill="#FFD5A8" stroke="#2D2154" stroke-width="2"/>
+          </g>
+
+          <!-- Mitochondria -->
+          <g data-organelle="mitochondria" class="organelle" tabindex="0" role="button" aria-label="Mitochondria">
+            <title>Mitochondria</title>
+            <g transform="rotate(20 150 150)">
+              <ellipse cx="150" cy="150" rx="55" ry="25" fill="#5FB890" stroke="#2D2154" stroke-width="4"/>
+              <path d="M105 150 Q115 163 125 150 Q135 137 145 150 Q155 163 165 150 Q175 137 185 150 Q195 163 200 155" stroke="#2D2154" stroke-width="2" fill="none"/>
+              <ellipse cx="127" cy="143" rx="11" ry="3" fill="#8FE0B0" opacity="0.7"/>
+            </g>
+            <g transform="rotate(-15 490 365)">
+              <ellipse cx="490" cy="365" rx="52" ry="24" fill="#5FB890" stroke="#2D2154" stroke-width="4"/>
+              <path d="M445 365 Q455 377 465 365 Q475 353 485 365 Q495 377 505 365 Q515 353 525 365 Q533 377 535 370" stroke="#2D2154" stroke-width="2" fill="none"/>
+              <ellipse cx="470" cy="360" rx="10" ry="2.5" fill="#8FE0B0" opacity="0.7"/>
+            </g>
+          </g>
+
+          <!-- Vacuole (plant: one large) -->
+          <g data-organelle="vacuoles" class="organelle" tabindex="0" role="button" aria-label="Vacuole">
+            <title>Vacuole</title>
+            <ellipse cx="105" cy="280" rx="50" ry="40" fill="#C9E4FF" stroke="#2D2154" stroke-width="3.5" opacity="0.9"/>
+            <ellipse cx="87" cy="263" rx="13" ry="9" fill="#E5F2FF" opacity="0.85"/>
+          </g>
+
+          <!-- Chloroplasts -->
+          <g data-organelle="chloroplasts" class="organelle" tabindex="0" role="button" aria-label="Chloroplasts">
+            <title>Chloroplasts</title>
+            <g transform="rotate(-12 95 105)">
+              <ellipse cx="95" cy="105" rx="38" ry="18" fill="#4CAF50" stroke="#2D2154" stroke-width="3"/>
+              <ellipse cx="77" cy="105" rx="5" ry="3.5" fill="#2E7D32"/>
+              <ellipse cx="90" cy="105" rx="5" ry="3.5" fill="#2E7D32"/>
+              <ellipse cx="103" cy="105" rx="5" ry="3.5" fill="#2E7D32"/>
+              <ellipse cx="116" cy="105" rx="5" ry="3.5" fill="#2E7D32"/>
+            </g>
+            <g transform="rotate(15 495 105)">
+              <ellipse cx="495" cy="105" rx="38" ry="18" fill="#4CAF50" stroke="#2D2154" stroke-width="3"/>
+              <ellipse cx="477" cy="105" rx="5" ry="3.5" fill="#2E7D32"/>
+              <ellipse cx="490" cy="105" rx="5" ry="3.5" fill="#2E7D32"/>
+              <ellipse cx="503" cy="105" rx="5" ry="3.5" fill="#2E7D32"/>
+              <ellipse cx="516" cy="105" rx="5" ry="3.5" fill="#2E7D32"/>
+            </g>
+            <g transform="rotate(18 170 425)">
+              <ellipse cx="170" cy="425" rx="36" ry="17" fill="#4CAF50" stroke="#2D2154" stroke-width="3"/>
+              <ellipse cx="154" cy="425" rx="5" ry="3.5" fill="#2E7D32"/>
+              <ellipse cx="166" cy="425" rx="5" ry="3.5" fill="#2E7D32"/>
+              <ellipse cx="178" cy="425" rx="5" ry="3.5" fill="#2E7D32"/>
+              <ellipse cx="190" cy="425" rx="5" ry="3.5" fill="#2E7D32"/>
+            </g>
+            <g transform="rotate(-10 465 425)">
+              <ellipse cx="465" cy="425" rx="36" ry="17" fill="#4CAF50" stroke="#2D2154" stroke-width="3"/>
+              <ellipse cx="449" cy="425" rx="5" ry="3.5" fill="#2E7D32"/>
+              <ellipse cx="461" cy="425" rx="5" ry="3.5" fill="#2E7D32"/>
+              <ellipse cx="473" cy="425" rx="5" ry="3.5" fill="#2E7D32"/>
+              <ellipse cx="485" cy="425" rx="5" ry="3.5" fill="#2E7D32"/>
+            </g>
+          </g>
+
+          <!-- Ribosomes -->
+          <g data-organelle="ribosomes" class="organelle" tabindex="0" role="button" aria-label="Ribosomes">
+            <title>Ribosomes</title>
+            <circle cx="400" cy="215" r="6.5" fill="#F07C99" stroke="#2D2154" stroke-width="2.5"/>
+            <circle cx="440" cy="245" r="6.5" fill="#F07C99" stroke="#2D2154" stroke-width="2.5"/>
+            <circle cx="455" cy="285" r="6.5" fill="#F07C99" stroke="#2D2154" stroke-width="2.5"/>
+            <circle cx="425" cy="320" r="6.5" fill="#F07C99" stroke="#2D2154" stroke-width="2.5"/>
+            <circle cx="200" cy="220" r="6.5" fill="#F07C99" stroke="#2D2154" stroke-width="2.5"/>
+            <circle cx="210" cy="290" r="6.5" fill="#F07C99" stroke="#2D2154" stroke-width="2.5"/>
+            <circle cx="265" cy="400" r="6.5" fill="#F07C99" stroke="#2D2154" stroke-width="2.5"/>
+            <circle cx="525" cy="285" r="6.5" fill="#F07C99" stroke="#2D2154" stroke-width="2.5"/>
+          </g>
+        </svg>
+      </div>
+
+      <aside class="info-pane">
+        <div class="info-panel" id="info-panel" aria-live="polite">
+          <div class="info-default">
+            <h2>Click a part of the cell</h2>
+            <p>Tap any organelle to learn what it does. Use the <strong>Middle</strong> / <strong>High</strong> toggle in the nav to switch between explanations, and the <strong>Animal</strong> / <strong>Plant</strong> tabs above to compare cell types.</p>
+            <button class="tour-button" id="tour-button" type="button">
+              <span aria-hidden="true">▷</span> Take a guided tour
+            </button>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+
+    <div class="cell-footer-bar">
+      <div class="explored-pill">
+        Explored <span id="explored-count">0</span>/<span id="explored-total">11</span> parts
+        <span class="progress-mini"><span class="progress-mini-fill" id="progress-mini-fill"></span></span>
+      </div>
+      <a href="quiz.html?module=cell" class="cta-button">Take the quiz →</a>
+    </div>
+  </main>
+
+  <footer class="site-footer">Built for Congressional App Challenge 2026</footer>
+
+  <script src="data/modules.js"></script>
+  <script src="data/cell-content.js"></script>
+  <script src="js/progress.js"></script>
+  <script src="js/cell.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

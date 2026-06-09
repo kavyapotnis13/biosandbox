@@ -1,0 +1,648 @@
+/* =========================================================
+   BioSandbox — design tokens (pastel theme)
+   Change anything here and it updates everywhere.
+   ========================================================= */
+:root {
+  /* Site background + surfaces */
+  --color-bg: #FFF8D6;              /* soft yellow */
+  --color-card: #FFFFFF;
+  --color-ink: #2D2154;             /* deep ink-purple — matches illustration outlines */
+  --color-muted: #7B6E8E;
+  --color-border: #F5E8B8;          /* warm yellow-tinted border */
+
+  /* Brand — pink */
+  --color-primary: #F07C99;         /* soft pink — site brand */
+  --color-primary-dark: #D85F7E;
+  --color-primary-tint: rgba(240, 124, 153, 0.12);
+
+  /* CTA accent — softer pink */
+  --color-accent: #FF9BB3;
+  --color-accent-dark: #F07C99;
+
+  /* Feedback */
+  --color-success: #5FB890;
+  --color-error: #E5849C;
+
+  /* Type */
+  --font-heading: 'Fraunces', Georgia, serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Card tint */
+  --color-card-tint: #E0EEFF;       /* soft sky blue for module + placeholder cards */
+
+  /* Form */
+  --radius: 18px;
+  --radius-sm: 10px;
+  --radius-pill: 999px;
+  --shadow-card: 0 2px 6px rgba(240, 124, 153, 0.10), 0 1px 2px rgba(45, 33, 84, 0.04);
+  --shadow-card-hover: 0 10px 24px rgba(240, 124, 153, 0.18), 0 2px 4px rgba(45, 33, 84, 0.05);
+  --transition: 200ms ease;
+
+  /* Layout */
+  --max-width: 1100px;
+}
+
+/* Reset */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--font-body);
+  background: var(--color-bg);
+  color: var(--color-ink);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+
+/* =========================================================
+   Top navigation (shared)
+   ========================================================= */
+.site-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  background: var(--color-card);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  text-decoration: none;
+}
+
+.brand-icon { font-size: 1.5rem; line-height: 1; }
+
+/* Audience track toggle — pill switch */
+.track-toggle {
+  display: inline-flex;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  padding: 3px;
+}
+
+.track-option {
+  padding: 0.4rem 1.1rem;
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-muted);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.track-option[aria-pressed="true"] {
+  background: var(--color-primary);
+  color: white;
+}
+
+.nav-link {
+  color: var(--color-muted);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.nav-link:hover { color: var(--color-ink); }
+
+/* =========================================================
+   Breadcrumb
+   ========================================================= */
+.breadcrumb {
+  max-width: var(--max-width);
+  margin: 1.25rem auto 0;
+  padding: 0 2rem;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+.breadcrumb a {
+  color: var(--color-muted);
+  text-decoration: none;
+}
+
+.breadcrumb a:hover { color: var(--color-ink); }
+
+/* =========================================================
+   Hero
+   ========================================================= */
+.hero {
+  text-align: center;
+  padding: 4rem 2rem 2.5rem;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.hero h1 {
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  font-weight: 600;
+  margin: 0 0 0.75rem;
+  line-height: 1.1;
+}
+
+.hero p {
+  font-size: 1.15rem;
+  color: var(--color-muted);
+  margin: 0 0 2rem;
+}
+
+/* =========================================================
+   Buttons
+   ========================================================= */
+.cta-button {
+  display: inline-block;
+  background: var(--color-primary);
+  color: white;
+  padding: 0.875rem 1.75rem;
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 1rem;
+  transition: var(--transition);
+  box-shadow: 0 2px 6px rgba(240, 124, 153, 0.4);
+  border: none;
+  cursor: pointer;
+}
+
+.cta-button:hover {
+  background: var(--color-primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(240, 124, 153, 0.45);
+}
+
+.cta-button.secondary {
+  background: var(--color-card);
+  color: var(--color-ink);
+  border: 1px solid var(--color-border);
+  box-shadow: none;
+}
+
+.cta-button.secondary:hover {
+  background: var(--color-primary-tint);
+}
+
+/* =========================================================
+   Module grid — auto-fills as more units are added
+   ========================================================= */
+.module-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.module-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-card-tint);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  text-decoration: none;
+  color: var(--color-ink);
+  transition: var(--transition);
+  box-shadow: var(--shadow-card);
+}
+
+.module-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+/* Thumbnail area — pastel theme background, illustrated icon */
+.module-thumbnail {
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--theme-bg, #EFE5FF);
+  padding: 1rem;
+  position: relative;
+}
+
+.module-thumbnail svg {
+  width: 100%;
+  max-width: 180px;
+  height: 100%;
+}
+
+.module-body {
+  padding: 1.25rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  flex-grow: 1;
+}
+
+.module-name {
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--color-ink);
+}
+
+.module-blurb {
+  color: var(--color-muted);
+  font-size: 0.95rem;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.module-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--color-border);
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+.status-pill {
+  font-size: 0.8rem;
+  color: var(--color-muted);
+  font-weight: 600;
+  padding: 0.2rem 0.7rem;
+  background: var(--color-card);
+  border-radius: var(--radius-pill);
+}
+
+.status-pill.in-progress {
+  color: var(--color-accent-dark);
+  background: rgba(255, 155, 179, 0.15);
+}
+
+.status-pill.mastered {
+  color: var(--color-success);
+  background: rgba(95, 184, 144, 0.15);
+}
+
+.module-cta {
+  color: var(--theme-accent, var(--color-primary));
+  font-weight: 700;
+}
+
+/* =========================================================
+   Progress strip (home page)
+   ========================================================= */
+.progress-strip {
+  max-width: var(--max-width);
+  margin: 1rem auto 3rem;
+  padding: 0 2rem;
+}
+
+.progress-summary {
+  font-size: 0.95rem;
+  color: var(--color-muted);
+  margin: 0 0 0.5rem;
+  font-weight: 600;
+}
+
+.progress-bar {
+  height: 8px;
+  background: var(--color-border);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+  transition: width 400ms ease;
+  width: 0;
+  border-radius: var(--radius-pill);
+}
+
+/* =========================================================
+   Footer
+   ========================================================= */
+.site-footer {
+  text-align: center;
+  padding: 2rem;
+  color: var(--color-muted);
+  font-size: 0.9rem;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-card);
+}
+
+.footer-link { color: var(--color-muted); }
+.footer-link:hover { color: var(--color-ink); }
+
+/* =========================================================
+   Module page placeholder (cell/dna/protein/quiz before built)
+   ========================================================= */
+.module-placeholder {
+  max-width: 640px;
+  margin: 4rem auto;
+  padding: 3rem 2rem;
+  background: var(--color-card-tint);
+  border-radius: var(--radius);
+  border: 1px dashed var(--color-border);
+  text-align: center;
+  box-shadow: var(--shadow-card);
+}
+
+.module-placeholder h1 {
+  font-size: 2rem;
+  margin: 0 0 0.5rem;
+}
+
+.module-placeholder .tagline {
+  color: var(--color-primary);
+  font-weight: 700;
+  margin: 0 0 1.5rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.module-placeholder p {
+  color: var(--color-muted);
+  margin: 0 0 1rem;
+}
+
+.module-placeholder .cta-button {
+  margin-top: 1.5rem;
+}
+
+/* =========================================================
+   About page (prose)
+   ========================================================= */
+.prose {
+  max-width: 680px;
+  margin: 3rem auto;
+  padding: 0 2rem;
+}
+
+.prose h1 {
+  font-size: 2.25rem;
+  margin: 0 0 1rem;
+}
+
+.prose h2 {
+  font-size: 1.4rem;
+  margin: 2rem 0 0.5rem;
+}
+
+.prose p {
+  margin: 0 0 1rem;
+  color: var(--color-ink);
+}
+
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--color-primary-tint);
+  padding: 0.1em 0.4em;
+  border-radius: var(--radius-sm);
+}
+
+/* =========================================================
+   Cell Explorer module
+   ========================================================= */
+.cell-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 1.5rem;
+  max-width: var(--max-width);
+  margin: 1.25rem auto;
+  padding: 0 2rem;
+}
+
+.diagram-pane {
+  background: var(--color-card-tint);
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+  padding: 1.25rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+  min-height: 480px;
+}
+
+/* Animal / plant tabs above the cell diagram */
+.cell-type-tabs {
+  display: inline-flex;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  padding: 3px;
+  box-shadow: var(--shadow-card);
+}
+
+.cell-tab {
+  display: inline-block;
+  padding: 0.45rem 1.1rem;
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-muted);
+  text-decoration: none;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.cell-tab[aria-current="page"] {
+  background: var(--color-primary);
+  color: white;
+}
+
+.cell-tab:hover:not([aria-current="page"]) {
+  color: var(--color-ink);
+}
+
+.cell-diagram {
+  width: 100%;
+  height: auto;
+  max-width: 620px;
+  display: block;
+}
+
+.info-pane {
+  align-self: start;
+  position: sticky;
+  top: 1rem;
+}
+
+.info-panel {
+  background: var(--color-card);
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+  padding: 1.5rem 1.5rem 1.25rem;
+  box-shadow: var(--shadow-card);
+}
+
+.info-default h2,
+.info-content .organelle-name {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  margin: 0 0 0.5rem;
+  color: var(--color-ink);
+}
+
+.info-default p,
+.organelle-function {
+  color: var(--color-ink);
+  margin: 0 0 1rem;
+  line-height: 1.6;
+}
+
+.did-you-know {
+  background: rgba(240, 124, 153, 0.08);
+  border-left: 3px solid var(--color-primary);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  margin: 0 0 1rem;
+}
+
+.dyk-label {
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  margin: 0 0 0.25rem;
+  font-size: 0.9rem;
+}
+
+.dyk-text {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--color-ink);
+  line-height: 1.55;
+}
+
+.tour-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  font: inherit;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--color-primary-dark);
+  background: var(--color-primary-tint);
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.tour-button:hover {
+  background: var(--color-primary);
+  color: white;
+}
+
+/* Organelle SVG interactivity */
+.organelle {
+  cursor: pointer;
+  transition: filter 180ms ease;
+  outline: none;
+}
+
+.organelle:hover,
+.organelle:focus-visible {
+  filter: drop-shadow(0 0 6px rgba(240, 124, 153, 0.65));
+}
+
+.organelle.selected {
+  filter: drop-shadow(0 0 10px rgba(240, 124, 153, 0.9));
+}
+
+/* Sticky footer bar (explored count + quiz CTA) */
+.cell-footer-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: var(--max-width);
+  margin: 0 auto 3rem;
+  padding: 0.875rem 1.5rem;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+}
+
+.explored-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--color-ink);
+}
+
+.progress-mini {
+  display: inline-block;
+  width: 100px;
+  height: 6px;
+  background: var(--color-border);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.progress-mini-fill {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+  border-radius: var(--radius-pill);
+  width: 0;
+  transition: width 400ms ease;
+}
+
+/* =========================================================
+   Mobile
+   ========================================================= */
+@media (max-width: 768px) {
+  .site-nav {
+    padding: 0.75rem 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .track-toggle { order: 3; flex-basis: 100%; justify-content: center; }
+  .hero { padding: 2.5rem 1rem 2rem; }
+  .module-grid {
+    padding: 1rem;
+    gap: 1rem;
+  }
+  .progress-strip { padding: 0 1rem; }
+  .breadcrumb { padding: 0 1rem; }
+
+  /* Cell explorer: stack panes on mobile */
+  .cell-layout {
+    grid-template-columns: 1fr;
+    padding: 0 1rem;
+  }
+  .info-pane { position: static; }
+  .diagram-pane { min-height: 320px; padding: 1rem; }
+  .cell-footer-bar {
+    margin: 0 1rem 2rem;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .explored-pill { justify-content: center; }
+}
