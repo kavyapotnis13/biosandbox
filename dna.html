@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body data-module="dna">
   <header class="site-nav">
     <a href="index.html" class="brand">
       <span class="brand-icon" aria-hidden="true">🧬</span>
@@ -19,25 +19,186 @@
       <button class="track-option" data-track="middle" type="button">Middle</button>
       <button class="track-option" data-track="high" type="button">High</button>
     </div>
-    <a href="about.html" class="nav-link">About</a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link nav-link-icon" aria-label="Home" title="Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12 L12 3 L22 12 L20 12 L20 21 L4 21 L4 12 Z" fill="#F07C99" stroke="#2D2154" stroke-width="1.8" stroke-linejoin="round"/><rect x="10" y="14" width="4" height="7" fill="#2D2154" rx="0.5"/></svg></a>
+      <a href="about.html" class="nav-link">About</a>
+    </div>
   </header>
 
   <nav class="breadcrumb"><a href="index.html">Home</a> / DNA &amp; Replication</nav>
 
   <main>
-    <section class="module-placeholder">
-      <h1>DNA &amp; Replication</h1>
-      <p class="tagline">Coming in Phase 4</p>
-      <p>This module will step through DNA replication — watching the helix unwind, helicase break the hydrogen bonds, and polymerase build new strands.</p>
-      <p>It includes a click-to-match base-pair mini-game (A↔T, C↔G) at the end.</p>
-      <a href="index.html" class="cta-button secondary">← Back to home</a>
-    </section>
+    <div class="dna-layout">
+
+      <div class="helix-pane">
+        <svg viewBox="0 0 600 640" class="dna-helix"
+             xmlns="http://www.w3.org/2000/svg"
+             role="img"
+             aria-label="DNA double helix diagram with eight base pairs.">
+
+          <!-- Sugar-phosphate backbones: two sinusoidal ribbons, 180° out of phase.
+               Period 140px, amplitude 60px, spanning y=40 to y=600 (8 half-turns). -->
+          <path class="backbone backbone-a"
+                d="M 300 40 Q 420 75 300 110 Q 180 145 300 180 Q 420 215 300 250 Q 180 285 300 320 Q 420 355 300 390 Q 180 425 300 460 Q 420 495 300 530 Q 180 565 300 600"/>
+          <path class="backbone backbone-b"
+                d="M 300 40 Q 180 75 300 110 Q 420 145 300 180 Q 180 215 300 250 Q 420 285 300 320 Q 180 355 300 390 Q 420 425 300 460 Q 180 495 300 530 Q 420 565 300 600"/>
+
+          <!-- Base pairs ("rungs"). Each rung spans x=240–360 split at x=300. -->
+          <!-- Rung 1 — y=75 — strand A (right) = A, strand B (left) = T -->
+          <g class="rung" data-pair="AT">
+            <rect class="base base-t" x="240" y="65" width="60" height="20" rx="4"/>
+            <rect class="base base-a" x="300" y="65" width="60" height="20" rx="4"/>
+            <text class="base-label" x="270" y="75">T</text>
+            <text class="base-label" x="330" y="75">A</text>
+          </g>
+          <!-- Rung 2 — y=145 — strand A (left) = C, strand B (right) = G -->
+          <g class="rung" data-pair="CG">
+            <rect class="base base-c" x="240" y="135" width="60" height="20" rx="4"/>
+            <rect class="base base-g" x="300" y="135" width="60" height="20" rx="4"/>
+            <text class="base-label" x="270" y="145">C</text>
+            <text class="base-label" x="330" y="145">G</text>
+          </g>
+          <!-- Rung 3 — y=215 — strand A (right) = T, strand B (left) = A -->
+          <g class="rung" data-pair="AT">
+            <rect class="base base-a" x="240" y="205" width="60" height="20" rx="4"/>
+            <rect class="base base-t" x="300" y="205" width="60" height="20" rx="4"/>
+            <text class="base-label" x="270" y="215">A</text>
+            <text class="base-label" x="330" y="215">T</text>
+          </g>
+          <!-- Rung 4 — y=285 — strand A (left) = G, strand B (right) = C -->
+          <g class="rung" data-pair="CG">
+            <rect class="base base-g" x="240" y="275" width="60" height="20" rx="4"/>
+            <rect class="base base-c" x="300" y="275" width="60" height="20" rx="4"/>
+            <text class="base-label" x="270" y="285">G</text>
+            <text class="base-label" x="330" y="285">C</text>
+          </g>
+          <!-- Rung 5 — y=355 — strand A (right) = A, strand B (left) = T -->
+          <g class="rung" data-pair="AT">
+            <rect class="base base-t" x="240" y="345" width="60" height="20" rx="4"/>
+            <rect class="base base-a" x="300" y="345" width="60" height="20" rx="4"/>
+            <text class="base-label" x="270" y="355">T</text>
+            <text class="base-label" x="330" y="355">A</text>
+          </g>
+          <!-- Rung 6 — y=425 — strand A (left) = C, strand B (right) = G -->
+          <g class="rung" data-pair="CG">
+            <rect class="base base-c" x="240" y="415" width="60" height="20" rx="4"/>
+            <rect class="base base-g" x="300" y="415" width="60" height="20" rx="4"/>
+            <text class="base-label" x="270" y="425">C</text>
+            <text class="base-label" x="330" y="425">G</text>
+          </g>
+          <!-- Rung 7 — y=495 — strand A (right) = T, strand B (left) = A -->
+          <g class="rung" data-pair="AT">
+            <rect class="base base-a" x="240" y="485" width="60" height="20" rx="4"/>
+            <rect class="base base-t" x="300" y="485" width="60" height="20" rx="4"/>
+            <text class="base-label" x="270" y="495">A</text>
+            <text class="base-label" x="330" y="495">T</text>
+          </g>
+          <!-- Rung 8 — y=565 — strand A (left) = G, strand B (right) = C -->
+          <g class="rung" data-pair="CG">
+            <rect class="base base-g" x="240" y="555" width="60" height="20" rx="4"/>
+            <rect class="base base-c" x="300" y="555" width="60" height="20" rx="4"/>
+            <text class="base-label" x="270" y="565">G</text>
+            <text class="base-label" x="330" y="565">C</text>
+          </g>
+
+          <!-- Helicase enzyme: amorphous purple blob, shows during unzipping. -->
+          <g class="enzyme helicase-blob" aria-hidden="true">
+            <path d="M 220 10 C 200 -10, 250 -15, 300 -8 C 350 -15, 400 -10, 380 10 C 410 30, 395 55, 360 58 C 340 75, 260 75, 240 58 C 205 55, 190 30, 220 10 Z"
+                  fill="#8E6BC9" stroke="#2D2154" stroke-width="3"/>
+            <circle cx="260" cy="20" r="7" fill="#6A4AAE"/>
+            <circle cx="335" cy="25" r="6" fill="#6A4AAE"/>
+            <circle cx="295" cy="42" r="5" fill="#C7A8F0" opacity="0.7"/>
+            <text class="enzyme-label" x="300" y="95">helicase</text>
+          </g>
+
+          <!-- DNA polymerase: gray clamp-like blob, shows while synthesizing new strands. -->
+          <g class="enzyme polymerase-blob" aria-hidden="true">
+            <path d="M 215 270 C 200 250, 250 240, 300 245 C 350 240, 400 250, 385 270 C 410 295, 390 320, 355 318 C 335 332, 265 332, 245 318 C 210 320, 190 295, 215 270 Z"
+                  fill="#9AA8B5" stroke="#2D2154" stroke-width="3"/>
+            <circle cx="255" cy="280" r="6" fill="#6E7C8A"/>
+            <circle cx="345" cy="285" r="5" fill="#6E7C8A"/>
+            <circle cx="300" cy="300" r="4" fill="#C9D5E0" opacity="0.7"/>
+            <text class="enzyme-label polymerase-label" x="455" y="285">polymerase</text>
+          </g>
+
+          <!-- Okazaki fragment markers: 4 dashed brackets enclosing the right-
+               side new bases in pairs. Visible only during phase 4 (Step 5 —
+               lagging strand in fragments). At Step 6 the .replicated class
+               cross-fades the working view to the daughter helices, taking
+               these brackets with it. -->
+          <g class="okazaki-markers" aria-hidden="true">
+            <rect class="okazaki-frag" x="305" y="58"  width="70" height="104" rx="6"/>
+            <rect class="okazaki-frag" x="305" y="198" width="70" height="104" rx="6"/>
+            <rect class="okazaki-frag" x="305" y="338" width="70" height="104" rx="6"/>
+            <rect class="okazaki-frag" x="305" y="478" width="70" height="104" rx="6"/>
+            <text class="okazaki-label" x="400" y="75">Okazaki</text>
+            <text class="okazaki-label" x="400" y="90">fragments</text>
+          </g>
+        </svg>
+      </div>
+
+      <aside class="info-pane">
+        <div class="info-panel flashcard-panel">
+          <div class="flashcard-deck" id="flashcard-deck" aria-live="polite">
+            <div class="flashcard-section-label" id="section-label">DNA basics</div>
+            <div class="flashcard flashcard-enter">
+              <h2 class="flashcard-title"></h2>
+              <div class="flashcard-body"></div>
+            </div>
+            <div class="flashcard-nav">
+              <button class="flashcard-btn" id="card-prev" type="button" aria-label="Previous card">←</button>
+              <span class="flashcard-counter" id="card-counter">1 / 5</span>
+              <button class="flashcard-btn" id="card-next" type="button" aria-label="Next card">→</button>
+            </div>
+          </div>
+
+          <!-- Click-to-match base-pair mini-game (hidden until the game section is active). -->
+          <div class="game-area" id="game-area" hidden>
+            <div class="flashcard-section-label">Base-pair matching</div>
+            <h2 class="game-title">Pair every base</h2>
+            <p class="game-instructions">Click the matching base for each slot. Remember: <strong>A↔T</strong>, <strong>C↔G</strong>.</p>
+
+            <div class="game-strand">
+              <span class="strand-label">Template strand</span>
+              <div class="strand-bases" id="template-bases"></div>
+            </div>
+
+            <div class="game-strand">
+              <span class="strand-label">Your matching strand</span>
+              <div class="strand-bases" id="answer-bases"></div>
+            </div>
+
+            <div class="base-pool" id="base-pool">
+              <button class="base-tile base-a" type="button" data-base="A">A</button>
+              <button class="base-tile base-t" type="button" data-base="T">T</button>
+              <button class="base-tile base-c" type="button" data-base="C">C</button>
+              <button class="base-tile base-g" type="button" data-base="G">G</button>
+            </div>
+
+            <div class="game-status" id="game-status" aria-live="polite"></div>
+          </div>
+
+          <button class="cta-button" id="section-cta" type="button">Watch replication ▶</button>
+          <button class="link-button" id="section-game-btn" type="button">Try the matching game →</button>
+          <button class="link-button" id="section-back" type="button" hidden>← Back to the basics</button>
+        </div>
+      </aside>
+
+    </div>
+
+    <div class="cell-footer-bar">
+      <span class="explored-pill">Ready to test what you've learned?</span>
+      <a href="quiz.html?module=dna" class="cta-button">Take the quiz →</a>
+    </div>
   </main>
 
   <footer class="site-footer">Built for Congressional App Challenge 2026</footer>
 
   <script src="data/modules.js"></script>
+  <script src="data/ap-standards.js"></script>
+  <script src="data/dna-content.js"></script>
   <script src="js/progress.js"></script>
+  <script src="js/dna.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

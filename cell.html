@@ -19,7 +19,10 @@
       <button class="track-option" data-track="middle" type="button">Middle</button>
       <button class="track-option" data-track="high" type="button">High</button>
     </div>
-    <a href="about.html" class="nav-link">About</a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link nav-link-icon" aria-label="Home" title="Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12 L12 3 L22 12 L20 12 L20 21 L4 21 L4 12 Z" fill="#F07C99" stroke="#2D2154" stroke-width="1.8" stroke-linejoin="round"/><rect x="10" y="14" width="4" height="7" fill="#2D2154" rx="0.5"/></svg></a>
+      <a href="about.html" class="nav-link">About</a>
+    </div>
   </header>
 
   <nav class="breadcrumb"><a href="index.html">Home</a> / Cell Explorer / Animal</nav>
@@ -40,106 +43,230 @@
              aria-label="Animal cell diagram. Click any organelle to learn about it.">
 
           <!-- Cytoplasm -->
-          <g data-organelle="cytoplasm" class="organelle" tabindex="0" role="button" aria-label="Cytoplasm">
+          <g data-organelle="cytoplasm" class="organelle" data-arrow-x="380" data-arrow-y="130" tabindex="0" role="button" aria-label="Cytoplasm">
             <title>Cytoplasm</title>
             <ellipse cx="300" cy="250" rx="265" ry="205" fill="#FFE0E8"/>
           </g>
 
           <!-- Cytoskeleton -->
-          <g data-organelle="cytoskeleton" class="organelle" tabindex="0" role="button" aria-label="Cytoskeleton">
+          <g data-organelle="cytoskeleton" class="organelle" data-arrow-x="540" data-arrow-y="250" tabindex="0" role="button" aria-label="Cytoskeleton">
             <title>Cytoskeleton</title>
-            <line x1="80" y1="125" x2="520" y2="375" stroke="#A484D9" stroke-width="2" opacity="0.5" stroke-dasharray="6 5"/>
-            <line x1="80" y1="375" x2="520" y2="125" stroke="#A484D9" stroke-width="2" opacity="0.5" stroke-dasharray="6 5"/>
-            <line x1="55" y1="250" x2="545" y2="250" stroke="#A484D9" stroke-width="2" opacity="0.4" stroke-dasharray="6 5"/>
-            <line x1="300" y1="60" x2="300" y2="440" stroke="#A484D9" stroke-width="2" opacity="0.4" stroke-dasharray="6 5"/>
-            <line x1="80" y1="125" x2="520" y2="375" stroke="transparent" stroke-width="10"/>
-            <line x1="80" y1="375" x2="520" y2="125" stroke="transparent" stroke-width="10"/>
+            <!-- microtubules: thicker, dashed -->
+            <line x1="80" y1="130" x2="520" y2="370" stroke="#1A9CB0" stroke-width="2.5" opacity="0.6" stroke-dasharray="8 4"/>
+            <line x1="80" y1="370" x2="520" y2="130" stroke="#1A9CB0" stroke-width="2.5" opacity="0.6" stroke-dasharray="8 4"/>
+            <line x1="60" y1="250" x2="540" y2="250" stroke="#1A9CB0" stroke-width="2.3" opacity="0.5" stroke-dasharray="8 4"/>
+            <line x1="300" y1="60" x2="300" y2="440" stroke="#1A9CB0" stroke-width="2.3" opacity="0.5" stroke-dasharray="8 4"/>
+            <!-- microfilaments: thin solid -->
+            <line x1="140" y1="180" x2="270" y2="170" stroke="#0E6478" stroke-width="1.4" opacity="0.5"/>
+            <line x1="330" y1="170" x2="450" y2="200" stroke="#0E6478" stroke-width="1.4" opacity="0.5"/>
+            <line x1="100" y1="320" x2="220" y2="380" stroke="#0E6478" stroke-width="1.4" opacity="0.5"/>
+            <line x1="370" y1="350" x2="490" y2="320" stroke="#0E6478" stroke-width="1.4" opacity="0.5"/>
+            <line x1="200" y1="105" x2="165" y2="200" stroke="#0E6478" stroke-width="1.3" opacity="0.45"/>
+            <line x1="430" y1="105" x2="475" y2="195" stroke="#0E6478" stroke-width="1.3" opacity="0.45"/>
+            <!-- short curved actin segments -->
+            <path d="M120 240 Q140 235 165 245" stroke="#0E6478" stroke-width="1.3" fill="none" opacity="0.45"/>
+            <path d="M460 270 Q480 275 500 268" stroke="#0E6478" stroke-width="1.3" fill="none" opacity="0.45"/>
+            <!-- hit areas -->
+            <line x1="80" y1="130" x2="520" y2="370" stroke="transparent" stroke-width="10"/>
+            <line x1="80" y1="370" x2="520" y2="130" stroke="transparent" stroke-width="10"/>
           </g>
 
-          <!-- Cell membrane (ellipse) -->
-          <g data-organelle="membrane" class="organelle" tabindex="0" role="button" aria-label="Cell Membrane">
+          <!-- Cell membrane (phospholipid bilayer) -->
+          <g data-organelle="membrane" class="organelle" data-arrow-x="109" data-arrow-y="102" tabindex="0" role="button" aria-label="Cell Membrane">
             <title>Cell Membrane</title>
-            <ellipse cx="300" cy="250" rx="270" ry="210" fill="none" stroke="#2D2154" stroke-width="6"/>
-            <ellipse cx="300" cy="250" rx="263" ry="203" fill="none" stroke="#F07C99" stroke-width="2.5" opacity="0.65"/>
+            <!-- outer bilayer face -->
+            <ellipse cx="300" cy="250" rx="270" ry="210" fill="none" stroke="#2D2154" stroke-width="5"/>
+            <!-- inner bilayer face (dashed = phospholipid heads) -->
+            <ellipse cx="300" cy="250" rx="262" ry="202" fill="none" stroke="#F07C99" stroke-width="3" stroke-dasharray="3 4" opacity="0.85"/>
+            <!-- embedded membrane proteins (channels) -->
+            <g fill="#7DB8C9" stroke="#2D2154" stroke-width="1.8">
+              <circle cx="300" cy="40" r="5"/>
+              <circle cx="491" cy="102" r="5"/>
+              <circle cx="568" cy="250" r="5"/>
+              <circle cx="491" cy="398" r="5"/>
+              <circle cx="300" cy="460" r="5"/>
+              <circle cx="109" cy="398" r="5"/>
+              <circle cx="32" cy="250" r="5"/>
+              <circle cx="109" cy="102" r="5"/>
+            </g>
+            <g fill="#3D5A6A">
+              <circle cx="300" cy="40" r="1.5"/>
+              <circle cx="491" cy="102" r="1.5"/>
+              <circle cx="568" cy="250" r="1.5"/>
+              <circle cx="491" cy="398" r="1.5"/>
+              <circle cx="300" cy="460" r="1.5"/>
+              <circle cx="109" cy="398" r="1.5"/>
+              <circle cx="32" cy="250" r="1.5"/>
+              <circle cx="109" cy="102" r="1.5"/>
+            </g>
           </g>
 
           <!-- ER -->
-          <g data-organelle="er" class="organelle" tabindex="0" role="button" aria-label="Endoplasmic Reticulum">
+          <g data-organelle="er" class="organelle" data-arrow-x="425" data-arrow-y="260" tabindex="0" role="button" aria-label="Endoplasmic Reticulum">
             <title>Endoplasmic Reticulum</title>
-            <path d="M385 195 C430 195, 465 230, 460 275 C455 320, 410 335, 380 320 C360 313, 360 295, 380 285"
+            <!-- right ER: accordion-folded ribbon -->
+            <path d="M388 192 Q430 188 458 215 Q470 240 418 252 Q398 257 405 278 Q418 300 462 302 Q472 322 428 328"
                   fill="none" stroke="#A484D9" stroke-width="13" stroke-linecap="round"/>
-            <path d="M385 195 C430 195, 465 230, 460 275 C455 320, 410 335, 380 320 C360 313, 360 295, 380 285"
+            <path d="M388 192 Q430 188 458 215 Q470 240 418 252 Q398 257 405 278 Q418 300 462 302 Q472 322 428 328"
                   fill="none" stroke="#2D2154" stroke-width="2.5" stroke-linecap="round"/>
-            <path d="M215 200 C175 210, 165 245, 195 270"
+            <!-- rough ER bumps (attached ribosomes) on outer curves -->
+            <circle cx="455" cy="207" r="3" fill="#F07C99" stroke="#2D2154" stroke-width="1.2"/>
+            <circle cx="468" cy="227" r="3" fill="#F07C99" stroke="#2D2154" stroke-width="1.2"/>
+            <circle cx="408" cy="263" r="3" fill="#F07C99" stroke="#2D2154" stroke-width="1.2"/>
+            <circle cx="465" cy="295" r="3" fill="#F07C99" stroke="#2D2154" stroke-width="1.2"/>
+            <circle cx="473" cy="315" r="3" fill="#F07C99" stroke="#2D2154" stroke-width="1.2"/>
+
+            <!-- left ER: smaller folded ribbon -->
+            <path d="M218 200 Q170 210 168 238 Q175 260 213 262 Q232 268 215 288 Q197 300 178 290"
                   fill="none" stroke="#A484D9" stroke-width="11" stroke-linecap="round"/>
-            <path d="M215 200 C175 210, 165 245, 195 270"
+            <path d="M218 200 Q170 210 168 238 Q175 260 213 262 Q232 268 215 288 Q197 300 178 290"
                   fill="none" stroke="#2D2154" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="172" cy="220" r="2.8" fill="#F07C99" stroke="#2D2154" stroke-width="1.2"/>
+            <circle cx="160" cy="245" r="2.8" fill="#F07C99" stroke="#2D2154" stroke-width="1.2"/>
+            <circle cx="225" cy="275" r="2.8" fill="#F07C99" stroke="#2D2154" stroke-width="1.2"/>
           </g>
 
           <!-- Nucleus (center) -->
           <g data-organelle="nucleus" class="organelle" tabindex="0" role="button" aria-label="Nucleus">
             <title>Nucleus</title>
-            <ellipse cx="300" cy="250" rx="82" ry="70" fill="#A484D9" stroke="#2D2154" stroke-width="4"/>
-            <ellipse cx="280" cy="225" rx="27" ry="18" fill="#C7A8F0" opacity="0.65"/>
-            <circle cx="315" cy="265" r="18" fill="#7A5BB8" stroke="#2D2154" stroke-width="2.5"/>
-            <circle cx="310" cy="259" r="6" fill="#9B7FCE"/>
+            <!-- outer nuclear envelope -->
+            <ellipse cx="300" cy="250" rx="86" ry="74" fill="#8E6BC9" stroke="#2D2154" stroke-width="3"/>
+            <!-- inner nuclear membrane -->
+            <ellipse cx="300" cy="250" rx="80" ry="68" fill="#A484D9" stroke="#2D2154" stroke-width="2.5"/>
+            <!-- highlight -->
+            <ellipse cx="278" cy="222" rx="28" ry="18" fill="#C7A8F0" opacity="0.6"/>
+            <!-- chromatin strands -->
+            <path d="M245 260 Q265 245 285 262 T325 258 T355 270" fill="none" stroke="#4A2D8C" stroke-width="2" opacity="0.55" stroke-linecap="round"/>
+            <path d="M250 285 Q275 275 295 290 T340 285" fill="none" stroke="#4A2D8C" stroke-width="1.8" opacity="0.5" stroke-linecap="round"/>
+            <path d="M260 225 Q280 215 305 228 T345 225" fill="none" stroke="#4A2D8C" stroke-width="1.8" opacity="0.45" stroke-linecap="round"/>
+            <!-- nucleolus -->
+            <circle cx="320" cy="268" r="19" fill="#6A4AAE" stroke="#2D2154" stroke-width="2.5"/>
+            <circle cx="314" cy="261" r="6" fill="#9B7FCE" opacity="0.85"/>
+            <!-- nuclear pores around envelope -->
+            <circle cx="300" cy="176" r="3.2" fill="#FFF8E8" stroke="#2D2154" stroke-width="1.5"/>
+            <circle cx="350" cy="186" r="3" fill="#FFF8E8" stroke="#2D2154" stroke-width="1.5"/>
+            <circle cx="252" cy="186" r="3" fill="#FFF8E8" stroke="#2D2154" stroke-width="1.5"/>
+            <circle cx="220" cy="218" r="3" fill="#FFF8E8" stroke="#2D2154" stroke-width="1.5"/>
+            <circle cx="214" cy="250" r="3.2" fill="#FFF8E8" stroke="#2D2154" stroke-width="1.5"/>
+            <circle cx="220" cy="285" r="3" fill="#FFF8E8" stroke="#2D2154" stroke-width="1.5"/>
+            <circle cx="248" cy="313" r="3" fill="#FFF8E8" stroke="#2D2154" stroke-width="1.5"/>
+            <circle cx="300" cy="324" r="3.2" fill="#FFF8E8" stroke="#2D2154" stroke-width="1.5"/>
+            <circle cx="352" cy="314" r="3" fill="#FFF8E8" stroke="#2D2154" stroke-width="1.5"/>
+            <circle cx="380" cy="285" r="3" fill="#FFF8E8" stroke="#2D2154" stroke-width="1.5"/>
+            <circle cx="386" cy="250" r="3.2" fill="#FFF8E8" stroke="#2D2154" stroke-width="1.5"/>
+            <circle cx="380" cy="218" r="3" fill="#FFF8E8" stroke="#2D2154" stroke-width="1.5"/>
           </g>
 
           <!-- Golgi -->
           <g data-organelle="golgi" class="organelle" tabindex="0" role="button" aria-label="Golgi Apparatus">
             <title>Golgi Apparatus</title>
-            <path d="M240 365 Q300 350 360 370 L355 382 Q300 362 245 378 Z" fill="#FFB870" stroke="#2D2154" stroke-width="3" stroke-linejoin="round"/>
-            <path d="M245 387 Q305 372 365 392 L360 404 Q305 384 250 400 Z" fill="#FFD5A8" stroke="#2D2154" stroke-width="3" stroke-linejoin="round"/>
-            <path d="M250 409 Q310 394 370 414 L365 426 Q310 406 255 422 Z" fill="#FFB870" stroke="#2D2154" stroke-width="3" stroke-linejoin="round"/>
-            <circle cx="385" cy="395" r="5" fill="#FFD5A8" stroke="#2D2154" stroke-width="2"/>
-            <circle cx="395" cy="420" r="4" fill="#FFD5A8" stroke="#2D2154" stroke-width="2"/>
+            <!-- cis face (top, receives from ER) -->
+            <path d="M255 348 Q305 335 355 350 L352 360 Q305 345 258 358 Z" fill="#FFE0B8" stroke="#2D2154" stroke-width="2.5" stroke-linejoin="round"/>
+            <!-- medial cisternae (color-graded cis → trans) -->
+            <path d="M248 365 Q305 350 362 367 L358 379 Q305 360 252 376 Z" fill="#FFD5A8" stroke="#2D2154" stroke-width="2.5" stroke-linejoin="round"/>
+            <path d="M243 385 Q305 370 367 388 L362 400 Q305 382 247 396 Z" fill="#FFB870" stroke="#2D2154" stroke-width="2.5" stroke-linejoin="round"/>
+            <path d="M238 405 Q305 390 372 409 L367 421 Q305 402 242 418 Z" fill="#FFA56A" stroke="#2D2154" stroke-width="2.5" stroke-linejoin="round"/>
+            <!-- trans face (bottom, ships vesicles out) -->
+            <path d="M232 425 Q305 410 378 430 L372 442 Q305 422 237 440 Z" fill="#FF8F4D" stroke="#2D2154" stroke-width="2.5" stroke-linejoin="round"/>
+            <!-- incoming vesicle (from ER) near cis face -->
+            <circle cx="378" cy="336" r="5" fill="#FFE0B8" stroke="#2D2154" stroke-width="2"/>
+            <circle cx="378" cy="336" r="1.5" fill="#FFF1D9"/>
+            <!-- transport vesicles budding from trans face -->
+            <circle cx="385" cy="408" r="3.5" fill="#FFB870" stroke="#2D2154" stroke-width="2"/>
+            <circle cx="385" cy="448" r="6" fill="#FF8F4D" stroke="#2D2154" stroke-width="2"/>
+            <circle cx="220" cy="442" r="5" fill="#FFA56A" stroke="#2D2154" stroke-width="2"/>
+            <circle cx="208" cy="425" r="4" fill="#FF8F4D" stroke="#2D2154" stroke-width="2"/>
           </g>
 
           <!-- Mitochondria -->
-          <g data-organelle="mitochondria" class="organelle" tabindex="0" role="button" aria-label="Mitochondria">
+          <g data-organelle="mitochondria" class="organelle" data-arrow-x="150" data-arrow-y="150" tabindex="0" role="button" aria-label="Mitochondria">
             <title>Mitochondria</title>
             <g transform="rotate(20 150 150)">
-              <ellipse cx="150" cy="150" rx="55" ry="25" fill="#5FB890" stroke="#2D2154" stroke-width="4"/>
-              <path d="M105 150 Q115 163 125 150 Q135 137 145 150 Q155 163 165 150 Q175 137 185 150 Q195 163 200 155" stroke="#2D2154" stroke-width="2" fill="none"/>
-              <ellipse cx="127" cy="143" rx="11" ry="3" fill="#8FE0B0" opacity="0.7"/>
+              <!-- outer membrane -->
+              <ellipse cx="150" cy="150" rx="58" ry="27" fill="#4FA882" stroke="#2D2154" stroke-width="3"/>
+              <!-- inner membrane / matrix -->
+              <ellipse cx="150" cy="150" rx="50" ry="20" fill="#7BCBA0" stroke="#2D2154" stroke-width="1.8"/>
+              <!-- cristae: finger-folds of inner membrane -->
+              <path d="M110 131 Q110 160 118 160 Q126 160 126 131
+                       M132 169 Q132 140 140 140 Q148 140 148 169
+                       M154 131 Q154 160 162 160 Q170 160 170 131
+                       M176 169 Q176 140 184 140 Q190 140 190 165"
+                    fill="none" stroke="#2D2154" stroke-width="2" stroke-linecap="round"/>
+              <!-- highlight -->
+              <ellipse cx="130" cy="142" rx="14" ry="3" fill="#B8EBCD" opacity="0.85"/>
+              <!-- mitochondrial DNA loop -->
+              <ellipse cx="143" cy="156" rx="4" ry="2.5" fill="none" stroke="#2D2154" stroke-width="1.2" opacity="0.7"/>
             </g>
             <g transform="rotate(-15 490 365)">
-              <ellipse cx="490" cy="365" rx="52" ry="24" fill="#5FB890" stroke="#2D2154" stroke-width="4"/>
-              <path d="M445 365 Q455 377 465 365 Q475 353 485 365 Q495 377 505 365 Q515 353 525 365 Q533 377 535 370" stroke="#2D2154" stroke-width="2" fill="none"/>
-              <ellipse cx="470" cy="360" rx="10" ry="2.5" fill="#8FE0B0" opacity="0.7"/>
+              <!-- outer membrane -->
+              <ellipse cx="490" cy="365" rx="55" ry="26" fill="#4FA882" stroke="#2D2154" stroke-width="3"/>
+              <!-- inner membrane / matrix -->
+              <ellipse cx="490" cy="365" rx="47" ry="19" fill="#7BCBA0" stroke="#2D2154" stroke-width="1.8"/>
+              <!-- cristae -->
+              <path d="M453 346 Q453 378 461 378 Q469 378 469 346
+                       M475 384 Q475 354 482 354 Q490 354 490 384
+                       M496 346 Q496 378 504 378 Q512 378 512 346
+                       M517 384 Q517 354 524 354 Q530 354 530 380"
+                    fill="none" stroke="#2D2154" stroke-width="2" stroke-linecap="round"/>
+              <!-- highlight -->
+              <ellipse cx="472" cy="358" rx="13" ry="2.5" fill="#B8EBCD" opacity="0.85"/>
             </g>
           </g>
 
           <!-- Lysosomes -->
-          <g data-organelle="lysosomes" class="organelle" tabindex="0" role="button" aria-label="Lysosomes">
+          <g data-organelle="lysosomes" class="organelle" data-arrow-x="160" data-arrow-y="335" tabindex="0" role="button" aria-label="Lysosomes">
             <title>Lysosomes</title>
+            <!-- big lysosome (lower left) -->
             <circle cx="160" cy="335" r="20" fill="#FFD86A" stroke="#2D2154" stroke-width="4"/>
             <circle cx="153" cy="328" r="6" fill="#FFF1B8" opacity="0.85"/>
+            <!-- digestive enzyme specks inside -->
+            <circle cx="166" cy="338" r="1.8" fill="#B8860B"/>
+            <circle cx="156" cy="344" r="1.6" fill="#B8860B"/>
+            <circle cx="170" cy="328" r="1.4" fill="#B8860B"/>
+            <circle cx="162" cy="332" r="1.3" fill="#B8860B"/>
+            <!-- small lysosome (upper right) -->
             <circle cx="515" cy="170" r="15" fill="#FFD86A" stroke="#2D2154" stroke-width="4"/>
             <circle cx="510" cy="166" r="4" fill="#FFF1B8" opacity="0.85"/>
+            <circle cx="518" cy="174" r="1.4" fill="#B8860B"/>
+            <circle cx="513" cy="178" r="1.3" fill="#B8860B"/>
+            <circle cx="520" cy="167" r="1.2" fill="#B8860B"/>
           </g>
 
           <!-- Vacuoles (animal: 3 small) -->
-          <g data-organelle="vacuoles" class="organelle" tabindex="0" role="button" aria-label="Vacuoles">
+          <g data-organelle="vacuoles" class="organelle" data-arrow-x="100" data-arrow-y="245" tabindex="0" role="button" aria-label="Vacuoles">
             <title>Vacuoles</title>
+            <!-- vacuole 1: upper right -->
             <circle cx="440" cy="135" r="14" fill="#C9E4FF" stroke="#2D2154" stroke-width="3"/>
-            <circle cx="436" cy="131" r="4" fill="#E5F2FF" opacity="0.8"/>
+            <circle cx="436" cy="131" r="4.5" fill="#FFFFFF" opacity="0.85"/>
+            <circle cx="446" cy="142" r="1.6" fill="#FFFFFF" opacity="0.9"/>
+            <!-- vacuole 2: left side -->
             <circle cx="100" cy="245" r="15" fill="#C9E4FF" stroke="#2D2154" stroke-width="3"/>
-            <circle cx="97" cy="240" r="4" fill="#E5F2FF" opacity="0.8"/>
+            <circle cx="96" cy="240" r="5" fill="#FFFFFF" opacity="0.85"/>
+            <circle cx="105" cy="250" r="1.8" fill="#FFFFFF" opacity="0.9"/>
+            <!-- vacuole 3: lower right -->
             <circle cx="420" cy="425" r="12" fill="#C9E4FF" stroke="#2D2154" stroke-width="3"/>
+            <circle cx="416" cy="421" r="3.5" fill="#FFFFFF" opacity="0.85"/>
           </g>
 
-          <!-- Ribosomes -->
-          <g data-organelle="ribosomes" class="organelle" tabindex="0" role="button" aria-label="Ribosomes">
+          <!-- Tour arrow: positioned by JS during guided tour. Tip is at (0,0), pointing down. -->
+          <g id="tour-arrow" class="tour-arrow" aria-hidden="true" style="display:none">
+            <line x1="0" y1="-72" x2="0" y2="-16" stroke="#E63946" stroke-width="6" stroke-linecap="round"/>
+            <polygon points="0,0 -13,-22 13,-22" fill="#E63946" stroke="#2D2154" stroke-width="2" stroke-linejoin="round"/>
+          </g>
+
+          <!-- Ribosomes (each = large + small subunit) -->
+          <g data-organelle="ribosomes" class="organelle" data-arrow-x="525" data-arrow-y="287" tabindex="0" role="button" aria-label="Ribosomes">
             <title>Ribosomes</title>
-            <circle cx="400" cy="215" r="6.5" fill="#F07C99" stroke="#2D2154" stroke-width="2.5"/>
-            <circle cx="440" cy="245" r="6.5" fill="#F07C99" stroke="#2D2154" stroke-width="2.5"/>
-            <circle cx="455" cy="285" r="6.5" fill="#F07C99" stroke="#2D2154" stroke-width="2.5"/>
-            <circle cx="425" cy="320" r="6.5" fill="#F07C99" stroke="#2D2154" stroke-width="2.5"/>
-            <circle cx="200" cy="220" r="6.5" fill="#F07C99" stroke="#2D2154" stroke-width="2.5"/>
-            <circle cx="210" cy="290" r="6.5" fill="#F07C99" stroke="#2D2154" stroke-width="2.5"/>
-            <circle cx="225" cy="400" r="6.5" fill="#F07C99" stroke="#2D2154" stroke-width="2.5"/>
-            <circle cx="525" cy="285" r="6.5" fill="#F07C99" stroke="#2D2154" stroke-width="2.5"/>
+            <g stroke="#2D2154" stroke-width="1.5">
+              <circle cx="400" cy="217" r="5" fill="#F07C99"/><circle cx="400" cy="211" r="3.2" fill="#FFA8BC"/>
+              <circle cx="440" cy="247" r="5" fill="#F07C99"/><circle cx="440" cy="241" r="3.2" fill="#FFA8BC"/>
+              <circle cx="455" cy="287" r="5" fill="#F07C99"/><circle cx="455" cy="281" r="3.2" fill="#FFA8BC"/>
+              <circle cx="425" cy="322" r="5" fill="#F07C99"/><circle cx="425" cy="316" r="3.2" fill="#FFA8BC"/>
+              <circle cx="200" cy="222" r="5" fill="#F07C99"/><circle cx="200" cy="216" r="3.2" fill="#FFA8BC"/>
+              <circle cx="210" cy="292" r="5" fill="#F07C99"/><circle cx="210" cy="286" r="3.2" fill="#FFA8BC"/>
+              <circle cx="225" cy="402" r="5" fill="#F07C99"/><circle cx="225" cy="396" r="3.2" fill="#FFA8BC"/>
+              <circle cx="525" cy="287" r="5" fill="#F07C99"/><circle cx="525" cy="281" r="3.2" fill="#FFA8BC"/>
+            </g>
           </g>
         </svg>
       </div>
@@ -160,7 +287,7 @@
 
     <div class="cell-footer-bar">
       <div class="explored-pill">
-        Explored <span id="explored-count">0</span>/<span id="explored-total">11</span> parts
+        Explored <span id="explored-count">0</span>/<span id="explored-total">12</span> parts
         <span class="progress-mini"><span class="progress-mini-fill" id="progress-mini-fill"></span></span>
       </div>
       <a href="quiz.html?module=cell" class="cta-button">Take the quiz →</a>
@@ -170,6 +297,7 @@
   <footer class="site-footer">Built for Congressional App Challenge 2026</footer>
 
   <script src="data/modules.js"></script>
+  <script src="data/ap-standards.js"></script>
   <script src="data/cell-content.js"></script>
   <script src="js/progress.js"></script>
   <script src="js/cell.js"></script>

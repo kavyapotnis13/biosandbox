@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Photosynthesis — BioSandbox</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-module="photosynthesis">
+  <header class="site-nav">
+    <a href="index.html" class="brand">
+      <span class="brand-icon" aria-hidden="true">🧬</span>
+      BioSandbox
+    </a>
+    <div class="track-toggle" role="group" aria-label="Audience level">
+      <button class="track-option" data-track="middle" type="button">Middle</button>
+      <button class="track-option" data-track="high" type="button">High</button>
+    </div>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link nav-link-icon" aria-label="Home" title="Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12 L12 3 L22 12 L20 12 L20 21 L4 21 L4 12 Z" fill="#F07C99" stroke="#2D2154" stroke-width="1.8" stroke-linejoin="round"/><rect x="10" y="14" width="4" height="7" fill="#2D2154" rx="0.5"/></svg></a>
+      <a href="about.html" class="nav-link">About</a>
+    </div>
+  </header>
+
+  <nav class="breadcrumb"><a href="index.html">Home</a> / Photosynthesis</nav>
+
+  <main>
+    <div class="photo-layout">
+
+      <div class="scene-pane">
+        <svg viewBox="0 0 600 640" class="photo-svg photo-svg-lr"
+             xmlns="http://www.w3.org/2000/svg"
+             role="img"
+             aria-label="Photosynthesis diagram: a chloroplast with thylakoid stacks, showing light reactions and the Calvin cycle.">
+
+          <!-- Sun + rays in the top-left corner. Always present; pulses
+               more strongly during the light reactions. -->
+          <g class="sun" aria-hidden="true">
+            <circle cx="70" cy="80" r="32" class="sun-body"/>
+            <g class="sun-rays">
+              <line x1="70" y1="20" x2="70" y2="40"/>
+              <line x1="20" y1="80" x2="40" y2="80"/>
+              <line x1="30" y1="35" x2="46" y2="51"/>
+              <line x1="110" y1="35" x2="94" y2="51"/>
+              <line x1="30" y1="125" x2="46" y2="109"/>
+            </g>
+          </g>
+
+          <!-- Light rays pouring from the sun into the chloroplast. -->
+          <g class="light-rays" aria-hidden="true">
+            <line x1="100" y1="105" x2="180" y2="240"/>
+            <line x1="120" y1="100" x2="220" y2="240"/>
+            <line x1="140" y1="100" x2="260" y2="240"/>
+            <line x1="160" y1="105" x2="320" y2="240"/>
+          </g>
+
+          <!-- Chloroplast shell: outer + inner membrane. -->
+          <ellipse cx="300" cy="370" rx="260" ry="170" class="chloroplast-outer"/>
+          <ellipse cx="300" cy="370" rx="248" ry="158" class="chloroplast-inner"/>
+          <text class="scene-label" x="300" y="195">Chloroplast</text>
+
+          <!-- Two grana (thylakoid stacks) inside the stroma. Each is a
+               column of 5 flattened ellipses (thylakoid discs). -->
+          <g class="granum granum-left">
+            <ellipse cx="210" cy="320" rx="55" ry="11"/>
+            <ellipse cx="210" cy="345" rx="55" ry="11"/>
+            <ellipse cx="210" cy="370" rx="55" ry="11"/>
+            <ellipse cx="210" cy="395" rx="55" ry="11"/>
+            <ellipse cx="210" cy="420" rx="55" ry="11"/>
+          </g>
+          <g class="granum granum-right">
+            <ellipse cx="390" cy="320" rx="55" ry="11"/>
+            <ellipse cx="390" cy="345" rx="55" ry="11"/>
+            <ellipse cx="390" cy="370" rx="55" ry="11"/>
+            <ellipse cx="390" cy="395" rx="55" ry="11"/>
+            <ellipse cx="390" cy="420" rx="55" ry="11"/>
+          </g>
+
+          <!-- Stroma lamella connecting the two grana. -->
+          <line x1="265" y1="370" x2="335" y2="370" class="stroma-lamella"/>
+
+          <!-- ============================================================
+               Light-reaction elements — visible only in .photo-svg-lr
+               ============================================================ -->
+
+          <!-- Water molecules entering and being split. -->
+          <g class="lr-water">
+            <g class="molecule water-1">
+              <circle cx="0" cy="0" r="13" class="mol-body water"/>
+              <text class="mol-label" x="0" y="3">H₂O</text>
+            </g>
+            <g class="molecule water-2">
+              <circle cx="0" cy="0" r="13" class="mol-body water"/>
+              <text class="mol-label" x="0" y="3">H₂O</text>
+            </g>
+          </g>
+
+          <!-- Oxygen leaving — bubbles drifting up and out. -->
+          <g class="lr-oxygen">
+            <g class="molecule oxygen-1">
+              <circle cx="0" cy="0" r="14" class="mol-body oxygen"/>
+              <text class="mol-label" x="0" y="3">O₂</text>
+            </g>
+            <g class="molecule oxygen-2">
+              <circle cx="0" cy="0" r="14" class="mol-body oxygen"/>
+              <text class="mol-label" x="0" y="3">O₂</text>
+            </g>
+          </g>
+
+          <!-- ATP + NADPH outputs drifting into the stroma. -->
+          <g class="lr-products">
+            <g class="molecule atp-1">
+              <rect x="-22" y="-13" width="44" height="26" rx="6" class="mol-body atp"/>
+              <text class="mol-label" x="0" y="3">ATP</text>
+            </g>
+            <g class="molecule nadph-1">
+              <rect x="-28" y="-13" width="56" height="26" rx="6" class="mol-body nadph"/>
+              <text class="mol-label" x="0" y="3">NADPH</text>
+            </g>
+          </g>
+
+          <!-- ============================================================
+               Calvin-cycle elements — visible only in .photo-svg-cc
+               ============================================================ -->
+
+          <!-- CO₂ molecules entering the chloroplast from outside. -->
+          <g class="cc-co2">
+            <g class="molecule co2-1">
+              <circle cx="0" cy="0" r="14" class="mol-body co2"/>
+              <text class="mol-label" x="0" y="3">CO₂</text>
+            </g>
+            <g class="molecule co2-2">
+              <circle cx="0" cy="0" r="14" class="mol-body co2"/>
+              <text class="mol-label" x="0" y="3">CO₂</text>
+            </g>
+            <g class="molecule co2-3">
+              <circle cx="0" cy="0" r="14" class="mol-body co2"/>
+              <text class="mol-label" x="0" y="3">CO₂</text>
+            </g>
+          </g>
+
+          <!-- Calvin cycle ring with labels for RuBP, 3-PGA, G3P. -->
+          <g class="cc-cycle" aria-hidden="true">
+            <circle cx="300" cy="475" r="42" class="cycle-ring"/>
+            <text class="cycle-label cycle-rubp"  x="300" y="436">RuBP</text>
+            <text class="cycle-label cycle-pga"   x="354" y="478">3-PGA</text>
+            <text class="cycle-label cycle-g3p"   x="246" y="478">G3P</text>
+            <text class="cycle-center" x="300" y="478">Calvin</text>
+            <text class="cycle-center" x="300" y="491">cycle</text>
+          </g>
+
+          <!-- Glucose leaving the chloroplast at the end of the cycle. -->
+          <g class="cc-glucose">
+            <g class="molecule glucose-1">
+              <polygon points="0,-18 16,-9 16,9 0,18 -16,9 -16,-9" class="mol-body glucose"/>
+              <text class="mol-label" x="0" y="3">C₆H₁₂O₆</text>
+            </g>
+          </g>
+
+          <!-- Phase label, updated by JS. -->
+          <text class="phase-label" id="photo-phase-label" x="300" y="615">Overview</text>
+        </svg>
+      </div>
+
+      <aside class="info-pane">
+        <div class="info-panel flashcard-panel">
+          <div class="flashcard-deck" id="flashcard-deck" aria-live="polite">
+            <div class="flashcard-section-label" id="section-label">Photosynthesis basics</div>
+            <div class="flashcard flashcard-enter">
+              <h2 class="flashcard-title"></h2>
+              <div class="flashcard-body"></div>
+            </div>
+            <div class="flashcard-nav">
+              <button class="flashcard-btn" id="card-prev" type="button" aria-label="Previous card">←</button>
+              <span class="flashcard-counter" id="card-counter">1 / 5</span>
+              <button class="flashcard-btn" id="card-next" type="button" aria-label="Next card">→</button>
+            </div>
+          </div>
+
+          <button class="cta-button" id="section-cta" type="button" hidden>↻ Restart</button>
+          <button class="link-button" id="section-back" type="button" hidden>← Back to the basics</button>
+        </div>
+      </aside>
+
+    </div>
+
+    <div class="cell-footer-bar">
+      <span class="explored-pill">Ready to test what you've learned?</span>
+      <a href="quiz.html?module=photosynthesis" class="cta-button">Take the quiz →</a>
+    </div>
+  </main>
+
+  <footer class="site-footer">Built for Congressional App Challenge 2026</footer>
+
+  <script src="data/modules.js"></script>
+  <script src="data/ap-standards.js"></script>
+  <script src="data/photosynthesis-content.js"></script>
+  <script src="js/progress.js"></script>
+  <script src="js/photosynthesis.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -63,6 +63,9 @@ function selectOrganelle(key) {
   if (target) target.classList.add('selected');
   currentSelected = key;
 
+  if (tourActive && target) showTourArrow(target);
+  else hideTourArrow();
+
   const track = getTrack();
   const funcText = content.function[track] || content.function.high;
 
@@ -136,7 +139,55 @@ function stopTour() {
     clearTimeout(tourTimer);
     tourTimer = null;
   }
+  hideTourArrow();
   if (currentSelected) selectOrganelle(currentSelected);
+}
+
+/* ---------- Tour arrow positioning ---------- */
+
+function showTourArrow(organelleEl) {
+  const arrow = document.getElementById('tour-arrow');
+  if (!arrow) return;
+
+  // Explicit target wins (set via data-arrow-x / data-arrow-y on multi-instance
+  // organelles like ribosomes, mitochondria — their bbox center lands in empty space).
+  const ax = organelleEl.dataset.arrowX;
+  const ay = organelleEl.dataset.arrowY;
+  let cx, topY, bottomY;
+
+  if (ax !== undefined && ay !== undefined) {
+    cx = parseFloat(ax);
+    const targetY = parseFloat(ay);
+    topY = targetY - 18;  // arrow tip lands just above the target point
+    bottomY = targetY + 18;
+  } else {
+    let bbox;
+    try { bbox = organelleEl.getBBox(); } catch (e) { arrow.style.display = 'none'; return; }
+    // Skip arrow for full-cell layers (cytoplasm, membrane, cytoskeleton, cell wall) —
+    // their bbox covers the whole diagram, so an arrow has nowhere meaningful to point.
+    if (bbox.width > 360 || bbox.height > 300) {
+      arrow.style.display = 'none';
+      return;
+    }
+    cx = bbox.x + bbox.width / 2;
+    topY = bbox.y - 4;
+    bottomY = bbox.y + bbox.height + 4;
+  }
+
+  // Prefer arrow above. If there's no room near the top edge, flip below and rotate 180°.
+  const roomAbove = topY > 75;
+  const y = roomAbove ? topY : bottomY;
+  const rotation = roomAbove ? 0 : 180;
+
+  arrow.setAttribute('transform', `translate(${cx} ${y}) rotate(${rotation})`);
+  arrow.style.display = '';
+  // Move arrow to end of SVG so it renders on top of every organelle.
+  arrow.parentNode.appendChild(arrow);
+}
+
+function hideTourArrow() {
+  const arrow = document.getElementById('tour-arrow');
+  if (arrow) arrow.style.display = 'none';
 }
 
 /* ---------- React to audience track changes ---------- */

@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body data-module="protein">
   <header class="site-nav">
     <a href="index.html" class="brand">
       <span class="brand-icon" aria-hidden="true">🧬</span>
@@ -19,25 +19,286 @@
       <button class="track-option" data-track="middle" type="button">Middle</button>
       <button class="track-option" data-track="high" type="button">High</button>
     </div>
-    <a href="about.html" class="nav-link">About</a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link nav-link-icon" aria-label="Home" title="Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12 L12 3 L22 12 L20 12 L20 21 L4 21 L4 12 Z" fill="#F07C99" stroke="#2D2154" stroke-width="1.8" stroke-linejoin="round"/><rect x="10" y="14" width="4" height="7" fill="#2D2154" rx="0.5"/></svg></a>
+      <a href="about.html" class="nav-link">About</a>
+    </div>
   </header>
 
   <nav class="breadcrumb"><a href="index.html">Home</a> / Protein Synthesis</nav>
 
   <main>
-    <section class="module-placeholder">
-      <h1>Protein Synthesis</h1>
-      <p class="tagline">Coming in Phase 4</p>
-      <p>This module walks through both stages: transcription (DNA → mRNA in the nucleus) and translation (mRNA → protein at the ribosome).</p>
-      <p>It includes a codon decoder mini-game — pick the right amino acid for each codon and watch your protein chain grow.</p>
-      <a href="index.html" class="cta-button secondary">← Back to home</a>
-    </section>
+    <div class="protein-layout">
+
+      <div class="scene-pane">
+        <svg viewBox="0 0 600 640" class="protein-svg protein-svg-tx"
+             xmlns="http://www.w3.org/2000/svg"
+             role="img"
+             aria-label="Protein synthesis diagram showing transcription in the nucleus and translation at the ribosome.">
+
+          <!-- ============================================================
+               TRANSCRIPTION SCENE — visible by default. Fades out when
+               the SVG gets the .protein-svg-tl class.
+               ============================================================ -->
+          <g class="scene scene-tx">
+
+            <!-- Nuclear membrane (rounded rect). A "pore" is just a gap in the
+                 lower edge, drawn as a separate light segment so it looks like
+                 a doorway. -->
+            <rect class="nucleus-bg" x="60" y="40" width="480" height="430" rx="60" ry="60"/>
+            <rect class="nucleus-border" x="60" y="40" width="480" height="430" rx="60" ry="60"/>
+            <text class="scene-label" x="300" y="72">Nucleus</text>
+            <text class="scene-sublabel" x="300" y="500">Cytoplasm</text>
+
+            <!-- Nuclear pore: a soft notch at the bottom of the nucleus -->
+            <g class="nuclear-pore" aria-hidden="true">
+              <rect x="265" y="455" width="70" height="30" rx="14" ry="14"/>
+              <text class="pore-label" x="300" y="445">nuclear pore</text>
+            </g>
+
+            <!-- DNA double strand inside the nucleus. Two horizontal-ish ribbons
+                 with short vertical rungs between them. -->
+            <g class="tx-dna">
+              <!-- Coding strand (top) -->
+              <path class="tx-strand tx-strand-top"
+                    d="M 100 195 Q 200 180 300 195 T 500 195"/>
+              <!-- Template strand (bottom) — read by RNA polymerase -->
+              <path class="tx-strand tx-strand-bot"
+                    d="M 100 245 Q 200 260 300 245 T 500 245"/>
+              <!-- Rungs (base pairs) -->
+              <g class="tx-rungs">
+                <line x1="130" y1="200" x2="130" y2="242"/>
+                <line x1="170" y1="194" x2="170" y2="248"/>
+                <line x1="210" y1="190" x2="210" y2="252"/>
+                <line x1="250" y1="190" x2="250" y2="252"/>
+                <line x1="290" y1="192" x2="290" y2="250"/>
+                <line x1="330" y1="195" x2="330" y2="247"/>
+                <line x1="370" y1="198" x2="370" y2="244"/>
+                <line x1="410" y1="200" x2="410" y2="242"/>
+                <line x1="450" y1="200" x2="450" y2="242"/>
+                <line x1="490" y1="198" x2="490" y2="244"/>
+              </g>
+              <!-- Promoter marker: a small flag at the start of the gene -->
+              <g class="promoter">
+                <rect x="92" y="170" width="22" height="14" rx="2"/>
+                <text class="promoter-label" x="103" y="165">promoter</text>
+              </g>
+            </g>
+
+            <!-- RNA polymerase blob. Translates left-to-right by phase via CSS. -->
+            <g class="rna-polymerase">
+              <ellipse cx="0" cy="220" rx="44" ry="40" class="poly-body"/>
+              <circle cx="-12" cy="208" r="6" class="poly-spot"/>
+              <circle cx="14" cy="214" r="5" class="poly-spot"/>
+              <circle cx="0" cy="234" r="4" class="poly-spot"/>
+              <text class="enzyme-label" x="0" y="280">RNA polymerase</text>
+            </g>
+
+            <!-- Growing mRNA strand inside the nucleus. Each base is a small
+                 colored tile that fades in as transcription progresses. The
+                 group's position follows the polymerase via JS. -->
+            <g class="tx-mrna" aria-hidden="true">
+              <rect class="mrna-base mrna-base-1" x="-150" y="320" width="22" height="22" rx="3"/>
+              <text class="mrna-label mrna-label-1" x="-139" y="331">A</text>
+              <rect class="mrna-base mrna-base-2" x="-124" y="320" width="22" height="22" rx="3"/>
+              <text class="mrna-label mrna-label-2" x="-113" y="331">U</text>
+              <rect class="mrna-base mrna-base-3" x="-98"  y="320" width="22" height="22" rx="3"/>
+              <text class="mrna-label mrna-label-3" x="-87"  y="331">G</text>
+              <rect class="mrna-base mrna-base-4" x="-72"  y="320" width="22" height="22" rx="3"/>
+              <text class="mrna-label mrna-label-4" x="-61"  y="331">C</text>
+              <rect class="mrna-base mrna-base-5" x="-46"  y="320" width="22" height="22" rx="3"/>
+              <text class="mrna-label mrna-label-5" x="-35"  y="331">U</text>
+              <rect class="mrna-base mrna-base-6" x="-20"  y="320" width="22" height="22" rx="3"/>
+              <text class="mrna-label mrna-label-6" x="-9"   y="331">A</text>
+            </g>
+
+            <!-- Escaped mRNA — a wavy strand that appears in the cytoplasm in
+                 the final step, having slipped through the nuclear pore. -->
+            <g class="tx-escaped-mrna" aria-hidden="true">
+              <path class="escaped-strand"
+                    d="M 300 500 Q 330 530 360 545 T 460 580"/>
+              <circle class="escaped-bead" cx="300" cy="500" r="8"/>
+              <circle class="escaped-bead" cx="330" cy="525" r="8"/>
+              <circle class="escaped-bead" cx="360" cy="545" r="8"/>
+              <circle class="escaped-bead" cx="390" cy="560" r="8"/>
+              <circle class="escaped-bead" cx="420" cy="572" r="8"/>
+              <circle class="escaped-bead" cx="460" cy="580" r="8"/>
+              <text class="escaped-label" x="460" y="610">mRNA → cytoplasm</text>
+            </g>
+          </g>
+
+          <!-- ============================================================
+               TRANSLATION SCENE — hidden by default. Fades in when the
+               SVG gets the .protein-svg-tl class.
+               ============================================================ -->
+          <g class="scene scene-tl">
+            <text class="scene-label" x="300" y="55">At the ribosome</text>
+
+            <!-- mRNA strand: 6 codons laid out left-to-right. -->
+            <g class="tl-mrna">
+              <!-- Backbone -->
+              <line class="mrna-backbone" x1="40" y1="380" x2="560" y2="380"/>
+              <!-- Codon tiles, each with 3 bases. -->
+              <g class="codon codon-1" data-codon="AUG">
+                <rect x="50"  y="358" width="74" height="44" rx="6"/>
+                <text x="63"  y="386">A</text>
+                <text x="87"  y="386">U</text>
+                <text x="111" y="386">G</text>
+                <text class="codon-tag" x="87" y="420">start</text>
+              </g>
+              <g class="codon codon-2" data-codon="GCU">
+                <rect x="134" y="358" width="74" height="44" rx="6"/>
+                <text x="147" y="386">G</text>
+                <text x="171" y="386">C</text>
+                <text x="195" y="386">U</text>
+              </g>
+              <g class="codon codon-3" data-codon="UAU">
+                <rect x="218" y="358" width="74" height="44" rx="6"/>
+                <text x="231" y="386">U</text>
+                <text x="255" y="386">A</text>
+                <text x="279" y="386">U</text>
+              </g>
+              <g class="codon codon-4" data-codon="GGG">
+                <rect x="302" y="358" width="74" height="44" rx="6"/>
+                <text x="315" y="386">G</text>
+                <text x="339" y="386">G</text>
+                <text x="363" y="386">G</text>
+              </g>
+              <g class="codon codon-5" data-codon="AAA">
+                <rect x="386" y="358" width="74" height="44" rx="6"/>
+                <text x="399" y="386">A</text>
+                <text x="423" y="386">A</text>
+                <text x="447" y="386">A</text>
+              </g>
+              <g class="codon codon-6" data-codon="UAA">
+                <rect x="470" y="358" width="74" height="44" rx="6"/>
+                <text x="483" y="386">U</text>
+                <text x="507" y="386">A</text>
+                <text x="531" y="386">A</text>
+                <text class="codon-tag" x="507" y="420">stop</text>
+              </g>
+            </g>
+
+            <!-- Ribosome: two grey blobs (large + small subunit) sitting on
+                 the mRNA, around the active codon. The whole group is shifted
+                 right by JS as translation progresses. -->
+            <g class="ribosome">
+              <!-- Large subunit -->
+              <path class="ribosome-large"
+                    d="M 30 270 C 30 220, 180 200, 180 270 C 180 320, 30 320, 30 270 Z"/>
+              <!-- Small subunit (sits below, hugging the mRNA) -->
+              <path class="ribosome-small"
+                    d="M 40 390 C 40 350, 170 350, 170 400 C 160 425, 50 425, 40 390 Z"/>
+              <!-- Active site indicator on the codon being read -->
+              <rect class="ribosome-window" x="50" y="356" width="74" height="48" rx="6"/>
+              <text class="ribosome-label" x="105" y="245">ribosome</text>
+            </g>
+
+            <!-- tRNA: a clover-shape that drops in over the active codon,
+                 carrying an amino acid bead on top. Hidden until needed. -->
+            <g class="trna" aria-hidden="true">
+              <!-- Stem -->
+              <path class="trna-stem"
+                    d="M 87 200 L 87 340"/>
+              <!-- Three loops -->
+              <ellipse class="trna-loop" cx="65" cy="255" rx="18" ry="14"/>
+              <ellipse class="trna-loop" cx="110" cy="255" rx="18" ry="14"/>
+              <ellipse class="trna-loop trna-loop-bottom" cx="87" cy="320" rx="14" ry="10"/>
+              <!-- Anticodon labels -->
+              <text class="trna-anticodon trna-ac-1" x="73" y="343">U</text>
+              <text class="trna-anticodon trna-ac-2" x="87" y="343">A</text>
+              <text class="trna-anticodon trna-ac-3" x="101" y="343">C</text>
+              <!-- Amino acid bead carried at the top -->
+              <circle class="trna-aa" cx="87" cy="180" r="14"/>
+              <text class="trna-aa-label" x="87" y="184">Met</text>
+            </g>
+
+            <!-- Polypeptide chain — a string of colored beads growing along
+                 the top as translation proceeds. Each bead fades in by phase. -->
+            <g class="polypeptide" aria-hidden="true">
+              <path class="poly-chain" d="M 105 130 L 200 130 L 280 130 L 360 130 L 430 130"/>
+              <circle class="aa-bead aa-bead-1" cx="105" cy="130" r="16"/>
+              <text class="aa-bead-label" x="105" y="134" data-bead="1">Met</text>
+              <circle class="aa-bead aa-bead-2" cx="180" cy="130" r="16"/>
+              <text class="aa-bead-label" x="180" y="134" data-bead="2">Ala</text>
+              <circle class="aa-bead aa-bead-3" cx="255" cy="130" r="16"/>
+              <text class="aa-bead-label" x="255" y="134" data-bead="3">Tyr</text>
+              <circle class="aa-bead aa-bead-4" cx="330" cy="130" r="16"/>
+              <text class="aa-bead-label" x="330" y="134" data-bead="4">Gly</text>
+              <circle class="aa-bead aa-bead-5" cx="405" cy="130" r="16"/>
+              <text class="aa-bead-label" x="405" y="134" data-bead="5">Lys</text>
+            </g>
+
+            <!-- Release factor — a small wedge that fades in at the stop codon. -->
+            <g class="release-factor" aria-hidden="true">
+              <path d="M 500 360 L 540 340 L 540 420 L 500 400 Z" class="rf-body"/>
+              <text class="rf-label" x="520" y="445">release factor</text>
+            </g>
+          </g>
+        </svg>
+      </div>
+
+      <aside class="info-pane">
+        <div class="info-panel flashcard-panel">
+          <div class="flashcard-deck" id="flashcard-deck" aria-live="polite">
+            <div class="flashcard-section-label" id="section-label">Protein basics</div>
+            <div class="flashcard flashcard-enter">
+              <h2 class="flashcard-title"></h2>
+              <div class="flashcard-body"></div>
+            </div>
+            <div class="flashcard-nav">
+              <button class="flashcard-btn" id="card-prev" type="button" aria-label="Previous card">←</button>
+              <span class="flashcard-counter" id="card-counter">1 / 5</span>
+              <button class="flashcard-btn" id="card-next" type="button" aria-label="Next card">→</button>
+            </div>
+          </div>
+
+          <!-- Codon decoder mini-game (hidden until the game section is active). -->
+          <div class="game-area" id="game-area" hidden>
+            <div class="flashcard-section-label">Codon decoder</div>
+            <h2 class="game-title">Decode the codon</h2>
+            <p class="game-instructions">Each mRNA codon codes for one amino acid. Pick the right one and watch your protein chain grow.</p>
+
+            <div class="codon-prompt">
+              <span class="codon-prompt-label">Next codon</span>
+              <div class="codon-display" id="codon-display">AUG</div>
+            </div>
+
+            <div class="aa-choices" id="aa-choices"></div>
+
+            <details class="codon-chart-wrap">
+              <summary>Need a hint? Show the codon chart</summary>
+              <div class="codon-chart" id="codon-chart"></div>
+            </details>
+
+            <div class="game-strand">
+              <span class="strand-label">Your protein chain</span>
+              <div class="chain-bases" id="chain-bases"></div>
+            </div>
+
+            <div class="game-status" id="game-status" aria-live="polite"></div>
+          </div>
+
+          <button class="cta-button" id="section-cta" type="button" hidden>↻ Restart</button>
+          <button class="link-button" id="section-back" type="button" hidden>← Back to the basics</button>
+        </div>
+      </aside>
+
+    </div>
+
+    <div class="cell-footer-bar">
+      <span class="explored-pill">Ready to test what you've learned?</span>
+      <a href="quiz.html?module=protein" class="cta-button">Take the quiz →</a>
+    </div>
   </main>
 
   <footer class="site-footer">Built for Congressional App Challenge 2026</footer>
 
   <script src="data/modules.js"></script>
+  <script src="data/ap-standards.js"></script>
+  <script src="data/protein-content.js"></script>
   <script src="js/progress.js"></script>
+  <script src="js/protein.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

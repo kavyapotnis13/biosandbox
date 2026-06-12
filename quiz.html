@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body data-module="quiz">
   <header class="site-nav">
     <a href="index.html" class="brand">
       <span class="brand-icon" aria-hidden="true">🧬</span>
@@ -19,25 +19,76 @@
       <button class="track-option" data-track="middle" type="button">Middle</button>
       <button class="track-option" data-track="high" type="button">High</button>
     </div>
-    <a href="about.html" class="nav-link">About</a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link nav-link-icon" aria-label="Home" title="Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12 L12 3 L22 12 L20 12 L20 21 L4 21 L4 12 Z" fill="#F07C99" stroke="#2D2154" stroke-width="1.8" stroke-linejoin="round"/><rect x="10" y="14" width="4" height="7" fill="#2D2154" rx="0.5"/></svg></a>
+      <a href="about.html" class="nav-link">About</a>
+    </div>
   </header>
 
-  <nav class="breadcrumb"><a href="index.html">Home</a> / Quiz</nav>
+  <nav class="breadcrumb" id="quiz-breadcrumb">
+    <a href="index.html">Home</a> / Quiz
+  </nav>
 
-  <main>
-    <section class="module-placeholder">
-      <h1>Quizzes</h1>
-      <p class="tagline">Coming in Phase 5</p>
-      <p>Each module gets its own 5-question quiz. This page is the shared quiz shell — it'll read a <code>?module=cell</code> URL parameter and pull the right questions.</p>
-      <p>Per-question feedback, a results screen, and best-score tracking in <code>localStorage</code>.</p>
-      <a href="index.html" class="cta-button secondary">← Back to home</a>
+  <main class="quiz-main">
+
+    <!-- Missing/invalid ?module=... — shows a friendly picker. -->
+    <section class="quiz-picker" id="quiz-picker" hidden>
+      <h1>Pick a quiz</h1>
+      <p>Each quiz is 5 questions pulled from the matching module.</p>
+      <div class="quiz-picker-grid" id="quiz-picker-grid"></div>
     </section>
+
+    <!-- Active quiz: one question at a time. -->
+    <section class="quiz-card" id="quiz-card" hidden>
+      <div class="quiz-header">
+        <span class="quiz-module-label" id="quiz-module-label">Module</span>
+        <span class="quiz-counter" id="quiz-counter">1 / 5</span>
+      </div>
+
+      <div class="quiz-progress" id="quiz-progress" aria-hidden="true"></div>
+
+      <h1 class="quiz-question" id="quiz-question"></h1>
+
+      <div class="quiz-choices" id="quiz-choices" role="list"></div>
+
+      <div class="quiz-feedback" id="quiz-feedback" hidden aria-live="polite">
+        <p class="quiz-feedback-headline" id="quiz-feedback-headline"></p>
+        <p class="quiz-feedback-explanation" id="quiz-feedback-explanation"></p>
+      </div>
+
+      <div class="quiz-actions">
+        <button class="link-button" id="quiz-quit" type="button">← Quit quiz</button>
+        <button class="cta-button" id="quiz-next" type="button" hidden>Next →</button>
+      </div>
+    </section>
+
+    <!-- Final results screen. -->
+    <section class="quiz-results" id="quiz-results" hidden>
+      <div class="quiz-results-badge" id="quiz-results-badge"></div>
+      <h1 class="quiz-results-title" id="quiz-results-title">Quiz complete</h1>
+      <p class="quiz-results-score">
+        You scored <strong id="quiz-score">0</strong> out of <strong id="quiz-total">5</strong>.
+      </p>
+      <p class="quiz-results-best" id="quiz-results-best"></p>
+
+      <ol class="quiz-results-breakdown" id="quiz-results-breakdown"></ol>
+
+      <div class="quiz-results-actions">
+        <button class="cta-button" id="quiz-retry" type="button">↻ Try again</button>
+        <a class="cta-button secondary" id="quiz-back-to-module" href="index.html">← Back to module</a>
+        <a class="cta-button secondary" href="index.html">Home</a>
+      </div>
+    </section>
+
   </main>
 
   <footer class="site-footer">Built for Congressional App Challenge 2026</footer>
 
   <script src="data/modules.js"></script>
+  <script src="data/ap-standards.js"></script>
+  <script src="data/quiz-data.js"></script>
   <script src="js/progress.js"></script>
+  <script src="js/quiz.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

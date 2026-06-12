@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AP Bio Alignment — BioSandbox</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-module="standards">
+  <header class="site-nav">
+    <a href="index.html" class="brand">
+      <span class="brand-icon" aria-hidden="true">🧬</span>
+      BioSandbox
+    </a>
+    <div class="track-toggle" role="group" aria-label="Audience level">
+      <button class="track-option" data-track="middle" type="button">Middle</button>
+      <button class="track-option" data-track="high" type="button">High</button>
+    </div>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link nav-link-icon" aria-label="Home" title="Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12 L12 3 L22 12 L20 12 L20 21 L4 21 L4 12 Z" fill="#F07C99" stroke="#2D2154" stroke-width="1.8" stroke-linejoin="round"/><rect x="10" y="14" width="4" height="7" fill="#2D2154" rx="0.5"/></svg></a>
+      <a href="about.html" class="nav-link">About</a>
+    </div>
+  </header>
+
+  <nav class="breadcrumb"><a href="index.html">Home</a> / AP Bio Alignment</nav>
+
+  <main>
+    <section class="standards-hero">
+      <h1>AP Biology Alignment</h1>
+      <p class="standards-intro">
+        BioSandbox is built around the College Board's <em>AP Biology Course and Exam Description</em>. Each module covers specific Learning Objectives (LOs), mapped below. Hover any LO code for its full title.
+      </p>
+      <p class="standards-coverage-line">
+        <span class="ap-coverage-badge">Coverage</span>
+        <strong><span id="units-covered">0</span></strong> of <strong>8</strong> units · <strong><span id="los-covered">0</span></strong> learning objectives across all modules.
+      </p>
+    </section>
+
+    <section class="standards-grid" id="standards-grid" aria-label="AP Biology units"></section>
+
+    <section class="standards-disclaimer">
+      <p>
+        LO codes follow the College Board AP Biology CED convention (Big Idea + Topic + Letter, e.g. <code>ENE-1.D</code>). Always cross-reference with the most current official CED on
+        <a href="https://apcentral.collegeboard.org/courses/ap-biology" target="_blank" rel="noopener noreferrer">AP Central</a> before relying on this map for course planning.
+      </p>
+    </section>
+  </main>
+
+  <footer class="site-footer">Built for Congressional App Challenge 2026</footer>
+
+  <script src="data/modules.js"></script>
+  <script src="data/ap-standards.js"></script>
+  <script src="js/progress.js"></script>
+  <script src="js/standards.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

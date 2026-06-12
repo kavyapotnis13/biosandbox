@@ -96,6 +96,14 @@ const CELL_CONTENT = {
     },
     didYouKnow: 'When you forget to water a plant and it wilts, that\'s actually the central vacuoles inside each cell shrinking. Water the plant and they refill — the plant stands back up.'
   },
+  cellwall: {
+    name: 'Cell Wall',
+    function: {
+      middle: 'A tough outer layer that surrounds plant cells, just outside the membrane. It keeps the cell\'s shape and protects it. Animal cells don\'t have one.',
+      high: 'Rigid layer of cellulose fibers external to the plasma membrane. Provides structural support, maintains shape against turgor pressure, and protects the cell. Unique to plant cells (with different versions in fungi and bacteria).'
+    },
+    didYouKnow: 'Cellulose in plant cell walls is the most abundant organic compound on Earth — wood, cotton, and paper are all mostly cellulose.'
+  },
   chloroplasts: {
     name: 'Chloroplasts',
     function: {
@@ -110,5 +118,5 @@ const CELL_CONTENT = {
 // through whichever array matches the currently selected cell type.
 const ORGANELLE_ORDER = {
   animal: ['membrane', 'cytoplasm', 'cytoskeleton', 'nucleus', 'mitochondria', 'ribosomes', 'er', 'golgi', 'lysosomes', 'vacuoles'],
-  plant:  ['membrane', 'cytoplasm', 'cytoskeleton', 'nucleus', 'mitochondria', 'ribosomes', 'er', 'golgi', 'vacuoles', 'chloroplasts']
+  plant:  ['cellwall', 'membrane', 'cytoplasm', 'cytoskeleton', 'nucleus', 'mitochondria', 'ribosomes', 'er', 'golgi', 'vacuoles', 'chloroplasts']
 };

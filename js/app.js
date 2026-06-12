@@ -88,6 +88,68 @@ function initHomePage() {
   if (badgesEl) badgesEl.textContent = stats.badges;
   if (exploredEl) exploredEl.textContent = stats.exploredPct;
   if (fillEl) fillEl.style.width = `${stats.exploredPct}%`;
+
+  // AP Bio coverage summary — count distinct units touched by any module.
+  const apUnitsEl = document.getElementById('ap-units-covered');
+  if (apUnitsEl && typeof getCoveredUnits === 'function') {
+    const allCodes = MODULES.flatMap(m => m.apStandards || []);
+    apUnitsEl.textContent = getCoveredUnits(allCodes).length;
+  }
+}
+
+/* ---------- AP Bio standards block (module pages) ---------- */
+
+/* Reads body[data-module="X"], looks up the matching module's apStandards,
+   and injects a compact AP-aligned banner at the top of <main>. Skipped if
+   the page has no data-module attribute, no matching module, or no LOs. */
+function initApStandardsBlock() {
+  if (typeof AP_BIO_UNITS === 'undefined' || typeof getLO !== 'function') return;
+
+  const slug = document.body.dataset.module;
+  if (!slug) return;
+  const m = getModule(slug);
+  if (!m || !m.apStandards || !m.apStandards.length) return;
+
+  // Resolve each LO code to its full record. Drop any unknown codes.
+  const resolved = m.apStandards.map(code => getLO(code)).filter(Boolean);
+  if (!resolved.length) return;
+
+  // Group LOs by unit so the banner reads like "Unit 6 · IST-1.G IST-1.H".
+  const byUnit = new Map();
+  for (const lo of resolved) {
+    if (!byUnit.has(lo.unit)) byUnit.set(lo.unit, { name: lo.unitName, los: [] });
+    byUnit.get(lo.unit).los.push(lo);
+  }
+
+  const unitsHtml = Array.from(byUnit.entries()).map(([num, info]) => `
+    <div class="ap-unit-row">
+      <span class="ap-unit-label">Unit ${num} · ${info.name}</span>
+      <div class="ap-lo-list">
+        ${info.los.map(lo =>
+          `<span class="ap-lo-pill" title="${escapeAttr(lo.title)}">${lo.code}</span>`
+        ).join('')}
+      </div>
+    </div>
+  `).join('');
+
+  const block = document.createElement('aside');
+  block.className = 'ap-standards-block';
+  block.setAttribute('aria-label', 'AP Biology learning objectives covered');
+  block.innerHTML = `
+    <span class="ap-standards-label">AP Bio aligned</span>
+    <div class="ap-standards-units">${unitsHtml}</div>
+  `;
+
+  const main = document.querySelector('main');
+  if (main) main.insertBefore(block, main.firstChild);
+}
+
+function escapeAttr(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
 
 /* ---------- Init on load ---------- */
@@ -95,4 +157,5 @@ function initHomePage() {
 document.addEventListener('DOMContentLoaded', () => {
   initTrackToggle();
   initHomePage();
+  initApStandardsBlock();
 });

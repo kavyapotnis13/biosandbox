@@ -34,38 +34,38 @@ A living checklist of where we are. Tick boxes (`- [ ]` → `- [x]`) as you fini
 ## ⬜ Still to do
 
 ### Outside the code (Phase 1 housekeeping)
-- [ ] Install VS Code + Live Server extension
-- [ ] Create GitHub account + `biosandbox` repo
-- [ ] Push project to the repo
-- [ ] Enable GitHub Pages → confirm live URL works
-- [ ] Watch one beginner SVG tutorial (Kevin Powell on YouTube)
+- [x] Install VS Code + Live Server extension
+- [x] Create GitHub account + `biosandbox` repo → github.com/kavyapotnis13/biosandbox
+- [x] Push project to the repo
+- [x] Enable GitHub Pages → https://kavyapotnis13.github.io/biosandbox/
+- [x] Watch one beginner SVG tutorial (Kevin Powell on YouTube)
 
-### Phase 3 — Cell Explorer
-- [ ] SVG cell diagram with 8 labeled organelles
-- [ ] Each organelle has a unique `id` and is clickable
-- [ ] Two-pane layout (diagram left, info panel right)
-- [ ] `data/cell-content.js` — name + function + "did you know" per organelle, tagged middle/high
-- [ ] Click → info card; hover → glow
-- [ ] Track explored count: "Explored X/8 parts"
-- [ ] Opt-in guided tour ("Take a tour" auto-cycles each organelle)
-- [ ] Keyboard nav (Tab + Enter)
-- [ ] Mobile: info panel stacks below diagram
+### Phase 3 — Cell Explorer ✅
+- [x] SVG cell diagram with 8 labeled organelles (12, across animal + plant)
+- [x] Each organelle has a unique `id` and is clickable
+- [x] Two-pane layout (diagram left, info panel right)
+- [x] `data/cell-content.js` — name + function + "did you know" per organelle, tagged middle/high
+- [x] Click → info card; hover → glow
+- [x] Track explored count: "Explored X/12 parts"
+- [x] Opt-in guided tour ("Take a tour" auto-cycles each organelle, with red arrow pointer)
+- [x] Keyboard nav (Tab + Enter)
+- [x] Mobile: info panel stacks below diagram
 
 ### Phase 4 — DNA & Protein Synthesis
-- [ ] DNA double helix SVG with subtle rotation
-- [ ] Step-through UI for DNA replication (Prev / Next, 6 steps)
-- [ ] Click-to-match base-pair mini-game (A↔T, C↔G)
-- [ ] Protein synthesis SVG — transcription + translation
-- [ ] Codon decoder mini-game (mRNA codon → amino acid)
+- [x] DNA double helix SVG with intro flashcards (basics + replication walkthrough)
+- [x] Step-through UI for DNA replication (6-phase animated unwinding + daughter helices)
+- [x] Click-to-match base-pair mini-game (A↔T, C↔G) — third section on dna.html
+- [x] Protein synthesis SVG — transcription + translation
+- [x] Codon decoder mini-game (mRNA codon → amino acid)
 - [ ] Step content tagged middle/high
 
 ### Phase 5 — Quiz engine + content
-- [ ] `js/quiz.js` — reads `?module=X`, pulls 5 of 8–10 questions
-- [ ] `data/quiz-data.js` — high-school pool (~30 questions)
-- [ ] Quiz UI — question card, 4 answer buttons, per-question feedback
-- [ ] Results screen — score, breakdown, retry / back / home
-- [ ] Save best score + badges via progress.js
-- [ ] Home page cards reflect quiz status (already wired)
+- [x] `js/quiz.js` — reads `?module=X`, pulls 5 of 8–10 questions
+- [x] `data/quiz-data.js` — high-school pool (~30 questions)
+- [x] Quiz UI — question card, 4 answer buttons, per-question feedback
+- [x] Results screen — score, breakdown, retry / back / home
+- [x] Save best score + badges via progress.js
+- [x] Home page cards reflect quiz status (already wired)
 
 ### Phase 6 — Polish & submit
 - [ ] Middle-school question pool (~30 more questions)
@@ -76,6 +76,12 @@ A living checklist of where we are. Tick boxes (`- [ ]` → `- [x]`) as you fini
 - [ ] App description for the submission
 - [ ] 1–3 minute demo video
 - [ ] Final GitHub Pages deploy
+
+### Phase 4b — Extra units (added after Phase 5)
+- [x] Mitosis module — 5-phase walkthrough + quiz
+- [x] Photosynthesis module — light reactions + Calvin cycle + quiz
+- [x] Cellular respiration module — glycolysis + Krebs + ETC + quiz
+- [ ] Revive-on-mistake mini-game (flappy-bird style)
 
 ### Stretch (post-MVP, if time)
 - [ ] Build-a-cell drag-and-drop sandbox

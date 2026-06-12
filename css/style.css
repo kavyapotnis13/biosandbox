@@ -64,14 +64,42 @@ h1, h2, h3 {
    Top navigation (shared)
    ========================================================= */
 .site-nav {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   gap: 1rem;
   padding: 1rem 2rem;
   background: var(--color-card);
   border-bottom: 1px solid var(--color-border);
 }
+
+.site-nav > .brand      { justify-self: start;  }
+.site-nav > .track-toggle { justify-self: center; }
+.site-nav > .nav-link   { justify-self: end;    }
+
+/* Right-side cluster on every page except index.html — holds Home + About. */
+.site-nav > .nav-links {
+  justify-self: end;
+  display: flex;
+  gap: 1.1rem;
+  align-items: center;
+}
+
+/* Icon-only nav links (e.g. the Home house icon). */
+.nav-link-icon {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+.nav-link-icon svg {
+  width: 32px;
+  height: 32px;
+  transition: transform 160ms ease;
+}
+.nav-link-icon:hover svg { transform: translateY(-2px); }
+
+/* Brand hover cue — makes it more obviously clickable. */
+.brand:hover { color: var(--color-primary); }
 
 .brand {
   display: inline-flex;
@@ -572,6 +600,20 @@ h1, h2, h3 {
   filter: drop-shadow(0 0 10px rgba(240, 124, 153, 0.9));
 }
 
+/* Guided-tour arrow: bobs gently toward the active organelle */
+.tour-arrow {
+  pointer-events: none;
+  filter: drop-shadow(0 1px 2px rgba(45, 33, 84, 0.35));
+  transform-box: fill-box;
+  transform-origin: 0 0;
+  animation: tour-arrow-bob 1.1s ease-in-out infinite;
+}
+
+@keyframes tour-arrow-bob {
+  0%, 100% { opacity: 0.95; }
+  50%      { opacity: 0.55; }
+}
+
 /* Sticky footer bar (explored count + quiz CTA) */
 .cell-footer-bar {
   display: flex;
@@ -620,10 +662,16 @@ h1, h2, h3 {
 @media (max-width: 768px) {
   .site-nav {
     padding: 0.75rem 1rem;
-    flex-wrap: wrap;
     gap: 0.5rem;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "brand link"
+      "toggle toggle";
   }
-  .track-toggle { order: 3; flex-basis: 100%; justify-content: center; }
+  .site-nav > .brand        { grid-area: brand; justify-self: start; }
+  .site-nav > .nav-link,
+  .site-nav > .nav-links    { grid-area: link;  justify-self: end;   }
+  .site-nav > .track-toggle { grid-area: toggle; justify-self: center; }
   .hero { padding: 2.5rem 1rem 2rem; }
   .module-grid {
     padding: 1rem;
@@ -645,4 +693,2501 @@ h1, h2, h3 {
     align-items: stretch;
   }
   .explored-pill { justify-content: center; }
+
+  /* DNA module: stack panes on mobile */
+  .dna-layout {
+    grid-template-columns: 1fr;
+    padding: 0 1rem;
+  }
+  .helix-pane { min-height: 360px; padding: 1rem; }
+
+  /* Protein module: stack panes on mobile */
+  .protein-layout {
+    grid-template-columns: 1fr;
+    padding: 0 1rem;
+  }
+  .scene-pane { min-height: 380px; padding: 1rem; }
+
+  /* Mitosis module: stack panes on mobile */
+  .mitosis-layout {
+    grid-template-columns: 1fr;
+    padding: 0 1rem;
+  }
+
+  /* Photosynthesis module: stack panes on mobile */
+  .photo-layout {
+    grid-template-columns: 1fr;
+    padding: 0 1rem;
+  }
+
+  /* Respiration module: stack panes on mobile */
+  .resp-layout {
+    grid-template-columns: 1fr;
+    padding: 0 1rem;
+  }
+}
+
+/* =========================================================
+   DNA & Replication module
+   ========================================================= */
+.dna-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 1.5rem;
+  max-width: var(--max-width);
+  margin: 1.25rem auto;
+  padding: 0 2rem;
+}
+
+.helix-pane {
+  background: var(--color-card-tint);
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+  padding: 1.25rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 600px;
+}
+
+.dna-helix {
+  width: 100%;
+  height: auto;
+  max-width: 540px;
+  display: block;
+}
+
+.dna-helix .backbone {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.dna-helix .backbone-a { stroke: #C56279; stroke-width: 9; }
+.dna-helix .backbone-b { stroke: #5A7FB0; stroke-width: 9; }
+
+/* Daughter-helix backbones (the freshly built strands). Hidden until the
+   helix has fully unzipped (.separated). */
+.dna-helix .backbone-new {
+  fill: none;
+  stroke-width: 9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 6 3;
+  opacity: 0;
+}
+.dna-helix .backbone-new-left  { stroke: #5A7FB0; }
+.dna-helix .backbone-new-right { stroke: #C56279; }
+
+/* Backbones are driven by JS-generated path data (the unwinding formula), so
+   no CSS transform here. */
+.dna-helix .backbone-new {
+  display: none;
+}
+
+/* Daughter helices: clones of the intact helix, side by side. Hidden until the
+   final replication step (.replicated), then cross-fade in while the unwound
+   originals fade out. */
+.dna-helix .daughter-helix {
+  opacity: 0;
+  transition: opacity 1100ms ease-out;
+}
+.dna-helix .daughter-helix.daughter-left  { transform: translateX(-72px); }
+.dna-helix .daughter-helix.daughter-right { transform: translateX(72px);  }
+
+.dna-helix.replicated .daughter-helix { opacity: 1; }
+
+.dna-helix.replicated > .backbone-a,
+.dna-helix.replicated > .backbone-b,
+.dna-helix.replicated > .rung {
+  opacity: 0;
+  transition: opacity 1100ms ease-out;
+}
+
+/* Enzyme blobs (helicase, polymerase) — hidden by default, fade in when their
+   corresponding stage of replication is active. */
+.dna-helix .enzyme {
+  opacity: 0;
+  transition: opacity 700ms ease-out, transform 700ms ease-out;
+  pointer-events: none;
+}
+.dna-helix.show-helicase .helicase-blob   { opacity: 1; }
+.dna-helix.show-polymerase .polymerase-blob { opacity: 1; }
+
+/* The polymerase blob covers the middle of the helix, so let its body shape
+   ride at reduced fill so base labels underneath remain readable. The text
+   labels stay fully opaque because fill-opacity only targets the path/circles. */
+.dna-helix .polymerase-blob path,
+.dna-helix .polymerase-blob circle { fill-opacity: 0.45; }
+
+.dna-helix .enzyme-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  fill: #2D2154;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+
+.dna-helix .base { stroke: #2D2154; stroke-width: 1.8; }
+.dna-helix .base-a { fill: #FF8FA3; }
+.dna-helix .base-t { fill: #5FB8D4; }
+.dna-helix .base-c { fill: #FFCB57; }
+.dna-helix .base-g { fill: #9C7BD3; }
+
+.dna-helix .base-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  fill: #2D2154;
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+}
+
+/* Replication animation: rungs split apart and new complementary bases fade in. */
+.dna-helix .rung rect,
+.dna-helix .rung text {
+  transition: transform 800ms cubic-bezier(0.4, 0, 0.2, 1),
+              opacity   600ms ease-out;
+}
+
+.dna-helix .rung .new-of-left,
+.dna-helix .rung .new-of-right,
+.dna-helix .rung .new-of-left-label,
+.dna-helix .rung .new-of-right-label {
+  opacity: 0;
+}
+
+.dna-helix .rung.split .old-left,
+.dna-helix .rung.split .old-left-label {
+  transform: translateX(-70px);
+}
+.dna-helix .rung.split .old-right,
+.dna-helix .rung.split .old-right-label {
+  transform: translateX(70px);
+}
+
+.dna-helix .rung.show-new-left .new-of-left,
+.dna-helix .rung.show-new-left .new-of-left-label {
+  opacity: 1;
+}
+.dna-helix .rung.show-new-right .new-of-right,
+.dna-helix .rung.show-new-right .new-of-right-label {
+  opacity: 1;
+}
+
+/* "New" bases are drawn solid like the originals — only the Okazaki bracket
+   (during Step 5) and the daughter-helix layout cue that they're freshly built. */
+
+/* Daughter helices: hide the "new-of-*" sub-bases inside cloned rungs so each
+   rung renders as a clean old-left + old-right pair (one solid base on each
+   side). Without this, applyPhaseState's show-new-* classes propagate into
+   the clones and add extra slivers between the pair. */
+.dna-helix .daughter-helix .rung .new-of-left,
+.dna-helix .daughter-helix .rung .new-of-right,
+.dna-helix .daughter-helix .rung .new-of-left-label,
+.dna-helix .daughter-helix .rung .new-of-right-label {
+  opacity: 0;
+}
+
+/* Secondary text-only button (e.g. "Back to the basics"). */
+.link-button {
+  background: none;
+  border: none;
+  color: var(--color-muted);
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0.25rem 0;
+  align-self: flex-start;
+  transition: color 160ms ease;
+}
+.link-button:hover:not(:disabled) {
+  color: var(--color-primary);
+}
+.link-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.info-note {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  font-style: italic;
+}
+
+/* Flashcard deck (intro cards + later replication steps) */
+.flashcard-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.flashcard-deck {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.flashcard-section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  padding: 0.3rem 0.6rem;
+  background: var(--color-card-tint);
+  border-radius: var(--radius-pill);
+  align-self: flex-start;
+}
+
+.flashcard {
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.flashcard-title {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  line-height: 1.2;
+  margin: 0;
+  color: var(--color-primary);
+}
+
+.flashcard-body p {
+  margin: 0 0 0.6rem;
+  line-height: 1.55;
+}
+.flashcard-body p:last-child { margin-bottom: 0; }
+
+.flashcard-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.flashcard-btn {
+  background: var(--color-card-tint);
+  border: 1px solid var(--color-border);
+  color: var(--color-ink);
+  font: inherit;
+  font-size: 1.15rem;
+  font-weight: 600;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flashcard-btn:hover:not(:disabled) {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.flashcard-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* Wide variant: shown at section boundaries so the user sees what comes next. */
+.flashcard-btn.flashcard-btn-wide {
+  width: auto;
+  height: auto;
+  border-radius: var(--radius-pill);
+  padding: 0.55rem 1.05rem;
+  font-size: 0.85rem;
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+.flashcard-btn.flashcard-btn-wide:hover:not(:disabled) {
+  filter: brightness(1.1);
+}
+
+.flashcard-counter {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  letter-spacing: 0.04em;
+}
+
+@keyframes flashcard-fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.flashcard-enter {
+  animation: flashcard-fade-in 240ms ease-out;
+}
+
+/* ---------- Base-pair matching game ---------- */
+
+.game-area {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+/* Force [hidden] to actually hide elements even when their class sets a
+   display value. Without this, `display: flex/inline-block` from class rules
+   wins and the element stays visible. */
+[hidden] { display: none !important; }
+
+.game-area .flashcard-section-label {
+  align-self: flex-start;
+}
+
+.game-title {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  line-height: 1.2;
+  margin: 0;
+  color: var(--color-primary);
+}
+
+.game-instructions {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  color: var(--color-ink);
+}
+
+.game-strand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.strand-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-muted);
+}
+
+.strand-bases {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.base-tile {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  border: 2px solid #2D2154;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+  font-weight: 700;
+  color: #2D2154;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+  user-select: none;
+  padding: 0;
+}
+
+.base-tile.base-a { background: #FF8FA3; }
+.base-tile.base-t { background: #5FB8D4; }
+.base-tile.base-c { background: #FFCB57; }
+.base-tile.base-g { background: #9C7BD3; }
+
+.base-tile-locked {
+  cursor: default;
+}
+
+.base-pool .base-tile:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(45, 33, 84, 0.18);
+}
+.base-pool .base-tile:active {
+  transform: translateY(0);
+}
+
+.base-slot {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  border: 2px dashed rgba(45, 33, 84, 0.4);
+  background: rgba(45, 33, 84, 0.03);
+}
+
+.base-slot-active {
+  border-color: var(--color-primary);
+  border-style: solid;
+  animation: slot-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes slot-pulse {
+  0%, 100% { box-shadow: 0 0 0 0   rgba(240, 124, 153, 0.55); }
+  50%      { box-shadow: 0 0 0 7px rgba(240, 124, 153, 0); }
+}
+
+@keyframes slot-shake {
+  0%, 100% { transform: translateX(0); }
+  25%      { transform: translateX(-4px); }
+  75%      { transform: translateX(4px); }
+}
+
+.base-slot-shake {
+  animation: slot-shake 280ms ease-in-out;
+  border-color: #E63946;
+  background: rgba(230, 57, 70, 0.1);
+}
+
+.base-pool {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  padding-top: 0.65rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.game-status {
+  text-align: center;
+  font-size: 0.9rem;
+  min-height: 1.4em;
+  color: var(--color-muted);
+}
+
+.game-status-complete {
+  color: #2A8A52;
+  font-weight: 600;
+}
+
+.game-status-error {
+  color: #E63946;
+}
+
+/* =========================================================
+   Protein Synthesis module
+   ========================================================= */
+.protein-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 1.5rem;
+  max-width: var(--max-width);
+  margin: 1.25rem auto;
+  padding: 0 2rem;
+}
+
+.scene-pane {
+  background: var(--color-card-tint);
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+  padding: 1.25rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 600px;
+}
+
+.protein-svg {
+  width: 100%;
+  height: auto;
+  max-width: 600px;
+  display: block;
+}
+
+/* Two scenes coexist in the SVG; only one is visible at a time. The default
+   class on the SVG is .protein-svg-tx; JS swaps to .protein-svg-tl during the
+   translation deck. */
+.protein-svg .scene {
+  transition: opacity 450ms ease-out;
+}
+.protein-svg-tx .scene-tx { opacity: 1; pointer-events: auto; }
+.protein-svg-tx .scene-tl { opacity: 0; pointer-events: none; }
+.protein-svg-tl .scene-tl { opacity: 1; pointer-events: auto; }
+.protein-svg-tl .scene-tx { opacity: 0; pointer-events: none; }
+
+/* ---------- Shared scene typography ---------- */
+.protein-svg .scene-label {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 600;
+  fill: var(--color-ink);
+  text-anchor: middle;
+}
+.protein-svg .scene-sublabel {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  fill: var(--color-muted);
+  text-anchor: middle;
+}
+.protein-svg .enzyme-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  fill: var(--color-ink);
+  text-anchor: middle;
+}
+
+/* ---------- Transcription scene ---------- */
+.protein-svg .nucleus-bg {
+  fill: #FFE3EC;
+}
+.protein-svg .nucleus-border {
+  fill: none;
+  stroke: #F07C99;
+  stroke-width: 3;
+  stroke-dasharray: 8 5;
+}
+
+.protein-svg .nuclear-pore rect {
+  fill: var(--color-card-tint);
+  stroke: #F07C99;
+  stroke-width: 2;
+}
+.protein-svg .pore-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  fill: var(--color-muted);
+  text-anchor: middle;
+}
+
+.protein-svg .tx-strand {
+  fill: none;
+  stroke-width: 7;
+  stroke-linecap: round;
+}
+.protein-svg .tx-strand-top { stroke: #C56279; }
+.protein-svg .tx-strand-bot { stroke: #5A7FB0; }
+
+.protein-svg .tx-rungs line {
+  stroke: #2D2154;
+  stroke-width: 2;
+  opacity: 0.55;
+}
+
+.protein-svg .promoter rect {
+  fill: #FFD86A;
+  stroke: #2D2154;
+  stroke-width: 1.5;
+}
+.protein-svg .promoter-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  fill: #2D2154;
+  text-anchor: middle;
+}
+
+/* RNA polymerase blob — translates left-to-right by phase. */
+.protein-svg .rna-polymerase {
+  transition: transform 700ms cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 350ms ease-out;
+  transform: translateX(120px);
+}
+.protein-svg .poly-body {
+  fill: #8E6BC9;
+  stroke: #2D2154;
+  stroke-width: 2.5;
+}
+.protein-svg .poly-spot {
+  fill: #6A4AAE;
+  opacity: 0.8;
+}
+
+/* Phase positions for the polymerase as it walks the gene. */
+.protein-svg.phase-0 .rna-polymerase { transform: translateX(120px); }
+.protein-svg.phase-1 .rna-polymerase { transform: translateX(220px); }
+.protein-svg.phase-2 .rna-polymerase { transform: translateX(310px); }
+.protein-svg.phase-3 .rna-polymerase { transform: translateX(400px); }
+.protein-svg.phase-4 .rna-polymerase { transform: translateX(470px); opacity: 0.25; }
+
+/* mRNA bases follow the polymerase. The group itself shifts; individual bases
+   fade in as the JS sets .visible on them. */
+.protein-svg .tx-mrna {
+  transition: transform 700ms cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateX(120px);
+}
+.protein-svg.phase-0 .tx-mrna { transform: translateX(120px); }
+.protein-svg.phase-1 .tx-mrna { transform: translateX(220px); }
+.protein-svg.phase-2 .tx-mrna { transform: translateX(310px); }
+.protein-svg.phase-3 .tx-mrna { transform: translateX(400px); }
+.protein-svg.phase-4 .tx-mrna { transform: translateX(470px); opacity: 0; }
+
+.protein-svg .mrna-base {
+  fill: #5FB890;
+  stroke: #2D2154;
+  stroke-width: 1.5;
+  opacity: 0;
+  transition: opacity 350ms ease-out;
+}
+.protein-svg .mrna-base.visible { opacity: 1; }
+.protein-svg .mrna-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  fill: #2D2154;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  opacity: 0;
+  transition: opacity 350ms ease-out;
+}
+.protein-svg .mrna-label.visible { opacity: 1; }
+
+/* Escaped mRNA — only visible in the final transcription phase. */
+.protein-svg .tx-escaped-mrna {
+  opacity: 0;
+  transition: opacity 600ms ease-out;
+}
+.protein-svg.phase-4 .tx-escaped-mrna { opacity: 1; }
+.protein-svg .escaped-strand {
+  fill: none;
+  stroke: #5FB890;
+  stroke-width: 3;
+  stroke-dasharray: 4 3;
+}
+.protein-svg .escaped-bead {
+  fill: #5FB890;
+  stroke: #2D2154;
+  stroke-width: 1.5;
+}
+.protein-svg .escaped-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  fill: #2D2154;
+  text-anchor: middle;
+}
+
+/* ---------- Translation scene ---------- */
+.protein-svg .mrna-backbone {
+  stroke: #5FB890;
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.protein-svg .codon rect {
+  fill: #E0F5E8;
+  stroke: #2D2154;
+  stroke-width: 2;
+  transition: fill 250ms ease-out;
+}
+.protein-svg .codon text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  fill: #2D2154;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+.protein-svg .codon-tag {
+  font-size: 10px;
+  font-weight: 700;
+  fill: var(--color-primary-dark);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* The codon currently inside the ribosome gets a soft highlight. */
+.protein-svg.phase-0 .codon-1 rect,
+.protein-svg.phase-1 .codon-1 rect { fill: #FFD86A; }
+.protein-svg.phase-2 .codon-2 rect { fill: #FFD86A; }
+.protein-svg.phase-3 .codon-3 rect { fill: #FFD86A; }
+.protein-svg.phase-4 .codon-6 rect { fill: #FF8FA3; }
+
+/* Ribosome — two blobs that translate as a unit. */
+.protein-svg .ribosome {
+  transition: transform 700ms cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateX(0);
+}
+.protein-svg.phase-0 .ribosome { transform: translateX(0); }
+.protein-svg.phase-1 .ribosome { transform: translateX(0); }
+.protein-svg.phase-2 .ribosome { transform: translateX(84px); }
+.protein-svg.phase-3 .ribosome { transform: translateX(168px); }
+.protein-svg.phase-4 .ribosome { transform: translateX(420px); }
+
+.protein-svg .ribosome-large {
+  fill: #C0C8D2;
+  stroke: #2D2154;
+  stroke-width: 2.5;
+  opacity: 0.85;
+}
+.protein-svg .ribosome-small {
+  fill: #9AA8B5;
+  stroke: #2D2154;
+  stroke-width: 2.5;
+  opacity: 0.85;
+}
+.protein-svg .ribosome-window {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 2.5;
+  stroke-dasharray: 4 3;
+}
+.protein-svg .ribosome-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  fill: var(--color-ink);
+  text-anchor: middle;
+}
+
+/* tRNA — drops in from above, follows the ribosome. */
+.protein-svg .trna {
+  opacity: 0;
+  transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 350ms ease-out;
+  transform: translate(0, 0);
+}
+.protein-svg.phase-1 .trna { opacity: 1; transform: translate(0, 0); }
+.protein-svg.phase-2 .trna { opacity: 1; transform: translate(84px, 0); }
+.protein-svg.phase-3 .trna { opacity: 1; transform: translate(168px, 0); }
+
+.protein-svg .trna-stem {
+  fill: none;
+  stroke: #E8915F;
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+.protein-svg .trna-loop {
+  fill: #FFD0B5;
+  stroke: #2D2154;
+  stroke-width: 2;
+}
+.protein-svg .trna-loop-bottom { fill: #FFB870; }
+.protein-svg .trna-anticodon {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  fill: #2D2154;
+  text-anchor: middle;
+}
+.protein-svg .trna-aa {
+  fill: #FF8FA3;
+  stroke: #2D2154;
+  stroke-width: 2;
+}
+.protein-svg .trna-aa-label {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 700;
+  fill: #2D2154;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+/* Polypeptide chain — beads fade in one at a time via .visible class. */
+.protein-svg .poly-chain {
+  fill: none;
+  stroke: var(--color-ink);
+  stroke-width: 2.5;
+  stroke-dasharray: 4 3;
+  opacity: 0.6;
+}
+.protein-svg .aa-bead {
+  fill: #FFD86A;
+  stroke: #2D2154;
+  stroke-width: 2;
+  opacity: 0;
+  transition: opacity 350ms ease-out;
+}
+.protein-svg .aa-bead.visible { opacity: 1; }
+.protein-svg .aa-bead-2 { fill: #A484D9; }
+.protein-svg .aa-bead-3 { fill: #5FB8D4; }
+.protein-svg .aa-bead-4 { fill: #5FB890; }
+.protein-svg .aa-bead-5 { fill: #FF8FA3; }
+.protein-svg .aa-bead-label {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 700;
+  fill: #2D2154;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  opacity: 0;
+  transition: opacity 350ms ease-out;
+}
+.protein-svg .aa-bead-label.visible { opacity: 1; }
+
+/* Release factor — fades in only at the stop codon. */
+.protein-svg .release-factor {
+  opacity: 0;
+  transition: opacity 450ms ease-out;
+}
+.protein-svg.phase-4 .release-factor { opacity: 1; }
+.protein-svg .rf-body {
+  fill: #E5849C;
+  stroke: #2D2154;
+  stroke-width: 2;
+}
+.protein-svg .rf-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  fill: #2D2154;
+  text-anchor: middle;
+}
+
+/* ---------- Codon decoder mini-game ---------- */
+.codon-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.6rem 0;
+}
+
+.codon-prompt-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-muted);
+}
+
+.codon-display {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-ink);
+  background: #FFD86A;
+  border: 2px solid #2D2154;
+  border-radius: var(--radius-sm);
+  padding: 0.35rem 1.1rem;
+}
+
+.aa-choices {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+
+.aa-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  padding: 0.55rem 0.5rem;
+  background: var(--color-card-tint);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font: inherit;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.aa-tile:hover {
+  background: var(--color-primary-tint);
+  border-color: var(--color-primary);
+  transform: translateY(-1px);
+}
+
+.aa-tile-short {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--color-ink);
+}
+
+.aa-tile-name {
+  font-size: 0.78rem;
+  color: var(--color-muted);
+}
+
+@keyframes aa-tile-shake {
+  0%, 100% { transform: translateX(0); }
+  25%      { transform: translateX(-4px); }
+  75%      { transform: translateX(4px); }
+}
+
+.aa-tile-shake {
+  animation: aa-tile-shake 280ms ease-in-out;
+  border-color: #E63946;
+  background: rgba(230, 57, 70, 0.1);
+}
+
+.chain-bases {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.chain-bead {
+  width: 44px;
+  height: 32px;
+  border-radius: 6px;
+  border: 2px dashed rgba(45, 33, 84, 0.4);
+  background: rgba(45, 33, 84, 0.03);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.chain-bead-active {
+  border-color: var(--color-primary);
+  border-style: solid;
+  animation: slot-pulse 1.4s ease-in-out infinite;
+}
+
+.chain-bead-filled {
+  background: #FFD86A;
+  border: 2px solid #2D2154;
+}
+
+/* ---------- Codon chart (reference table inside the game) ---------- */
+.codon-chart-wrap {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-card-tint);
+  padding: 0.4rem 0.7rem;
+}
+
+.codon-chart-wrap > summary {
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-primary-dark);
+  list-style: none;
+  padding: 0.25rem 0;
+}
+
+.codon-chart-wrap > summary::before {
+  content: '▸ ';
+  display: inline-block;
+  width: 1em;
+  transition: transform 150ms ease;
+}
+
+.codon-chart-wrap[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+.codon-chart {
+  margin-top: 0.5rem;
+  overflow-x: auto;
+}
+
+.codon-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  table-layout: fixed;
+}
+
+.codon-table th,
+.codon-table td {
+  border: 1px solid var(--color-border);
+  text-align: center;
+  padding: 2px 3px;
+}
+
+.codon-table thead th {
+  background: var(--color-card);
+  color: var(--color-primary-dark);
+  font-weight: 700;
+  font-size: 0.72rem;
+}
+
+.codon-table .ct-base-row,
+.codon-table .ct-base-col {
+  background: var(--color-card);
+  color: var(--color-primary-dark);
+  font-weight: 700;
+  font-size: 0.72rem;
+  width: 1.4em;
+}
+
+.codon-table .ct-cell {
+  background: var(--color-card);
+  line-height: 1.1;
+}
+
+.codon-table .ct-codon {
+  display: block;
+  font-weight: 700;
+  color: var(--color-ink);
+  font-size: 0.68rem;
+}
+
+.codon-table .ct-aa {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  color: var(--color-muted);
+}
+
+.codon-table .ct-stop .ct-aa {
+  color: #E63946;
+  font-weight: 700;
+}
+
+/* =========================================================
+   Mitosis module
+   ========================================================= */
+.mitosis-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 1.5rem;
+  max-width: var(--max-width);
+  margin: 1.25rem auto;
+  padding: 0 2rem;
+}
+
+.mitosis-svg {
+  width: 100%;
+  height: auto;
+  max-width: 560px;
+  display: block;
+}
+
+/* ---------- Cell membrane ---------- */
+.mitosis-svg .cell-membrane {
+  fill: #FFE3EC;
+  stroke: #F07C99;
+  stroke-width: 3;
+  transition: opacity 600ms ease-out, transform 700ms ease-out;
+  transform-origin: 300px 320px;
+}
+
+/* Slight elongation in anaphase to suggest the cell stretching toward
+   the poles before splitting. */
+.mitosis-svg.phase-2 .cell-membrane { transform: scaleX(1.05); }
+.mitosis-svg.phase-3 .cell-membrane { transform: scaleX(1.1);  }
+
+/* In cytokinesis, the single circle fades out and the two daughter circles
+   fade in. */
+.mitosis-svg.phase-4 .cell-membrane { opacity: 0; }
+
+.mitosis-svg .daughter-cells {
+  opacity: 0;
+  transition: opacity 600ms ease-out;
+}
+.mitosis-svg .daughter-cell {
+  fill: #FFE3EC;
+  stroke: #F07C99;
+  stroke-width: 3;
+}
+.mitosis-svg.phase-4 .daughter-cells { opacity: 1; }
+
+/* Cleavage furrow wedges — only visible in cytokinesis. */
+.mitosis-svg .cleavage-furrow {
+  fill: #F07C99;
+  opacity: 0;
+  transition: opacity 500ms ease-out;
+}
+.mitosis-svg.phase-4 .cleavage-furrow { opacity: 1; }
+
+/* ---------- Parent nucleus ---------- */
+.mitosis-svg .nucleus {
+  fill: #A484D9;
+  stroke: #2D2154;
+  stroke-width: 3;
+  opacity: 0.85;
+  transition: opacity 600ms ease-out;
+}
+
+/* Dashed envelope while breaking down in prophase. */
+.mitosis-svg.phase-0 .nucleus {
+  fill: rgba(164, 132, 217, 0.18);
+  stroke-dasharray: 8 6;
+  opacity: 0.6;
+}
+
+/* Gone from metaphase onward. */
+.mitosis-svg.phase-1 .nucleus,
+.mitosis-svg.phase-2 .nucleus,
+.mitosis-svg.phase-3 .nucleus,
+.mitosis-svg.phase-4 .nucleus { opacity: 0; }
+
+/* ---------- Daughter nuclei (telophase + cytokinesis) ---------- */
+.mitosis-svg .daughter-nuclei {
+  opacity: 0;
+  transition: opacity 600ms ease-out;
+}
+.mitosis-svg .daughter-nucleus {
+  fill: #A484D9;
+  stroke: #2D2154;
+  stroke-width: 3;
+  opacity: 0.85;
+}
+.mitosis-svg.phase-3 .daughter-nuclei,
+.mitosis-svg.phase-4 .daughter-nuclei { opacity: 1; }
+
+/* ---------- Centrosomes ---------- */
+.mitosis-svg .centrosome {
+  opacity: 0;
+  transition: opacity 500ms ease-out;
+}
+.mitosis-svg .centrosome > circle:first-child {
+  fill: #FFD86A;
+  stroke: #2D2154;
+  stroke-width: 2;
+}
+.mitosis-svg .centrosome-dot { fill: #2D2154; }
+
+.mitosis-svg .centrosome-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  fill: #2D2154;
+  text-anchor: middle;
+}
+
+/* Visible from prophase through telophase. Dim in cytokinesis. */
+.mitosis-svg.phase-0 .centrosome,
+.mitosis-svg.phase-1 .centrosome,
+.mitosis-svg.phase-2 .centrosome,
+.mitosis-svg.phase-3 .centrosome { opacity: 1; }
+.mitosis-svg.phase-4 .centrosome { opacity: 0.35; }
+
+/* ---------- Spindle fibers ---------- */
+.mitosis-svg .spindle {
+  opacity: 0;
+  transition: opacity 500ms ease-out;
+}
+.mitosis-svg .fiber {
+  stroke: #5A7FB0;
+  stroke-width: 1.5;
+  stroke-dasharray: 4 3;
+  opacity: 0.75;
+}
+/* Forming in prophase, taut in metaphase, shortening in anaphase. */
+.mitosis-svg.phase-0 .spindle { opacity: 0.4; }
+.mitosis-svg.phase-1 .spindle { opacity: 1;   }
+.mitosis-svg.phase-2 .spindle { opacity: 0.7; }
+.mitosis-svg.phase-3 .spindle { opacity: 0.15; }
+
+/* ---------- Chromosomes ---------- */
+/* Each chromosome group is positioned via transform per phase. The default
+   (no phase class) keeps them hidden inside the parent nucleus. */
+.mitosis-svg .chromosome {
+  opacity: 0;
+  transition: transform 800ms cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 500ms ease-out;
+}
+.mitosis-svg .chromatid {
+  fill: #5FB890;
+  stroke: #2D2154;
+  stroke-width: 1.8;
+  transition: transform 800ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.mitosis-svg .centromere {
+  fill: #2D2154;
+}
+
+/* Prophase: scattered inside the old nucleus, visible. */
+.mitosis-svg.phase-0 .chromosome { opacity: 1; }
+.mitosis-svg.phase-0 .chr-1 { transform: translate(245px, 245px) rotate(-12deg); }
+.mitosis-svg.phase-0 .chr-2 { transform: translate(360px, 265px) rotate(20deg);  }
+.mitosis-svg.phase-0 .chr-3 { transform: translate(255px, 380px) rotate(35deg);  }
+.mitosis-svg.phase-0 .chr-4 { transform: translate(355px, 395px) rotate(-22deg); }
+
+/* Metaphase: lined up at the equator (x=300). */
+.mitosis-svg.phase-1 .chromosome { opacity: 1; }
+.mitosis-svg.phase-1 .chr-1 { transform: translate(300px, 200px); }
+.mitosis-svg.phase-1 .chr-2 { transform: translate(300px, 280px); }
+.mitosis-svg.phase-1 .chr-3 { transform: translate(300px, 360px); }
+.mitosis-svg.phase-1 .chr-4 { transform: translate(300px, 440px); }
+
+/* Anaphase: chromosomes stay at center y, but sister chromatids are pulled
+   apart to opposite poles. */
+.mitosis-svg.phase-2 .chromosome { opacity: 1; }
+.mitosis-svg.phase-2 .chr-1 { transform: translate(300px, 200px); }
+.mitosis-svg.phase-2 .chr-2 { transform: translate(300px, 280px); }
+.mitosis-svg.phase-2 .chr-3 { transform: translate(300px, 360px); }
+.mitosis-svg.phase-2 .chr-4 { transform: translate(300px, 440px); }
+.mitosis-svg.phase-2 .chromatid-l { transform: translateX(-130px); }
+.mitosis-svg.phase-2 .chromatid-r { transform: translateX(130px);  }
+.mitosis-svg.phase-2 .centromere  { opacity: 0; transition: opacity 300ms ease-out; }
+
+/* Telophase: chromatids arrive at the poles and fade as the daughter nuclei
+   form around them. */
+.mitosis-svg.phase-3 .chromosome { opacity: 0.5; }
+.mitosis-svg.phase-3 .chr-1 { transform: translate(300px, 250px); }
+.mitosis-svg.phase-3 .chr-2 { transform: translate(300px, 320px); }
+.mitosis-svg.phase-3 .chr-3 { transform: translate(300px, 320px); }
+.mitosis-svg.phase-3 .chr-4 { transform: translate(300px, 390px); }
+.mitosis-svg.phase-3 .chromatid-l { transform: translateX(-140px); }
+.mitosis-svg.phase-3 .chromatid-r { transform: translateX(140px);  }
+.mitosis-svg.phase-3 .centromere { opacity: 0; }
+
+/* Cytokinesis: chromosomes are gone, fully replaced by the daughter nuclei. */
+.mitosis-svg.phase-4 .chromosome { opacity: 0; }
+
+/* ---------- Phase label ---------- */
+.mitosis-svg .phase-label {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 600;
+  fill: var(--color-primary);
+  text-anchor: middle;
+}
+
+/* =========================================================
+   Photosynthesis module
+   ========================================================= */
+.photo-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 1.5rem;
+  max-width: var(--max-width);
+  margin: 1.25rem auto;
+  padding: 0 2rem;
+}
+
+.photo-svg {
+  width: 100%;
+  height: auto;
+  max-width: 600px;
+  display: block;
+}
+
+/* ---------- Sun + light rays ---------- */
+.photo-svg .sun-body {
+  fill: #FFD86A;
+  stroke: #2D2154;
+  stroke-width: 2.5;
+}
+
+.photo-svg .sun-rays line {
+  stroke: #FFD86A;
+  stroke-width: 4;
+  stroke-linecap: round;
+  opacity: 0.85;
+}
+
+@keyframes sun-pulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.06); }
+}
+
+.photo-svg-lr .sun {
+  transform-origin: 70px 80px;
+  transform-box: fill-box;
+  animation: sun-pulse 2.4s ease-in-out infinite;
+}
+
+.photo-svg .light-rays line {
+  stroke: #FFD86A;
+  stroke-width: 4;
+  stroke-linecap: round;
+  opacity: 0;
+  transition: opacity 500ms ease-out;
+}
+
+.photo-svg-lr .light-rays line { opacity: 0.7; }
+.photo-svg-cc .light-rays line { opacity: 0.2; }
+
+/* ---------- Chloroplast shell ---------- */
+.photo-svg .chloroplast-outer {
+  fill: #5FB890;
+  stroke: #2D2154;
+  stroke-width: 3;
+}
+
+.photo-svg .chloroplast-inner {
+  fill: #D5F4E2;
+  stroke: none;
+}
+
+.photo-svg .scene-label {
+  font-family: var(--font-heading);
+  font-size: 17px;
+  font-weight: 600;
+  fill: var(--color-ink);
+  text-anchor: middle;
+}
+
+/* ---------- Grana (thylakoid stacks) ---------- */
+.photo-svg .granum ellipse {
+  fill: #2A8A52;
+  stroke: #1F5F3A;
+  stroke-width: 1.5;
+  opacity: 0.92;
+}
+
+/* During light-reaction phases 1-3, the granum gets a subtle highlight to
+   show it's where the action is happening. */
+.photo-svg-lr.phase-1 .granum ellipse,
+.photo-svg-lr.phase-2 .granum ellipse,
+.photo-svg-lr.phase-3 .granum ellipse {
+  filter: drop-shadow(0 0 4px rgba(255, 216, 106, 0.7));
+}
+
+.photo-svg .stroma-lamella {
+  stroke: #2A8A52;
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+/* ---------- Molecule chips (generic shapes used by all groups) ---------- */
+.photo-svg .molecule {
+  transition: transform 700ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.photo-svg .mol-body {
+  stroke: #2D2154;
+  stroke-width: 1.8;
+}
+.photo-svg .mol-body.water   { fill: #8FCFFF; }
+.photo-svg .mol-body.oxygen  { fill: #B7E4C7; }
+.photo-svg .mol-body.atp     { fill: #FFD86A; }
+.photo-svg .mol-body.nadph   { fill: #FF9BB3; }
+.photo-svg .mol-body.co2     { fill: #C0C8D2; }
+.photo-svg .mol-body.glucose { fill: #FFB870; }
+
+.photo-svg .mol-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  fill: #2D2154;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+/* ---------- Groups: hidden by default, scene + phase reveal ---------- */
+.photo-svg .lr-water,
+.photo-svg .lr-oxygen,
+.photo-svg .lr-products,
+.photo-svg .cc-co2,
+.photo-svg .cc-cycle,
+.photo-svg .cc-glucose {
+  opacity: 0;
+  transition: opacity 500ms ease-out;
+  pointer-events: none;
+}
+
+/* ---------- Light reactions: water, O₂, ATP/NADPH ---------- */
+
+/* Phase 1: water molecules appear next to the granum, about to be split. */
+.photo-svg-lr.phase-1 .lr-water { opacity: 1; }
+.photo-svg .water-1 { transform: translate(155px, 295px); }
+.photo-svg .water-2 { transform: translate(155px, 445px); }
+
+/* Phase 2: water is gone, O₂ bubbles up from the granum. */
+.photo-svg-lr.phase-2 .lr-oxygen,
+.photo-svg-lr.phase-3 .lr-oxygen { opacity: 1; }
+
+/* O₂ starts at the granum in phase 2, escapes by phase 3. */
+.photo-svg-lr.phase-2 .oxygen-1 { transform: translate(210px, 280px); }
+.photo-svg-lr.phase-2 .oxygen-2 { transform: translate(210px, 460px); }
+.photo-svg-lr.phase-3 .oxygen-1 { transform: translate(120px, 150px); }
+.photo-svg-lr.phase-3 .oxygen-2 { transform: translate(70px,  210px); }
+
+/* Phase 3: ATP + NADPH show up in the stroma, ready to feed the Calvin cycle. */
+.photo-svg-lr.phase-3 .lr-products { opacity: 1; }
+.photo-svg .atp-1   { transform: translate(295px, 280px); }
+.photo-svg .nadph-1 { transform: translate(305px, 460px); }
+
+/* ---------- Calvin cycle: CO₂, cycle ring, glucose ---------- */
+
+/* Cycle ring is always visible in Calvin scene; the labels brighten as the
+   relevant intermediates become "active." */
+.photo-svg-cc .cc-cycle { opacity: 1; }
+
+.photo-svg .cycle-ring {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 2.5;
+  stroke-dasharray: 5 4;
+}
+
+.photo-svg .cycle-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  fill: var(--color-ink);
+  text-anchor: middle;
+  opacity: 0.45;
+  transition: opacity 400ms ease-out;
+}
+
+/* Highlight intermediates per Calvin phase. */
+.photo-svg-cc.phase-0 .cycle-rubp,
+.photo-svg-cc.phase-1 .cycle-rubp { opacity: 1; }
+.photo-svg-cc.phase-1 .cycle-pga,
+.photo-svg-cc.phase-2 .cycle-pga { opacity: 1; }
+.photo-svg-cc.phase-2 .cycle-g3p,
+.photo-svg-cc.phase-3 .cycle-g3p { opacity: 1; }
+
+.photo-svg .cycle-center {
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: 600;
+  fill: var(--color-primary);
+  text-anchor: middle;
+}
+
+/* CO₂ enters from outside, drifts toward the cycle. */
+.photo-svg-cc.phase-0 .cc-co2,
+.photo-svg-cc.phase-1 .cc-co2 { opacity: 1; }
+
+.photo-svg-cc.phase-0 .co2-1 { transform: translate(560px, 240px); }
+.photo-svg-cc.phase-0 .co2-2 { transform: translate(572px, 320px); }
+.photo-svg-cc.phase-0 .co2-3 { transform: translate(558px, 410px); }
+.photo-svg-cc.phase-1 .co2-1 { transform: translate(355px, 445px); }
+.photo-svg-cc.phase-1 .co2-2 { transform: translate(390px, 455px); }
+.photo-svg-cc.phase-1 .co2-3 { transform: translate(370px, 510px); }
+
+/* Glucose escapes the chloroplast in the final Calvin phase. */
+.photo-svg-cc.phase-3 .cc-glucose { opacity: 1; }
+.photo-svg .glucose-1 { transform: translate(560px, 150px); }
+
+/* ---------- Phase label ---------- */
+.photo-svg .phase-label {
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 600;
+  fill: var(--color-primary);
+  text-anchor: middle;
+}
+
+/* =========================================================
+   Cellular Respiration module
+   ========================================================= */
+.resp-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 1.5rem;
+  max-width: var(--max-width);
+  margin: 1.25rem auto;
+  padding: 0 2rem;
+}
+
+.resp-svg {
+  width: 100%;
+  height: auto;
+  max-width: 600px;
+  display: block;
+}
+
+/* ---------- Cell + mitochondrion shells ---------- */
+.resp-svg .resp-cell {
+  fill: #FFDCC4;
+  stroke: #E8915F;
+  stroke-width: 3;
+}
+
+.resp-svg .mito-outer {
+  fill: #A484D9;
+  stroke: #2D2154;
+  stroke-width: 3;
+}
+
+.resp-svg .mito-inner {
+  fill: #EFE5FF;
+  stroke: #6A4AAE;
+  stroke-width: 2;
+}
+
+.resp-svg .cristae path {
+  fill: #EFE5FF;
+  stroke: #6A4AAE;
+  stroke-width: 2;
+}
+
+.resp-svg .resp-label {
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 600;
+  fill: var(--color-ink);
+  text-anchor: middle;
+}
+
+.resp-svg .resp-label:first-of-type { text-anchor: start; }
+
+.resp-svg .stage-label {
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 600;
+  fill: var(--color-primary);
+  text-anchor: middle;
+}
+
+/* ---------- Generic molecule chip ---------- */
+.resp-svg .molecule {
+  transition: transform 700ms cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 400ms ease-out;
+}
+.resp-svg .mol-body {
+  stroke: #2D2154;
+  stroke-width: 1.8;
+}
+.resp-svg .mol-body.glucose  { fill: #FFB870; }
+.resp-svg .mol-body.pyruvate { fill: #FFD86A; }
+.resp-svg .mol-body.atp      { fill: #FFD86A; }
+.resp-svg .mol-body.nadh     { fill: #FF9BB3; }
+.resp-svg .mol-body.fadh     { fill: #C7A8F0; }
+.resp-svg .mol-body.co2      { fill: #C0C8D2; }
+.resp-svg .mol-body.acetyl   { fill: #FFCB57; }
+
+.resp-svg .mol-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  fill: #2D2154;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
+
+/* ---------- All stage groups: hidden by default ---------- */
+.resp-svg .gly-stage,
+.resp-svg .krebs-stage,
+.resp-svg .etc-stage {
+  opacity: 0;
+  transition: opacity 400ms ease-out;
+  pointer-events: none;
+}
+
+/* Individual molecules within a stage also start hidden so their entrance can
+   be staged per phase. */
+.resp-svg .molecule { opacity: 0; }
+
+/* ---------- Glycolysis scene ---------- */
+.resp-svg.scene-gly .gly-stage { opacity: 1; }
+
+/* Phase 0: glucose appears at top of cytoplasm. */
+.resp-svg.scene-gly.phase-0 .gly-glucose { opacity: 1; transform: translate(300px, 140px); }
+
+/* Phase 1: glucose splits into two pyruvate. */
+.resp-svg.scene-gly.phase-1 .gly-pyr-1 { opacity: 1; transform: translate(220px, 200px); }
+.resp-svg.scene-gly.phase-1 .gly-pyr-2 { opacity: 1; transform: translate(380px, 200px); }
+
+/* Phase 2: pyruvate drift toward mitochondrion + ATP/NADH yields appear. */
+.resp-svg.scene-gly.phase-2 .gly-pyr-1 { opacity: 1; transform: translate(255px, 245px); }
+.resp-svg.scene-gly.phase-2 .gly-pyr-2 { opacity: 1; transform: translate(345px, 245px); }
+.resp-svg.scene-gly.phase-2 .gly-atp   { opacity: 1; transform: translate(130px, 170px); }
+.resp-svg.scene-gly.phase-2 .gly-nadh  { opacity: 1; transform: translate(470px, 170px); }
+
+/* ---------- Krebs scene ---------- */
+.resp-svg.scene-krebs .krebs-stage { opacity: 1; }
+
+.resp-svg .krebs-cycle .cycle-ring {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 2.5;
+  stroke-dasharray: 5 4;
+  opacity: 0.4;
+  transition: opacity 400ms ease-out;
+}
+
+.resp-svg .cycle-center {
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: 600;
+  fill: var(--color-primary);
+  text-anchor: middle;
+  opacity: 0.5;
+  transition: opacity 400ms ease-out;
+}
+
+/* Cycle brightens once the cycle is engaged. */
+.resp-svg.scene-krebs.phase-1 .cycle-ring,
+.resp-svg.scene-krebs.phase-2 .cycle-ring,
+.resp-svg.scene-krebs.phase-3 .cycle-ring { opacity: 1; }
+
+.resp-svg.scene-krebs.phase-1 .cycle-center,
+.resp-svg.scene-krebs.phase-2 .cycle-center,
+.resp-svg.scene-krebs.phase-3 .cycle-center { opacity: 1; }
+
+/* Phase 0: acetyl-CoA shows up above the cycle. */
+.resp-svg.scene-krebs.phase-0 .krebs-acetyl { opacity: 1; transform: translate(300px, 360px); }
+
+/* Phase 1: acetyl-CoA fades (consumed by cycle); cycle brightens (handled
+   above by the ring/center opacity rules). */
+
+/* Phase 2: CO₂ molecules escape from the cycle, drifting outward. */
+.resp-svg.scene-krebs.phase-2 .krebs-co2-1 { opacity: 1; transform: translate(220px, 420px); }
+.resp-svg.scene-krebs.phase-2 .krebs-co2-2 { opacity: 1; transform: translate(380px, 420px); }
+.resp-svg.scene-krebs.phase-3 .krebs-co2-1 { opacity: 0.6; transform: translate(150px, 360px); }
+.resp-svg.scene-krebs.phase-3 .krebs-co2-2 { opacity: 0.6; transform: translate(450px, 360px); }
+
+/* Phase 3: full NADH + FADH₂ output piles. */
+.resp-svg.scene-krebs.phase-3 .krebs-nadh { opacity: 1; transform: translate(180px, 490px); }
+.resp-svg.scene-krebs.phase-3 .krebs-fadh { opacity: 1; transform: translate(420px, 490px); }
+
+/* ---------- ETC scene ---------- */
+.resp-svg.scene-etc .etc-stage { opacity: 1; }
+
+/* Electron-transport-chain complexes (always visible in ETC scene). */
+.resp-svg .etc-complexes rect {
+  fill: #6A4AAE;
+  stroke: #2D2154;
+  stroke-width: 2;
+}
+
+/* ATP synthase visualization. */
+.resp-svg .synthase-top {
+  fill: #FFD86A;
+  stroke: #2D2154;
+  stroke-width: 2;
+}
+
+@keyframes synthase-spin {
+  from { transform: rotate(0deg);   }
+  to   { transform: rotate(360deg); }
+}
+
+.resp-svg .synthase-rotor {
+  fill: #FFB870;
+  stroke: #2D2154;
+  stroke-width: 2;
+  transform-origin: 416px 528px;
+  transform-box: fill-box;
+}
+
+.resp-svg.scene-etc.phase-2 .synthase-rotor,
+.resp-svg.scene-etc.phase-3 .synthase-rotor {
+  animation: synthase-spin 2s linear infinite;
+}
+
+.resp-svg .enzyme-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  fill: var(--color-ink);
+  text-anchor: middle;
+}
+
+/* H⁺ pumping arrows. */
+.resp-svg .h-arrow {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0;
+  transition: opacity 400ms ease-out;
+}
+.resp-svg .h-arrow-down { stroke: var(--color-success); }
+
+.resp-svg.scene-etc.phase-1 .h-arrow,
+.resp-svg.scene-etc.phase-2 .h-arrow,
+.resp-svg.scene-etc.phase-3 .h-arrow { opacity: 1; }
+
+/* The downward H⁺ arrow through ATP synthase appears in phase 2+. */
+.resp-svg.scene-etc.phase-1 .h-arrow-down { opacity: 0.3; }
+
+/* ATP pile appears when ATP synthase is making it. */
+.resp-svg.scene-etc.phase-2 .etc-atp { opacity: 1; transform: translate(490px, 460px); }
+.resp-svg.scene-etc.phase-3 .etc-atp { opacity: 1; transform: translate(490px, 460px); }
+
+/* O₂ → H₂O at the end of the chain. */
+.resp-svg .reaction-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  fill: var(--color-success);
+  text-anchor: middle;
+  opacity: 0;
+  transition: opacity 400ms ease-out;
+}
+.resp-svg.scene-etc.phase-3 .reaction-label { opacity: 1; }
+
+/* Dim ETC complexes that haven't been "reached" yet by the cascade. */
+.resp-svg .etc-complexes rect { opacity: 0.4; transition: opacity 400ms ease-out; }
+.resp-svg.scene-etc.phase-0 .etc-complexes rect { opacity: 1; }
+.resp-svg.scene-etc.phase-1 .etc-complexes rect,
+.resp-svg.scene-etc.phase-2 .etc-complexes rect,
+.resp-svg.scene-etc.phase-3 .etc-complexes rect { opacity: 1; }
+
+/* ---------- Phase label ---------- */
+.resp-svg .phase-label {
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 600;
+  fill: var(--color-primary);
+  text-anchor: middle;
+}
+
+/* =========================================================
+   Quiz module
+   ========================================================= */
+.quiz-main {
+  max-width: 720px;
+  margin: 1.5rem auto 3rem;
+  padding: 0 1.5rem;
+}
+
+/* ---------- Picker (no ?module=... in URL) ---------- */
+.quiz-picker {
+  background: var(--color-card-tint);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 2.5rem 2rem;
+  box-shadow: var(--shadow-card);
+  text-align: center;
+}
+
+.quiz-picker h1 {
+  margin: 0 0 0.4rem;
+  font-size: 2rem;
+}
+
+.quiz-picker > p {
+  color: var(--color-muted);
+  margin: 0 0 1.75rem;
+}
+
+.quiz-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  text-align: left;
+}
+
+.quiz-picker-card {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.25rem 1.1rem;
+  text-decoration: none;
+  color: var(--color-ink);
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  box-shadow: var(--shadow-card);
+}
+
+.quiz-picker-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.quiz-picker-name {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  margin: 0;
+  color: var(--color-ink);
+}
+
+.quiz-picker-blurb {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+.quiz-picker-cta {
+  margin-top: 0.4rem;
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+/* ---------- Quiz card ---------- */
+.quiz-card {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.75rem 2rem 1.5rem;
+  box-shadow: var(--shadow-card);
+}
+
+@keyframes quiz-card-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.quiz-card-enter { animation: quiz-card-fade-in 240ms ease-out; }
+
+.quiz-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.quiz-module-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  padding: 0.3rem 0.65rem;
+  background: var(--color-card-tint);
+  border-radius: var(--radius-pill);
+}
+
+.quiz-counter {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  letter-spacing: 0.04em;
+}
+
+/* Row of dots above the question — shows progress + per-q outcome. */
+.quiz-progress {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 1.25rem;
+}
+
+.quiz-progress-dot {
+  flex: 1;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--color-border);
+  transition: background 200ms ease;
+}
+
+.quiz-progress-current {
+  background: var(--color-primary);
+}
+
+.quiz-progress-right {
+  background: var(--color-success);
+}
+
+.quiz-progress-wrong {
+  background: var(--color-error);
+}
+
+.quiz-question {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  line-height: 1.35;
+  margin: 0 0 1.25rem;
+  color: var(--color-ink);
+}
+
+.quiz-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.quiz-choice {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  width: 100%;
+  padding: 0.85rem 1rem;
+  background: var(--color-card-tint);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: 0.98rem;
+  color: var(--color-ink);
+  text-align: left;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.quiz-choice:hover:not(:disabled) {
+  background: var(--color-primary-tint);
+  border-color: var(--color-primary);
+  transform: translateY(-1px);
+}
+
+.quiz-choice:disabled {
+  cursor: default;
+}
+
+.quiz-choice-letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--color-card);
+  border: 2px solid currentColor;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  flex-shrink: 0;
+}
+
+.quiz-choice-text { flex-grow: 1; }
+
+.quiz-choice-correct {
+  background: rgba(95, 184, 144, 0.18);
+  border-color: var(--color-success);
+}
+.quiz-choice-correct .quiz-choice-letter {
+  background: var(--color-success);
+  color: white;
+  border-color: var(--color-success);
+}
+
+.quiz-choice-wrong {
+  background: rgba(229, 132, 156, 0.18);
+  border-color: var(--color-error);
+}
+.quiz-choice-wrong .quiz-choice-letter {
+  background: var(--color-error);
+  color: white;
+  border-color: var(--color-error);
+}
+
+/* ---------- Feedback panel ---------- */
+.quiz-feedback {
+  background: var(--color-card-tint);
+  border-left: 3px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.quiz-feedback-headline {
+  margin: 0 0 0.35rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.quiz-feedback-right { color: var(--color-success); }
+.quiz-feedback-wrong { color: var(--color-error); }
+
+.quiz-feedback-explanation {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--color-ink);
+}
+
+.quiz-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--color-border);
+}
+
+/* ---------- Results screen ---------- */
+.quiz-results {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 2rem 2rem 1.5rem;
+  box-shadow: var(--shadow-card);
+  text-align: center;
+}
+
+.quiz-results-badge {
+  font-size: 3rem;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.quiz-results-title {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  margin: 0 0 0.5rem;
+  color: var(--color-ink);
+}
+
+.quiz-results-score {
+  font-size: 1.15rem;
+  color: var(--color-muted);
+  margin: 0 0 0.5rem;
+}
+
+.quiz-results-score strong {
+  color: var(--color-primary);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+.quiz-results-best {
+  font-size: 0.95rem;
+  color: var(--color-muted);
+  margin: 0 0 1.5rem;
+}
+
+.quiz-results-best.is-best {
+  color: var(--color-primary-dark);
+  font-weight: 700;
+}
+
+/* Per-question breakdown */
+.quiz-results-breakdown {
+  list-style: none;
+  margin: 1.5rem 0 1.75rem;
+  padding: 0;
+  text-align: left;
+  border-top: 1px solid var(--color-border);
+}
+
+.breakdown-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.breakdown-mark {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.breakdown-right .breakdown-mark {
+  background: rgba(95, 184, 144, 0.18);
+  color: var(--color-success);
+}
+
+.breakdown-wrong .breakdown-mark {
+  background: rgba(229, 132, 156, 0.18);
+  color: var(--color-error);
+}
+
+.breakdown-body {
+  flex-grow: 1;
+}
+
+.breakdown-q {
+  margin: 0 0 0.2rem;
+  font-size: 0.95rem;
+  color: var(--color-ink);
+}
+
+.breakdown-correct {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+.breakdown-correct strong {
+  color: var(--color-success);
+}
+
+.quiz-results-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 768px) {
+  .quiz-main { padding: 0 1rem; }
+  .quiz-card,
+  .quiz-results,
+  .quiz-picker { padding: 1.5rem 1.25rem; }
+  .quiz-question { font-size: 1.2rem; }
+  .quiz-results-title { font-size: 1.6rem; }
+  .quiz-results-actions { flex-direction: column; }
+  .quiz-results-actions > * { width: 100%; }
+}
+
+/* =========================================================
+   Standards page (standards.html)
+   ========================================================= */
+.standards-hero {
+  max-width: var(--max-width);
+  margin: 2rem auto 1rem;
+  padding: 0 2rem;
+  text-align: center;
+}
+
+.standards-hero h1 {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  margin: 0 0 0.6rem;
+}
+
+.standards-intro {
+  font-size: 1.05rem;
+  color: var(--color-muted);
+  max-width: 640px;
+  margin: 0 auto 1rem;
+}
+
+.standards-coverage-line {
+  font-size: 1rem;
+  color: var(--color-ink);
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 1rem 0 0;
+}
+
+.standards-grid {
+  max-width: var(--max-width);
+  margin: 1.5rem auto;
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.25rem;
+}
+
+.unit-card {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem 1rem;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+}
+
+.unit-card.unit-full   { border-left: 4px solid var(--color-success); }
+.unit-card.unit-partial { border-left: 4px solid var(--color-primary); }
+.unit-card.unit-uncovered {
+  border-left: 4px solid var(--color-border);
+  opacity: 0.85;
+}
+
+.unit-card-header {
+  margin-bottom: 0.85rem;
+}
+
+.unit-card-title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-bottom: 0.35rem;
+}
+
+.unit-number {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  padding: 0.2rem 0.55rem;
+  background: var(--color-primary-tint);
+  border-radius: var(--radius-pill);
+}
+
+.unit-name {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  margin: 0;
+  color: var(--color-ink);
+}
+
+.unit-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  margin-bottom: 0.5rem;
+}
+
+.unit-big-ideas { display: inline-flex; gap: 0.3rem; }
+
+.big-idea-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-sm);
+  cursor: help;
+  background: var(--color-card-tint);
+  color: var(--color-ink);
+}
+.big-idea-evo { background: rgba(95, 184, 144, 0.18); color: #2A8A52; }
+.big-idea-ene { background: rgba(255, 184, 112, 0.22); color: #B8651A; }
+.big-idea-ist { background: rgba(164, 132, 217, 0.22); color: #6A4AAE; }
+.big-idea-syi { background: rgba(240, 124, 153, 0.18); color: var(--color-primary-dark); }
+
+.unit-coverage-bar {
+  height: 6px;
+  background: var(--color-border);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  margin-top: 0.4rem;
+}
+
+.unit-coverage-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+  transition: width 400ms ease;
+}
+
+.unit-coverage-text {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  margin: 0.35rem 0 0;
+}
+
+.lo-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.lo-row {
+  padding: 0.55rem 0.7rem;
+  border-radius: var(--radius-sm);
+  background: var(--color-card-tint);
+  border: 1px solid var(--color-border);
+}
+
+.lo-row.lo-covered {
+  border-color: rgba(95, 184, 144, 0.4);
+  background: rgba(95, 184, 144, 0.08);
+}
+
+.lo-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.15rem;
+  flex-wrap: wrap;
+}
+
+.lo-code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  padding: 0.1rem 0.4rem;
+  background: white;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+.lo-title {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--color-ink);
+  line-height: 1.35;
+}
+
+.lo-modules {
+  font-size: 0.78rem;
+  color: var(--color-muted);
+  padding-left: 0.1rem;
+}
+
+.lo-module-link {
+  color: var(--color-success);
+  text-decoration: none;
+  font-weight: 600;
+}
+.lo-module-link:hover {
+  text-decoration: underline;
+}
+
+.lo-uncovered-tag {
+  font-style: italic;
+  color: var(--color-muted);
+}
+
+.standards-disclaimer {
+  max-width: var(--max-width);
+  margin: 1.5rem auto 3rem;
+  padding: 0 2rem;
+}
+
+.standards-disclaimer p {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  text-align: center;
+  background: var(--color-card-tint);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1.25rem;
+}
+
+.standards-disclaimer code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85em;
+  background: white;
+  padding: 0.1em 0.4em;
+  border-radius: var(--radius-sm);
+}
+
+.standards-disclaimer a {
+  color: var(--color-primary);
+}
+
+@media (max-width: 768px) {
+  .standards-hero { padding: 0 1rem; }
+  .standards-grid { padding: 0 1rem; grid-template-columns: 1fr; }
+  .standards-disclaimer { padding: 0 1rem; }
+}
+
+/* =========================================================
+   AP Bio coverage summary (home page progress strip)
+   ========================================================= */
+.ap-coverage-summary {
+  margin: 0.85rem 0 0;
+  font-size: 0.92rem;
+  color: var(--color-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.ap-coverage-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  padding: 0.22rem 0.6rem;
+  background: var(--color-primary-tint);
+  border-radius: var(--radius-pill);
+}
+
+.ap-coverage-summary strong {
+  color: var(--color-ink);
+  font-weight: 700;
+}
+
+.ap-coverage-link {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.ap-coverage-link:hover {
+  color: var(--color-primary-dark);
+  text-decoration: underline;
+}
+
+/* =========================================================
+   AP Bio standards block (injected at the top of module pages)
+   ========================================================= */
+.ap-standards-block {
+  max-width: var(--max-width);
+  margin: 1rem auto 0;
+  padding: 0.65rem 1.25rem;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.85rem;
+  box-shadow: var(--shadow-card);
+}
+
+.ap-standards-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  padding: 0.25rem 0.6rem;
+  background: var(--color-primary-tint);
+  border-radius: var(--radius-pill);
+  flex-shrink: 0;
+}
+
+.ap-standards-units {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  flex: 1;
+}
+
+.ap-unit-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.ap-unit-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+.ap-lo-list {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+
+.ap-lo-pill {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.18rem 0.55rem;
+  background: var(--color-card-tint);
+  color: var(--color-ink);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  cursor: help;
+}
+
+.ap-lo-pill:hover {
+  background: var(--color-primary-tint);
+  border-color: var(--color-primary);
+}
+
+@media (max-width: 768px) {
+  .ap-standards-block {
+    margin: 0.75rem 1rem 0;
+    padding: 0.55rem 0.85rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* =========================================================
+   DNA — Okazaki fragment markers (Step 5)
+   ========================================================= */
+.dna-helix .okazaki-markers {
+  opacity: 0;
+  transition: opacity 400ms ease-out;
+  pointer-events: none;
+}
+
+.dna-helix.show-okazaki .okazaki-markers { opacity: 1; }
+
+.dna-helix .okazaki-frag {
+  fill: rgba(240, 124, 153, 0.08);
+  stroke: var(--color-primary);
+  stroke-width: 2;
+  stroke-dasharray: 5 4;
+}
+
+.dna-helix .okazaki-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  fill: var(--color-primary-dark);
+  text-anchor: start;
 }

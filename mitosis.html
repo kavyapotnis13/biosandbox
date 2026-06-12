@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mitosis — BioSandbox</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-module="mitosis">
+  <header class="site-nav">
+    <a href="index.html" class="brand">
+      <span class="brand-icon" aria-hidden="true">🧬</span>
+      BioSandbox
+    </a>
+    <div class="track-toggle" role="group" aria-label="Audience level">
+      <button class="track-option" data-track="middle" type="button">Middle</button>
+      <button class="track-option" data-track="high" type="button">High</button>
+    </div>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link nav-link-icon" aria-label="Home" title="Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12 L12 3 L22 12 L20 12 L20 21 L4 21 L4 12 Z" fill="#F07C99" stroke="#2D2154" stroke-width="1.8" stroke-linejoin="round"/><rect x="10" y="14" width="4" height="7" fill="#2D2154" rx="0.5"/></svg></a>
+      <a href="about.html" class="nav-link">About</a>
+    </div>
+  </header>
+
+  <nav class="breadcrumb"><a href="index.html">Home</a> / Mitosis</nav>
+
+  <main>
+    <div class="mitosis-layout">
+
+      <div class="scene-pane">
+        <svg viewBox="0 0 600 640" class="mitosis-svg"
+             xmlns="http://www.w3.org/2000/svg"
+             role="img"
+             aria-label="Mitosis diagram showing chromosome condensation, alignment, separation, and cell division.">
+
+          <!-- Cell membrane: a single circle during phases 0-3, replaced by
+               two daughter circles during cytokinesis (phase 4). -->
+          <circle class="cell-membrane" cx="300" cy="320" r="240"/>
+
+          <g class="daughter-cells" aria-hidden="true">
+            <circle class="daughter-cell daughter-left"  cx="160" cy="320" r="135"/>
+            <circle class="daughter-cell daughter-right" cx="440" cy="320" r="135"/>
+          </g>
+
+          <!-- Cleavage furrow: small inward wedges pinching the cell at the
+               equator during cytokinesis. -->
+          <g class="cleavage-furrow" aria-hidden="true">
+            <path d="M 300 80  L 290 110 L 310 110 Z"/>
+            <path d="M 300 560 L 290 530 L 310 530 Z"/>
+          </g>
+
+          <!-- Parent nucleus: visible during interphase and the start of
+               prophase; fades out as the envelope breaks down. -->
+          <circle class="nucleus" cx="300" cy="320" r="150"/>
+
+          <!-- Daughter nuclei: appear at the poles in telophase + cytokinesis. -->
+          <g class="daughter-nuclei" aria-hidden="true">
+            <circle class="daughter-nucleus" cx="160" cy="320" r="60"/>
+            <circle class="daughter-nucleus" cx="440" cy="320" r="60"/>
+          </g>
+
+          <!-- Centrosomes at each pole. Appear in prophase. -->
+          <g class="centrosome centrosome-left">
+            <circle cx="90" cy="320" r="10"/>
+            <circle cx="90" cy="320" r="4" class="centrosome-dot"/>
+            <text class="centrosome-label" x="90" y="295">centrosome</text>
+          </g>
+          <g class="centrosome centrosome-right">
+            <circle cx="510" cy="320" r="10"/>
+            <circle cx="510" cy="320" r="4" class="centrosome-dot"/>
+          </g>
+
+          <!-- Spindle fibers: lines from each centrosome to each chromosome.
+               Visible from metaphase onward; fade out in telophase. -->
+          <g class="spindle">
+            <line class="fiber" x1="90"  y1="320" x2="300" y2="200"/>
+            <line class="fiber" x1="90"  y1="320" x2="300" y2="280"/>
+            <line class="fiber" x1="90"  y1="320" x2="300" y2="360"/>
+            <line class="fiber" x1="90"  y1="320" x2="300" y2="440"/>
+            <line class="fiber" x1="510" y1="320" x2="300" y2="200"/>
+            <line class="fiber" x1="510" y1="320" x2="300" y2="280"/>
+            <line class="fiber" x1="510" y1="320" x2="300" y2="360"/>
+            <line class="fiber" x1="510" y1="320" x2="300" y2="440"/>
+          </g>
+
+          <!-- Four chromosomes. Each is two sister chromatids joined at a
+               centromere. The group's position is set per phase via CSS.
+               At anaphase each chromatid translates toward its pole. -->
+          <g class="chromosome chr-1">
+            <rect class="chromatid chromatid-l" x="-8" y="-20" width="6" height="40" rx="3"/>
+            <rect class="chromatid chromatid-r" x="2"  y="-20" width="6" height="40" rx="3"/>
+            <circle class="centromere" cx="0" cy="0" r="3"/>
+          </g>
+          <g class="chromosome chr-2">
+            <rect class="chromatid chromatid-l" x="-8" y="-20" width="6" height="40" rx="3"/>
+            <rect class="chromatid chromatid-r" x="2"  y="-20" width="6" height="40" rx="3"/>
+            <circle class="centromere" cx="0" cy="0" r="3"/>
+          </g>
+          <g class="chromosome chr-3">
+            <rect class="chromatid chromatid-l" x="-8" y="-20" width="6" height="40" rx="3"/>
+            <rect class="chromatid chromatid-r" x="2"  y="-20" width="6" height="40" rx="3"/>
+            <circle class="centromere" cx="0" cy="0" r="3"/>
+          </g>
+          <g class="chromosome chr-4">
+            <rect class="chromatid chromatid-l" x="-8" y="-20" width="6" height="40" rx="3"/>
+            <rect class="chromatid chromatid-r" x="2"  y="-20" width="6" height="40" rx="3"/>
+            <circle class="centromere" cx="0" cy="0" r="3"/>
+          </g>
+
+          <!-- Phase label, updated by JS. -->
+          <text class="phase-label" id="mitosis-phase-label" x="300" y="610">Interphase</text>
+        </svg>
+      </div>
+
+      <aside class="info-pane">
+        <div class="info-panel flashcard-panel">
+          <div class="flashcard-deck" id="flashcard-deck" aria-live="polite">
+            <div class="flashcard-section-label" id="section-label">Mitosis basics</div>
+            <div class="flashcard flashcard-enter">
+              <h2 class="flashcard-title"></h2>
+              <div class="flashcard-body"></div>
+            </div>
+            <div class="flashcard-nav">
+              <button class="flashcard-btn" id="card-prev" type="button" aria-label="Previous card">←</button>
+              <span class="flashcard-counter" id="card-counter">1 / 5</span>
+              <button class="flashcard-btn" id="card-next" type="button" aria-label="Next card">→</button>
+            </div>
+          </div>
+
+          <button class="cta-button" id="section-cta" type="button" hidden>↻ Restart walkthrough</button>
+          <button class="link-button" id="section-back" type="button" hidden>← Back to the basics</button>
+        </div>
+      </aside>
+
+    </div>
+
+    <div class="cell-footer-bar">
+      <span class="explored-pill">Ready to test what you've learned?</span>
+      <a href="quiz.html?module=mitosis" class="cta-button">Take the quiz →</a>
+    </div>
+  </main>
+
+  <footer class="site-footer">Built for Congressional App Challenge 2026</footer>
+
+  <script src="data/modules.js"></script>
+  <script src="data/ap-standards.js"></script>
+  <script src="data/mitosis-content.js"></script>
+  <script src="js/progress.js"></script>
+  <script src="js/mitosis.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -37,7 +37,8 @@ const MODULES = [
     name: 'Cell Explorer',
     blurb: 'Tour the organelles inside an animal or plant cell.',
     page: 'cell.html',
-    totalParts: 11,
+    totalParts: 12,
+    apStandards: ['SYI-1.E', 'SYI-1.F', 'SYI-1.G', 'SYI-2.A', 'ENE-2.A'],
     theme: 'sunshine',
     iconSvg: `
       <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -69,6 +70,7 @@ const MODULES = [
     blurb: 'Watch the double helix unwind and copy itself, step by step.',
     page: 'dna.html',
     totalParts: 6,
+    apStandards: ['IST-1.A', 'IST-1.G', 'IST-1.H'],
     theme: 'sunshine',
     iconSvg: `
       <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -99,6 +101,7 @@ const MODULES = [
     blurb: 'Decode DNA into amino acids and build a protein chain.',
     page: 'protein.html',
     totalParts: 5,
+    apStandards: ['IST-1.G', 'IST-1.I', 'IST-1.J'],
     theme: 'sunshine',
     iconSvg: `
       <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -123,18 +126,119 @@ const MODULES = [
         <path d="M12 58 Q16 61 20 58" stroke="#2D2154" stroke-width="1.5" stroke-linecap="round" fill="none"/>
       </svg>
     `
+  },
+  {
+    slug: 'photosynthesis',
+    name: 'Photosynthesis',
+    blurb: 'Follow sunlight, water, and CO₂ as a plant builds its own food.',
+    page: 'photosynthesis.html',
+    totalParts: 5,
+    apStandards: ['ENE-1.C', 'ENE-1.D', 'ENE-1.E'],
+    theme: 'mint',
+    iconSvg: `
+      <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <ellipse cx="60" cy="50" rx="48" ry="36" fill="#FFE48F" opacity="0.55"/>
+        <circle cx="14" cy="20" r="2" fill="#F07C99"/>
+        <circle cx="108" cy="20" r="2.4" fill="#F07C99"/>
+        <circle cx="108" cy="80" r="2" fill="#E8915F"/>
+        <!-- Sun in the corner -->
+        <circle cx="22" cy="22" r="7" fill="#FFD86A" stroke="#2D2154" stroke-width="2"/>
+        <line x1="22" y1="10" x2="22" y2="14" stroke="#FFD86A" stroke-width="2" stroke-linecap="round"/>
+        <line x1="10" y1="22" x2="14" y2="22" stroke="#FFD86A" stroke-width="2" stroke-linecap="round"/>
+        <line x1="13" y1="13" x2="16" y2="16" stroke="#FFD86A" stroke-width="2" stroke-linecap="round"/>
+        <!-- Chloroplast oval -->
+        <ellipse cx="68" cy="56" rx="38" ry="26" fill="#5FB890" stroke="#2D2154" stroke-width="2.8"/>
+        <ellipse cx="68" cy="56" rx="34" ry="22" fill="#D5F4E2"/>
+        <!-- Grana stacks inside -->
+        <g fill="#2A8A52" stroke="#1F5F3A" stroke-width="0.8">
+          <ellipse cx="55" cy="50" rx="9" ry="2"/>
+          <ellipse cx="55" cy="55" rx="9" ry="2"/>
+          <ellipse cx="55" cy="60" rx="9" ry="2"/>
+          <ellipse cx="80" cy="50" rx="9" ry="2"/>
+          <ellipse cx="80" cy="55" rx="9" ry="2"/>
+          <ellipse cx="80" cy="60" rx="9" ry="2"/>
+        </g>
+        <line x1="64" y1="55" x2="71" y2="55" stroke="#2A8A52" stroke-width="1.2"/>
+        <!-- Cute face on the chloroplast -->
+        <circle cx="64" cy="73" r="1.2" fill="#2D2154"/>
+        <circle cx="72" cy="73" r="1.2" fill="#2D2154"/>
+        <path d="M64 77 Q68 79 72 77" stroke="#2D2154" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+      </svg>
+    `
+  },
+  {
+    slug: 'respiration',
+    name: 'Cellular Respiration',
+    blurb: 'Turn glucose into ATP through glycolysis, the Krebs cycle, and the electron transport chain.',
+    page: 'respiration.html',
+    totalParts: 4,
+    apStandards: ['ENE-1.C', 'ENE-1.F', 'ENE-1.G', 'ENE-1.H'],
+    theme: 'lavender',
+    iconSvg: `
+      <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <ellipse cx="60" cy="50" rx="48" ry="36" fill="#FFE48F" opacity="0.55"/>
+        <circle cx="14" cy="20" r="2" fill="#F07C99"/>
+        <circle cx="108" cy="22" r="2.4" fill="#F07C99"/>
+        <circle cx="14" cy="80" r="2" fill="#E8915F"/>
+        <!-- Cell wrapper -->
+        <rect x="14" y="18" width="92" height="64" rx="14" fill="#FFDCC4" stroke="#E8915F" stroke-width="2.5"/>
+        <!-- Mitochondrion -->
+        <ellipse cx="60" cy="52" rx="36" ry="22" fill="#A484D9" stroke="#2D2154" stroke-width="2.5"/>
+        <ellipse cx="60" cy="52" rx="32" ry="18" fill="#EFE5FF"/>
+        <!-- Cristae folds -->
+        <path d="M30 48 Q36 52 30 56" fill="none" stroke="#6A4AAE" stroke-width="1.5"/>
+        <path d="M44 44 Q50 52 44 60" fill="none" stroke="#6A4AAE" stroke-width="1.5"/>
+        <path d="M60 42 Q66 52 60 62" fill="none" stroke="#6A4AAE" stroke-width="1.5"/>
+        <path d="M76 44 Q82 52 76 60" fill="none" stroke="#6A4AAE" stroke-width="1.5"/>
+        <path d="M90 48 Q84 52 90 56" fill="none" stroke="#6A4AAE" stroke-width="1.5"/>
+        <!-- ATP bursts -->
+        <circle cx="22" cy="32" r="5" fill="#FFD86A" stroke="#2D2154" stroke-width="1.5"/>
+        <text x="22" y="34.5" font-family="monospace" font-size="5" font-weight="700" fill="#2D2154" text-anchor="middle">ATP</text>
+        <circle cx="98" cy="32" r="5" fill="#FFD86A" stroke="#2D2154" stroke-width="1.5"/>
+        <text x="98" y="34.5" font-family="monospace" font-size="5" font-weight="700" fill="#2D2154" text-anchor="middle">ATP</text>
+        <!-- Cute face on mitochondrion -->
+        <circle cx="55" cy="52" r="1.2" fill="#2D2154"/>
+        <circle cx="65" cy="52" r="1.2" fill="#2D2154"/>
+        <path d="M55 56 Q60 58 65 56" stroke="#2D2154" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+      </svg>
+    `
+  },
+  {
+    slug: 'mitosis',
+    name: 'Mitosis',
+    blurb: 'Watch one cell split into two through the five phases of division.',
+    page: 'mitosis.html',
+    totalParts: 5,
+    apStandards: ['IST-3.D', 'IST-3.E'],
+    theme: 'peach',
+    iconSvg: `
+      <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <ellipse cx="60" cy="50" rx="48" ry="36" fill="#FFE48F" opacity="0.55"/>
+        <circle cx="14" cy="20" r="2" fill="#F07C99"/>
+        <circle cx="108" cy="22" r="2.4" fill="#F07C99"/>
+        <circle cx="108" cy="78" r="2" fill="#E8915F"/>
+        <circle cx="14" cy="80" r="2.2" fill="#E8915F"/>
+        <!-- Two pinched daughter cells -->
+        <circle cx="38" cy="50" r="26" fill="#FFE3EC" stroke="#2D2154" stroke-width="2.8"/>
+        <circle cx="82" cy="50" r="26" fill="#FFE3EC" stroke="#2D2154" stroke-width="2.8"/>
+        <!-- Pinch wedges -->
+        <path d="M60 26 L55 36 L65 36 Z" fill="#F07C99"/>
+        <path d="M60 74 L55 64 L65 64 Z" fill="#F07C99"/>
+        <!-- Daughter nuclei -->
+        <circle cx="38" cy="50" r="11" fill="#A484D9" stroke="#2D2154" stroke-width="2.5"/>
+        <circle cx="82" cy="50" r="11" fill="#A484D9" stroke="#2D2154" stroke-width="2.5"/>
+        <!-- Tiny condensed chromosomes inside -->
+        <rect x="34" y="45" width="3" height="10" rx="1.2" fill="#5FB890" stroke="#2D2154" stroke-width="1.2"/>
+        <rect x="39" y="45" width="3" height="10" rx="1.2" fill="#5FB890" stroke="#2D2154" stroke-width="1.2"/>
+        <rect x="78" y="45" width="3" height="10" rx="1.2" fill="#5FB890" stroke="#2D2154" stroke-width="1.2"/>
+        <rect x="83" y="45" width="3" height="10" rx="1.2" fill="#5FB890" stroke="#2D2154" stroke-width="1.2"/>
+        <!-- Cute face on one daughter cell -->
+        <circle cx="35" cy="49" r="1.2" fill="#2D2154"/>
+        <circle cx="41" cy="49" r="1.2" fill="#2D2154"/>
+        <path d="M35 53 Q38 55 41 53" stroke="#2D2154" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+      </svg>
+    `
   }
-
-  // Example future module (copy + uncomment, then create its .html file):
-  // ,{
-  //   slug: 'mitosis',
-  //   name: 'Mitosis',
-  //   blurb: 'Step through the phases of cell division.',
-  //   page: 'mitosis.html',
-  //   totalParts: 4,
-  //   theme: 'peach',
-  //   iconSvg: `<svg viewBox="0 0 120 100">...your cute thumbnail...</svg>`
-  // }
 ];
 
 // Convenience helper — used by progress.js and app.js.
