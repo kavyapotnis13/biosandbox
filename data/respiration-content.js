@@ -160,5 +160,26 @@ const RESP_ETC = [
       <p>This is why you breathe in O₂ — without it, the ETC stalls, ATP production collapses, and your cells die within minutes.</p>
       <p>Total ATP per glucose: roughly <strong>30-32</strong>. Compare to just 2 from glycolysis alone — oxygen is a massive multiplier.</p>
     `
+  },
+  {
+    title: "When there's no oxygen — fermentation",
+    body: `
+      <p>What if O₂ runs out? The ETC stalls because there's nothing to grab the spent electrons. Without the ETC, NADH piles up — and the cell runs out of NAD⁺ to keep glycolysis going.</p>
+      <p>Cells solve this with <strong>fermentation</strong>: a quick way to regenerate NAD⁺ by dumping electrons onto pyruvate or a derivative.</p>
+      <ul>
+        <li><strong>Lactic acid fermentation</strong> (your muscles during a sprint, bacteria in yogurt): pyruvate + NADH → lactate + NAD⁺.</li>
+        <li><strong>Alcoholic fermentation</strong> (yeast in beer and bread): pyruvate → CO₂ + acetaldehyde + NADH → ethanol + NAD⁺.</li>
+      </ul>
+      <p>Fermentation produces only <strong>2 ATP per glucose</strong> (from glycolysis itself) — but it keeps glycolysis going when oxygen is scarce. That's why your muscles burn during sprinting (lactate buildup) and why yeast makes bread rise (CO₂ from alcoholic fermentation).</p>
+    `
+  },
+  {
+    title: "Anaerobic vs aerobic — the trade-off",
+    body: `
+      <p><strong>Aerobic respiration</strong> (with O₂): 30–32 ATP per glucose. Slow to start, requires mitochondria, but vastly more efficient.</p>
+      <p><strong>Anaerobic respiration / fermentation</strong> (without O₂): 2 ATP per glucose. Fast, no mitochondria required, but wastes most of the glucose's energy.</p>
+      <p>Many microbes (and your muscles during heavy exercise) switch flexibly between the two. Obligate anaerobes (e.g. <em>Clostridium</em>) only do fermentation; obligate aerobes (e.g. you) can't survive without O₂ for more than a few minutes.</p>
+      <p>Evolutionarily, fermentation is much older — early life ran on it before oxygen-producing photosynthesis filled the atmosphere ~2.4 billion years ago.</p>
+    `
   }
 ];

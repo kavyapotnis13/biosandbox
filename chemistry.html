@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chemistry of Life — BioSandbox</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-module="chemistry">
+  <header class="site-nav">
+    <a href="index.html" class="brand">
+      <span class="brand-icon" aria-hidden="true">🧬</span>
+      BioSandbox
+    </a>
+    <div class="track-toggle" role="group" aria-label="Audience level">
+      <button class="track-option" data-track="middle" type="button">Middle</button>
+      <button class="track-option" data-track="high" type="button">High</button>
+    </div>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link nav-link-icon" aria-label="Home" title="Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12 L12 3 L22 12 L20 12 L20 21 L4 21 L4 12 Z" fill="#F07C99" stroke="#2D2154" stroke-width="1.8" stroke-linejoin="round"/><rect x="10" y="14" width="4" height="7" fill="#2D2154" rx="0.5"/></svg></a>
+      <a href="about.html" class="nav-link">About</a>
+    </div>
+  </header>
+
+  <nav class="breadcrumb"><a href="index.html">Home</a> / Chemistry of Life</nav>
+
+  <main>
+    <div class="chemistry-layout">
+
+      <!-- Left pane: macromolecule builder -->
+      <div class="chem-pane">
+        <div class="chem-tool" id="chem-tool">
+
+          <!-- Macromolecule tabs -->
+          <div class="builder-tabs" id="builder-tabs" role="tablist" aria-label="Macromolecule type">
+            <button class="builder-tab" type="button" data-type="carb"    role="tab" aria-pressed="true">Carbs</button>
+            <button class="builder-tab" type="button" data-type="protein" role="tab" aria-pressed="false">Proteins</button>
+            <button class="builder-tab" type="button" data-type="lipid"   role="tab" aria-pressed="false">Lipids</button>
+            <button class="builder-tab" type="button" data-type="nucleic" role="tab" aria-pressed="false">Nucleic Acids</button>
+          </div>
+
+          <!-- Bond name + blurb -->
+          <div class="builder-info">
+            <span class="builder-bond-name" id="builder-bond-name">glycosidic bond</span>
+            <p class="builder-blurb" id="builder-blurb"></p>
+          </div>
+
+          <!-- Build canvas (chain for polymers, glycerol+slots for lipid) -->
+          <div class="builder-canvas" id="builder-canvas">
+            <div class="builder-empty" id="builder-empty">Click any monomer below to start building.</div>
+          </div>
+
+          <!-- Stats row -->
+          <div class="builder-stats">
+            <div class="builder-stat">
+              <span class="builder-stat-label" id="monomer-stat-label">Monomers</span>
+              <span class="builder-stat-value" id="monomer-count">0</span>
+            </div>
+            <div class="builder-stat">
+              <span class="builder-stat-label">💧 Water released</span>
+              <span class="builder-stat-value" id="water-count">0</span>
+            </div>
+          </div>
+
+          <!-- Monomer pool -->
+          <div class="monomer-pool-wrap">
+            <div class="monomer-pool-label">Pool</div>
+            <div class="monomer-pool" id="monomer-pool"></div>
+          </div>
+
+          <div class="builder-controls">
+            <button class="link-button" id="clear-chain" type="button">↻ Hydrolyze (clear)</button>
+          </div>
+
+          <p class="builder-hint">
+            💡 Each bond you build releases one water molecule (dehydration synthesis).
+          </p>
+        </div>
+      </div>
+
+      <!-- Right pane: flashcard decks -->
+      <aside class="info-pane">
+        <div class="info-panel flashcard-panel">
+          <div class="flashcard-deck" id="flashcard-deck" aria-live="polite">
+            <div class="flashcard-section-label" id="section-label">Atoms & bonds</div>
+            <div class="flashcard flashcard-enter">
+              <h2 class="flashcard-title"></h2>
+              <div class="flashcard-body"></div>
+            </div>
+            <div class="flashcard-nav">
+              <button class="flashcard-btn" id="card-prev" type="button" aria-label="Previous card">←</button>
+              <span class="flashcard-counter" id="card-counter">1 / 4</span>
+              <button class="flashcard-btn" id="card-next" type="button" aria-label="Next card">→</button>
+            </div>
+          </div>
+
+          <button class="link-button" id="section-back" type="button" hidden>← Back to the basics</button>
+        </div>
+      </aside>
+
+    </div>
+
+    <div class="cell-footer-bar">
+      <span class="explored-pill">Ready to test what you've learned?</span>
+      <a href="quiz.html?module=chemistry" class="cta-button">Take the quiz →</a>
+    </div>
+  </main>
+
+  <footer class="site-footer">Built for Congressional App Challenge 2026</footer>
+
+  <script src="data/modules.js"></script>
+  <script src="data/ap-standards.js"></script>
+  <script src="data/chemistry-content.js"></script>
+  <script src="js/progress.js"></script>
+  <script src="js/chemistry.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

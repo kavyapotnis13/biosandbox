@@ -213,8 +213,20 @@ function finish() {
   recordQuizScore(quizSlug, score);
   const newBest = getProgress()[quizSlug]?.bestScore;
 
+  // Stats: today's activity, daily-goal counter, total-quizzes, attempt log, new badges.
+  // Count every answered question toward the daily goal (not just correct ones).
+  const answered = quizAnswers.filter(a => a !== null).length;
+  markActiveToday();
+  recordQuestionsAnswered(answered);
+  recordQuizTaken();
+  recordQuizAttempt(quizSlug, score, quizQuestions.length);
+  const newBadges = checkAndAwardBadges();
+
   show('quiz-card', false);
   show('quiz-results', true);
+
+  renderTodayStats();
+  renderNewBadges(newBadges);
 
   // Headline + score
   const title  = document.getElementById('quiz-results-title');
@@ -294,4 +306,56 @@ function sample(arr, n) {
 function show(id, visible) {
   const el = document.getElementById(id);
   if (el) el.hidden = !visible;
+}
+
+/* ---------- Results: today's stats + new badges ---------- */
+
+function renderTodayStats() {
+  const el = document.getElementById('quiz-results-stats');
+  if (!el) return;
+  const { answered, goal, hit } = getTodayProgress();
+  const { currentStreak } = getStreaks();
+  const shown = Math.min(answered, goal);
+  const pct = goal > 0 ? Math.min(100, Math.round((answered / goal) * 100)) : 0;
+
+  el.innerHTML = `
+    <div class="quiz-stat-row">
+      <div class="quiz-stat-chip">
+        <span class="quiz-stat-icon">🔥</span>
+        <span class="quiz-stat-text">${currentStreak}-day streak</span>
+      </div>
+      <div class="quiz-stat-chip quiz-stat-chip-grow">
+        <span class="quiz-stat-text">Today: ${shown} / ${goal} questions</span>
+        <div class="quiz-stat-bar">
+          <div class="quiz-stat-bar-fill" style="width: ${pct}%"></div>
+        </div>
+        ${hit ? '<span class="quiz-stat-hit">✓ Goal hit!</span>' : ''}
+      </div>
+    </div>
+    <p class="quiz-stat-link"><a href="goals.html">See all goals &amp; badges →</a></p>
+  `;
+}
+
+function renderNewBadges(newBadges) {
+  const el = document.getElementById('quiz-results-new-badges');
+  if (!el) return;
+  if (!newBadges || newBadges.length === 0) {
+    el.hidden = true;
+    return;
+  }
+  el.hidden = false;
+  el.innerHTML = `
+    <span class="new-badge-header">🎉 New badge${newBadges.length > 1 ? 's' : ''} earned!</span>
+    <div class="new-badge-list">
+      ${newBadges.map(b => `
+        <div class="new-badge-card">
+          <span class="new-badge-emoji">${b.emoji}</span>
+          <div>
+            <strong class="new-badge-name">${b.name}</strong>
+            <span class="new-badge-desc">${b.description}</span>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
 }

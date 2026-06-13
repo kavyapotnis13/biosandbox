@@ -7,28 +7,54 @@
   <meta name="description" content="An interactive biology learning app for middle and high schoolers. Click organelles, step through DNA replication, decode proteins, and test your knowledge.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <header class="site-nav">
     <a href="index.html" class="brand">
-      <span class="brand-icon" aria-hidden="true">🧬</span>
+      <span class="brand-icon" aria-hidden="true"></span>
       BioSandbox
     </a>
     <div class="track-toggle" role="group" aria-label="Audience level">
       <button class="track-option" data-track="middle" type="button">Middle</button>
       <button class="track-option" data-track="high" type="button">High</button>
     </div>
-    <a href="about.html" class="nav-link">About</a>
+    <div class="nav-links">
+      <a href="goals.html" class="nav-link">Goals</a>
+      <a href="about.html" class="nav-link">About</a>
+    </div>
   </header>
 
   <main>
     <section class="hero">
-      <h1>Explore biology, hands-on</h1>
-      <p>Click. Drag. Learn. Quiz yourself.</p>
-      <a href="cell.html" class="cta-button">Start with the cell →</a>
+      <div class="hero-colophon">
+        <span>Volume I · Edition 2026</span>
+        <span>BioSandbox</span>
+        <span>A field manual for AP Biology</span>
+      </div>
+      <div class="hero-title-wrap">
+        <h1>Explore biology, <em>hands-on.</em></h1>
+        <p class="hero-standfirst">
+          A self-paced lab manual: click through a cell, step through DNA
+          replication, decode a protein, and quiz yourself when you're ready.
+        </p>
+        <div class="hero-actions">
+          <a href="cell.html" class="cta-link">
+            Open Module 02 — Cell <span class="arrow">→</span>
+          </a>
+          <a href="standards.html" class="nav-link">AP standards map</a>
+        </div>
+      </div>
     </section>
+
+    <header class="module-grid-header">
+      <div>
+        <p class="eyebrow">Section Index</p>
+        <h2>Modules</h2>
+      </div>
+      <span class="module-grid-header-count" id="module-grid-count">14 specimens</span>
+    </header>
 
     <!-- The module grid is rendered by js/app.js from data/modules.js.
          Add new units by editing data/modules.js — no HTML changes needed here. -->
@@ -41,6 +67,25 @@
         <span id="explored-pct">0</span>% explored
       </p>
       <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+
+      <div class="home-chips">
+        <a class="home-chip home-chip-streak" href="goals.html">
+          <span class="home-chip-icon" id="home-chip-streak-icon">🔥</span>
+          <span class="home-chip-label">
+            <strong id="home-streak-value">0</strong>-day streak
+          </span>
+        </a>
+        <a class="home-chip home-chip-goal" href="goals.html">
+          <span class="home-chip-icon">🎯</span>
+          <span class="home-chip-label">
+            Today: <strong id="home-goal-value">0 / 5</strong>
+          </span>
+        </a>
+        <a class="home-chip home-chip-goal-link" href="goals.html">
+          Goals &amp; badges →
+        </a>
+      </div>
+
       <p class="ap-coverage-summary">
         <span class="ap-coverage-badge">AP Bio aligned</span>
         Covers <strong id="ap-units-covered">0</strong> of <strong>8</strong> AP Biology units —
@@ -50,7 +95,7 @@
   </main>
 
   <footer class="site-footer">
-    Built for Congressional App Challenge 2026
+    Built for Congressional App Challenge 2026 · Set in Newsreader &amp; JetBrains Mono
   </footer>
 
   <script src="data/modules.js"></script>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ecology — BioSandbox</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-module="ecology">
+  <header class="site-nav">
+    <a href="index.html" class="brand">
+      <span class="brand-icon" aria-hidden="true">🧬</span>
+      BioSandbox
+    </a>
+    <div class="track-toggle" role="group" aria-label="Audience level">
+      <button class="track-option" data-track="middle" type="button">Middle</button>
+      <button class="track-option" data-track="high" type="button">High</button>
+    </div>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link nav-link-icon" aria-label="Home" title="Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12 L12 3 L22 12 L20 12 L20 21 L4 21 L4 12 Z" fill="#F07C99" stroke="#2D2154" stroke-width="1.8" stroke-linejoin="round"/><rect x="10" y="14" width="4" height="7" fill="#2D2154" rx="0.5"/></svg></a>
+      <a href="about.html" class="nav-link">About</a>
+    </div>
+  </header>
+
+  <nav class="breadcrumb"><a href="index.html">Home</a> / Ecology</nav>
+
+  <main>
+    <div class="ecology-layout">
+
+      <!-- Left pane: interactive food web -->
+      <div class="web-pane">
+        <div class="web-tool" id="web-tool">
+
+          <!-- Trophic-level legend -->
+          <div class="trophic-legend" aria-label="Trophic level color key">
+            <span class="legend-item"><span class="legend-dot level-4"></span>Tertiary</span>
+            <span class="legend-item"><span class="legend-dot level-3"></span>Secondary</span>
+            <span class="legend-item"><span class="legend-dot level-2"></span>Primary</span>
+            <span class="legend-item"><span class="legend-dot level-1"></span>Producer</span>
+          </div>
+
+          <!-- Food web SVG -->
+          <svg class="food-web" id="food-web" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" aria-label="Meadow food web">
+            <g id="edge-layer"></g>
+            <g id="node-layer"></g>
+          </svg>
+
+          <!-- Info card for the currently-selected organism -->
+          <div class="organism-info" id="organism-info">
+            <div class="organism-info-default" id="organism-info-default">
+              <h3>Click any organism above</h3>
+              <p>Highlights its predators and prey, and tells you about its role in the meadow.</p>
+            </div>
+            <div class="organism-info-detail" id="organism-info-detail" hidden>
+              <div class="organism-info-header">
+                <span class="organism-info-icon" id="info-icon"></span>
+                <div>
+                  <h3 class="organism-info-name" id="info-name"></h3>
+                  <span class="organism-info-level" id="info-level"></span>
+                </div>
+              </div>
+              <p class="organism-info-blurb" id="info-blurb"></p>
+              <div class="organism-info-row">
+                <span class="organism-info-label">Eats</span>
+                <span class="organism-info-value" id="info-eats">—</span>
+              </div>
+              <div class="organism-info-row">
+                <span class="organism-info-label">Eaten by</span>
+                <span class="organism-info-value" id="info-eaten">—</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right pane: flashcard decks -->
+      <aside class="info-pane">
+        <div class="info-panel flashcard-panel">
+          <div class="flashcard-deck" id="flashcard-deck" aria-live="polite">
+            <div class="flashcard-section-label" id="section-label">Ecology basics</div>
+            <div class="flashcard flashcard-enter">
+              <h2 class="flashcard-title"></h2>
+              <div class="flashcard-body"></div>
+            </div>
+            <div class="flashcard-nav">
+              <button class="flashcard-btn" id="card-prev" type="button" aria-label="Previous card">←</button>
+              <span class="flashcard-counter" id="card-counter">1 / 4</span>
+              <button class="flashcard-btn" id="card-next" type="button" aria-label="Next card">→</button>
+            </div>
+          </div>
+
+          <button class="link-button" id="section-back" type="button" hidden>← Back to the basics</button>
+        </div>
+      </aside>
+
+    </div>
+
+    <div class="cell-footer-bar">
+      <span class="explored-pill">Ready to test what you've learned?</span>
+      <a href="quiz.html?module=ecology" class="cta-button">Take the quiz →</a>
+    </div>
+  </main>
+
+  <footer class="site-footer">Built for Congressional App Challenge 2026</footer>
+
+  <script src="data/modules.js"></script>
+  <script src="data/ap-standards.js"></script>
+  <script src="data/ecology-content.js"></script>
+  <script src="js/progress.js"></script>
+  <script src="js/ecology.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

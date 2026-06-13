@@ -52,14 +52,34 @@ function renderModuleCard(module) {
   card.style.setProperty('--theme-bg', theme.bg);
   card.style.setProperty('--theme-accent', theme.accent);
 
+  // Build the specimen classification — the mono signature on each card.
+  // E.g. "№ 02 · CELL · AP UNIT 2". Falls back gracefully if AP data is
+  // unavailable for a particular module.
+  const indexNum = String(MODULES.indexOf(module) + 1).padStart(2, '0');
+  let apUnitLabel = '';
+  if (typeof getLO === 'function' && module.apStandards && module.apStandards[0]) {
+    const lo = getLO(module.apStandards[0]);
+    if (lo) apUnitLabel = `AP Unit ${lo.unit}`;
+  }
+  const slugUpper = module.slug.toUpperCase();
+  const specimenHtml = `
+    <div class="module-specimen">
+      <span class="num">№ ${indexNum}</span>
+      <span class="sep">·</span>
+      <span>${slugUpper}</span>
+      ${apUnitLabel ? `<span class="sep">·</span><span>${apUnitLabel}</span>` : ''}
+    </div>
+  `;
+
   card.innerHTML = `
     <div class="module-thumbnail">${module.iconSvg}</div>
     <div class="module-body">
+      ${specimenHtml}
       <h2 class="module-name">${module.name}</h2>
       <p class="module-blurb">${module.blurb}</p>
       <div class="module-status">
         <span class="status-pill ${statusClass}">${statusLabel}</span>
-        <span class="module-cta">Start →</span>
+        <span class="module-cta">Start <span class="arrow">→</span></span>
       </div>
     </div>
   `;
@@ -94,6 +114,18 @@ function initHomePage() {
   if (apUnitsEl && typeof getCoveredUnits === 'function') {
     const allCodes = MODULES.flatMap(m => m.apStandards || []);
     apUnitsEl.textContent = getCoveredUnits(allCodes).length;
+  }
+
+  // Home-page streak + daily-goal chips.
+  if (typeof getStreaks === 'function' && typeof getTodayProgress === 'function') {
+    const { currentStreak } = getStreaks();
+    const { answered, goal } = getTodayProgress();
+    const streakValueEl = document.getElementById('home-streak-value');
+    const streakIconEl  = document.getElementById('home-chip-streak-icon');
+    const goalValueEl   = document.getElementById('home-goal-value');
+    if (streakValueEl) streakValueEl.textContent = String(currentStreak);
+    if (streakIconEl)  streakIconEl.classList.toggle('streak-emoji-dim', currentStreak === 0);
+    if (goalValueEl)   goalValueEl.textContent = `${Math.min(answered, goal)} / ${goal}`;
   }
 }
 

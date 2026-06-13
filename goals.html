@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Goals & Badges — BioSandbox</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="goals">
+  <header class="site-nav">
+    <a href="index.html" class="brand">
+      <span class="brand-icon" aria-hidden="true">🧬</span>
+      BioSandbox
+    </a>
+    <div class="track-toggle" role="group" aria-label="Audience level">
+      <button class="track-option" data-track="middle" type="button">Middle</button>
+      <button class="track-option" data-track="high" type="button">High</button>
+    </div>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link nav-link-icon" aria-label="Home" title="Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12 L12 3 L22 12 L20 12 L20 21 L4 21 L4 12 Z" fill="#F07C99" stroke="#2D2154" stroke-width="1.8" stroke-linejoin="round"/><rect x="10" y="14" width="4" height="7" fill="#2D2154" rx="0.5"/></svg></a>
+      <a href="about.html" class="nav-link">About</a>
+    </div>
+  </header>
+
+  <nav class="breadcrumb"><a href="index.html">Home</a> / Goals &amp; Badges</nav>
+
+  <main>
+    <section class="goals-hero">
+      <h1>Your study log</h1>
+      <p>Set a daily goal, build a streak, earn badges as you go.</p>
+    </section>
+
+    <section class="goals-top">
+      <!-- Today's goal ring -->
+      <div class="goal-card">
+        <h2 class="goal-card-title">Today's goal</h2>
+        <div class="goal-ring-wrap">
+          <svg class="goal-ring" viewBox="0 0 140 140" aria-hidden="true">
+            <circle class="goal-ring-track" cx="70" cy="70" r="60"
+                    fill="none" stroke-width="14"/>
+            <circle class="goal-ring-fill" id="goal-ring-fill" cx="70" cy="70" r="60"
+                    fill="none" stroke-width="14"
+                    stroke-linecap="round"
+                    transform="rotate(-90 70 70)"/>
+          </svg>
+          <div class="goal-ring-center">
+            <span class="goal-ring-value" id="goal-ring-value">0 / 5</span>
+            <span class="goal-ring-label">questions</span>
+          </div>
+        </div>
+        <p class="goal-card-message" id="goal-card-message">Take a quiz to start counting.</p>
+
+        <div class="goal-selector">
+          <span class="goal-selector-label">Daily goal:</span>
+          <div class="goal-selector-options" id="goal-selector">
+            <button class="goal-pill" type="button" data-goal="5"  aria-pressed="false">5 / day</button>
+            <button class="goal-pill" type="button" data-goal="10" aria-pressed="false">10 / day</button>
+            <button class="goal-pill" type="button" data-goal="20" aria-pressed="false">20 / day</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Streak card -->
+      <div class="goal-card streak-card">
+        <h2 class="goal-card-title">Streak</h2>
+        <div class="streak-flame">
+          <span class="streak-emoji" id="streak-emoji">🔥</span>
+          <span class="streak-number" id="streak-number">0</span>
+        </div>
+        <p class="streak-label" id="streak-label">day streak</p>
+        <div class="streak-rows">
+          <div class="streak-row">
+            <span class="streak-row-label">Longest</span>
+            <span class="streak-row-value" id="streak-longest">0 days</span>
+          </div>
+          <div class="streak-row">
+            <span class="streak-row-label">Last active</span>
+            <span class="streak-row-value" id="streak-last">Never</span>
+          </div>
+          <div class="streak-row">
+            <span class="streak-row-label">Quizzes taken</span>
+            <span class="streak-row-value" id="streak-quizzes">0</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Module mastery grid -->
+    <section class="mastery-section">
+      <h2 class="goals-section-title">Module mastery</h2>
+      <p class="goals-section-sub">A module is "mastered" once you've scored 4 / 5 or higher on its quiz.</p>
+      <div class="mastery-grid" id="mastery-grid"></div>
+    </section>
+
+    <!-- Analytics -->
+    <section class="analytics-section">
+      <h2 class="goals-section-title">Your stats</h2>
+      <p class="goals-section-sub">How your quizzing is going across modules, time, and days.</p>
+
+      <div class="analytics-grid">
+
+        <!-- Per-module mastery bar chart -->
+        <div class="analytics-card analytics-card-wide">
+          <h3 class="analytics-card-title">Best score by module</h3>
+          <div class="mastery-chart" id="mastery-chart"></div>
+        </div>
+
+        <!-- Score-over-time line chart -->
+        <div class="analytics-card analytics-card-wide">
+          <h3 class="analytics-card-title">Recent quiz scores</h3>
+          <div class="score-chart-wrap" id="score-chart-wrap">
+            <svg class="score-chart" id="score-chart" viewBox="0 0 480 160" aria-hidden="true">
+              <g id="score-chart-axes"></g>
+              <polyline id="score-chart-line" fill="none" stroke="#C56279" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+              <g id="score-chart-dots"></g>
+            </svg>
+            <p class="analytics-empty" id="score-chart-empty" hidden>
+              Take a few quizzes and your score history will graph here.
+            </p>
+          </div>
+        </div>
+
+        <!-- 12-week activity heatmap -->
+        <div class="analytics-card analytics-card-wide">
+          <h3 class="analytics-card-title">Last 12 weeks</h3>
+          <div class="heatmap-block">
+            <div class="heatmap-day-labels">
+              <span>Mon</span>
+              <span>Wed</span>
+              <span>Fri</span>
+            </div>
+            <div class="heatmap-grid" id="heatmap-grid" aria-label="Activity heatmap, last 12 weeks"></div>
+          </div>
+          <div class="heatmap-legend">
+            <span class="heatmap-legend-item"><span class="heatmap-cell heatmap-cell-none"></span> Inactive</span>
+            <span class="heatmap-legend-item"><span class="heatmap-cell heatmap-cell-active"></span> Active</span>
+            <span class="heatmap-legend-item"><span class="heatmap-cell heatmap-cell-hit"></span> Goal hit</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Badges -->
+    <section class="badge-section">
+      <h2 class="goals-section-title">Badges
+        <span class="badge-count" id="badge-count">0 / 10</span>
+      </h2>
+      <p class="goals-section-sub">Unlock these by studying, scoring, and showing up.</p>
+      <div class="badge-grid" id="badge-grid"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">Built for Congressional App Challenge 2026</footer>
+
+  <script src="data/modules.js"></script>
+  <script src="js/progress.js"></script>
+  <script src="js/goals.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

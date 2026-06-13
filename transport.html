@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Membrane Transport — BioSandbox</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-module="transport">
+  <header class="site-nav">
+    <a href="index.html" class="brand">
+      <span class="brand-icon" aria-hidden="true">🧬</span>
+      BioSandbox
+    </a>
+    <div class="track-toggle" role="group" aria-label="Audience level">
+      <button class="track-option" data-track="middle" type="button">Middle</button>
+      <button class="track-option" data-track="high" type="button">High</button>
+    </div>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link nav-link-icon" aria-label="Home" title="Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12 L12 3 L22 12 L20 12 L20 21 L4 21 L4 12 Z" fill="#F07C99" stroke="#2D2154" stroke-width="1.8" stroke-linejoin="round"/><rect x="10" y="14" width="4" height="7" fill="#2D2154" rx="0.5"/></svg></a>
+      <a href="about.html" class="nav-link">About</a>
+    </div>
+  </header>
+
+  <nav class="breadcrumb"><a href="index.html">Home</a> / Membrane Transport</nav>
+
+  <main>
+    <div class="transport-layout">
+
+      <!-- Left pane: bilayer + cell -->
+      <div class="transport-pane">
+
+        <h2 class="transport-section-title">Across the bilayer</h2>
+        <svg id="transport-svg" class="transport-svg" viewBox="0 0 460 200" xmlns="http://www.w3.org/2000/svg" aria-label="Membrane transport diagram">
+          <text x="14" y="14" class="env-label">outside</text>
+          <text x="14" y="194" class="env-label">inside</text>
+
+          <!-- Bilayer heads -->
+          <g class="bilayer">
+            <g class="head-row head-row-top">
+              <circle cx="20"  cy="60" r="6"/><circle cx="40"  cy="60" r="6"/><circle cx="60"  cy="60" r="6"/>
+              <circle cx="80"  cy="60" r="6"/><circle cx="100" cy="60" r="6"/>
+              <circle cx="160" cy="60" r="6"/><circle cx="180" cy="60" r="6"/>
+              <circle cx="240" cy="60" r="6"/><circle cx="260" cy="60" r="6"/>
+              <circle cx="320" cy="60" r="6"/><circle cx="340" cy="60" r="6"/>
+              <circle cx="380" cy="60" r="6"/><circle cx="400" cy="60" r="6"/><circle cx="420" cy="60" r="6"/><circle cx="440" cy="60" r="6"/>
+            </g>
+            <g class="head-row head-row-bot">
+              <circle cx="20"  cy="140" r="6"/><circle cx="40"  cy="140" r="6"/><circle cx="60"  cy="140" r="6"/>
+              <circle cx="80"  cy="140" r="6"/><circle cx="100" cy="140" r="6"/>
+              <circle cx="160" cy="140" r="6"/><circle cx="180" cy="140" r="6"/>
+              <circle cx="240" cy="140" r="6"/><circle cx="260" cy="140" r="6"/>
+              <circle cx="320" cy="140" r="6"/><circle cx="340" cy="140" r="6"/>
+              <circle cx="380" cy="140" r="6"/><circle cx="400" cy="140" r="6"/><circle cx="420" cy="140" r="6"/><circle cx="440" cy="140" r="6"/>
+            </g>
+          </g>
+
+          <!-- Channel 1: simple diffusion (small molecule slipping through lipid) -->
+          <g class="route route-simple">
+            <text x="60" y="36" class="route-label">simple</text>
+            <circle class="trans-mol mol-simple" cx="60" cy="36" r="5"/>
+          </g>
+
+          <!-- Channel 2: facilitated channel protein -->
+          <g class="route route-channel">
+            <rect class="channel-prot" x="160" y="46" width="22" height="108" rx="5"/>
+            <text x="171" y="36" class="route-label">channel</text>
+            <circle class="trans-mol mol-channel" cx="171" cy="36" r="6"/>
+          </g>
+
+          <!-- Channel 3: aquaporin (water) -->
+          <g class="route route-water">
+            <rect class="channel-prot" x="240" y="46" width="22" height="108" rx="5"/>
+            <text x="251" y="36" class="route-label">water</text>
+            <circle class="trans-mol mol-water" cx="251" cy="36" r="4"/>
+          </g>
+
+          <!-- Channel 4: active pump (ATP-driven, against gradient) -->
+          <g class="route route-active">
+            <rect class="pump-prot" x="320" y="46" width="22" height="108" rx="5"/>
+            <text x="331" y="36" class="route-label">pump</text>
+            <text x="331" y="176" class="atp-mark">ATP</text>
+            <circle class="trans-mol mol-active" cx="331" cy="176" r="5"/>
+          </g>
+
+          <!-- "Blocked" big charged molecule (cannot cross alone) -->
+          <g class="route route-blocked">
+            <circle cx="400" cy="36" r="9" fill="#C95C46" stroke="#2D2154" stroke-width="1.6"/>
+            <text x="400" y="40" class="big-charge-label">+</text>
+            <line x1="386" y1="22" x2="414" y2="50" stroke="#C95C46" stroke-width="2"/>
+            <text x="400" y="14" class="route-label">blocked</text>
+          </g>
+        </svg>
+
+        <div class="pump-line">
+          <span class="pump-line-text">Active transport spends ATP to push molecules against their gradient.</span>
+          <button class="cancer-toggle" id="pump-toggle" type="button" aria-pressed="true">✓ ATP pump on</button>
+        </div>
+
+        <hr class="rule" style="margin: 0.5rem 0;">
+
+        <!-- Tonicity simulator -->
+        <h2 class="transport-section-title">Tonicity & osmosis</h2>
+        <div class="tonicity-wrap">
+          <svg id="cell-svg" class="cell-svg isotonic" viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg" aria-label="Cell in solution">
+            <!-- Outside solute dots -->
+            <g class="outside-solutes">
+              <circle cx="22" cy="22" r="3"/><circle cx="54" cy="40" r="3"/><circle cx="222" cy="26" r="3"/>
+              <circle cx="252" cy="56" r="3"/><circle cx="34" cy="160" r="3"/><circle cx="258" cy="170" r="3"/>
+              <circle cx="18" cy="100" r="3"/><circle cx="260" cy="100" r="3"/>
+              <circle cx="62" cy="186" r="3"/><circle cx="220" cy="184" r="3"/>
+            </g>
+            <!-- The cell — radius animates with tonicity -->
+            <circle class="cell-body" cx="140" cy="100" r="60"/>
+            <!-- Inside solutes -->
+            <g class="inside-solutes">
+              <circle cx="120" cy="90" r="3"/><circle cx="155" cy="80" r="3"/><circle cx="160" cy="115" r="3"/>
+              <circle cx="125" cy="120" r="3"/><circle cx="135" cy="100" r="3"/>
+            </g>
+            <!-- Water-flow arrows -->
+            <g class="water-arrows">
+              <path class="arrow-in arrow-1" d="M 50 100 L 78 100" />
+              <polygon class="arrow-in arrow-1" points="76,96 84,100 76,104" />
+              <path class="arrow-in arrow-2" d="M 230 100 L 202 100" />
+              <polygon class="arrow-in arrow-2" points="204,96 196,100 204,104" />
+              <path class="arrow-out arrow-1" d="M 78 100 L 50 100" />
+              <polygon class="arrow-out arrow-1" points="52,96 44,100 52,104" />
+              <path class="arrow-out arrow-2" d="M 202 100 L 230 100" />
+              <polygon class="arrow-out arrow-2" points="228,96 236,100 228,104" />
+            </g>
+          </svg>
+
+          <div class="tonicity-controls">
+            <div class="tonicity-head">
+              <span class="tonicity-name" id="tonicity-label">Isotonic</span>
+              <span class="tonicity-climate" id="tonicity-climate">Same solute both sides</span>
+            </div>
+            <label class="tonicity-slider-label">
+              <span>Hypertonic</span>
+              <input id="tonicity-slider" type="range" min="-1" max="1" step="0.02" value="0" aria-label="Outside solute concentration">
+              <span>Hypotonic</span>
+            </label>
+            <p class="enzyme-status enzyme-status-ok" id="tonicity-status">✓ Balanced — no net water movement.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right pane: flashcards -->
+      <aside class="info-pane">
+        <div class="info-panel flashcard-panel">
+          <div class="flashcard-deck" id="flashcard-deck" aria-live="polite">
+            <div class="flashcard-section-label" id="section-label">The membrane</div>
+            <div class="flashcard flashcard-enter">
+              <h2 class="flashcard-title"></h2>
+              <div class="flashcard-body"></div>
+            </div>
+            <div class="flashcard-nav">
+              <button class="flashcard-btn" id="card-prev" type="button" aria-label="Previous card">←</button>
+              <span class="flashcard-counter" id="card-counter">1 / 2</span>
+              <button class="flashcard-btn" id="card-next" type="button" aria-label="Next card">→</button>
+            </div>
+          </div>
+          <button class="link-button" id="section-back" type="button" hidden>← Back to the basics</button>
+        </div>
+      </aside>
+
+    </div>
+
+    <div class="cell-footer-bar">
+      <span class="explored-pill">Ready to test what you've learned?</span>
+      <a href="quiz.html?module=transport" class="cta-button">Take the quiz →</a>
+    </div>
+  </main>
+
+  <footer class="site-footer">Built for Congressional App Challenge 2026</footer>
+
+  <script src="data/modules.js"></script>
+  <script src="data/ap-standards.js"></script>
+  <script src="data/transport-content.js"></script>
+  <script src="js/progress.js"></script>
+  <script src="js/transport.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

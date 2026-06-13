@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Natural Selection — BioSandbox</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-module="selection">
+  <header class="site-nav">
+    <a href="index.html" class="brand">
+      <span class="brand-icon" aria-hidden="true">🧬</span>
+      BioSandbox
+    </a>
+    <div class="track-toggle" role="group" aria-label="Audience level">
+      <button class="track-option" data-track="middle" type="button">Middle</button>
+      <button class="track-option" data-track="high" type="button">High</button>
+    </div>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link nav-link-icon" aria-label="Home" title="Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12 L12 3 L22 12 L20 12 L20 21 L4 21 L4 12 Z" fill="#F07C99" stroke="#2D2154" stroke-width="1.8" stroke-linejoin="round"/><rect x="10" y="14" width="4" height="7" fill="#2D2154" rx="0.5"/></svg></a>
+      <a href="about.html" class="nav-link">About</a>
+    </div>
+  </header>
+
+  <nav class="breadcrumb"><a href="index.html">Home</a> / Natural Selection</nav>
+
+  <main>
+    <div class="selection-layout">
+
+      <!-- Left pane: interactive population simulator -->
+      <div class="habitat-pane">
+        <div class="sim-tool" id="sim-tool">
+
+          <!-- Environment toggle -->
+          <div class="env-toggle" role="group" aria-label="Habitat">
+            <button class="env-option" type="button" data-env="light" aria-pressed="true">
+              <span class="env-swatch env-swatch-light"></span>
+              Light habitat
+            </button>
+            <button class="env-option" type="button" data-env="dark" aria-pressed="false">
+              <span class="env-swatch env-swatch-dark"></span>
+              Dark habitat
+            </button>
+          </div>
+
+          <!-- Habitat with creatures (SVG injected by JS) -->
+          <svg class="habitat-svg" id="habitat-svg" viewBox="0 0 360 240" xmlns="http://www.w3.org/2000/svg" aria-label="Population of 20 creatures in a habitat">
+            <rect class="habitat-bg" id="habitat-bg" x="0" y="0" width="360" height="240" rx="14"/>
+            <g id="creature-layer"></g>
+          </svg>
+
+          <!-- Stats row -->
+          <div class="sim-stats">
+            <div class="sim-stat">
+              <span class="sim-stat-label">Generation</span>
+              <span class="sim-stat-value" id="gen-counter">0</span>
+            </div>
+            <div class="sim-stat sim-stat-grow">
+              <span class="sim-stat-label">Population mix</span>
+              <div class="freq-bar" aria-hidden="true">
+                <div class="freq-bar-light" id="freq-bar-light" style="width: 50%"></div>
+                <div class="freq-bar-dark"  id="freq-bar-dark"  style="width: 50%"></div>
+              </div>
+              <div class="freq-readout">
+                <span class="freq-readout-light"><span class="freq-dot freq-dot-light"></span><span id="pct-light">50%</span> light</span>
+                <span class="freq-readout-dark"><span class="freq-dot freq-dot-dark"></span><span id="pct-dark">50%</span> dark</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- History sparkline showing % dark over generations -->
+          <div class="sparkline-block">
+            <div class="sparkline-header">
+              <span class="sparkline-label">% dark over generations</span>
+              <span class="sparkline-axis">100%</span>
+            </div>
+            <svg class="freq-sparkline" id="freq-sparkline" viewBox="0 0 360 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <line x1="0" y1="30" x2="360" y2="30" stroke="#2D2154" stroke-width="0.5" stroke-dasharray="3 3" opacity="0.3"/>
+              <polyline id="sparkline-path" points="0,30" fill="none" stroke="#5A3F8F" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+            </svg>
+            <div class="sparkline-axis-row">
+              <span class="sparkline-axis">0%</span>
+            </div>
+          </div>
+
+          <!-- Controls -->
+          <div class="sim-controls">
+            <button class="cta-button" id="run-gen" type="button">▶ Run a generation</button>
+            <button class="link-button" id="reset-sim" type="button">↻ Reset to 50/50</button>
+          </div>
+
+          <p class="sim-hint" id="sim-hint">
+            💡 Pick a habitat, then run generations. Creatures whose color matches their habitat are harder for predators to spot.
+          </p>
+        </div>
+      </div>
+
+      <!-- Right pane: flashcard decks -->
+      <aside class="info-pane">
+        <div class="info-panel flashcard-panel">
+          <div class="flashcard-deck" id="flashcard-deck" aria-live="polite">
+            <div class="flashcard-section-label" id="section-label">Evolution basics</div>
+            <div class="flashcard flashcard-enter">
+              <h2 class="flashcard-title"></h2>
+              <div class="flashcard-body"></div>
+            </div>
+            <div class="flashcard-nav">
+              <button class="flashcard-btn" id="card-prev" type="button" aria-label="Previous card">←</button>
+              <span class="flashcard-counter" id="card-counter">1 / 5</span>
+              <button class="flashcard-btn" id="card-next" type="button" aria-label="Next card">→</button>
+            </div>
+          </div>
+
+          <button class="link-button" id="section-back" type="button" hidden>← Back to the basics</button>
+        </div>
+      </aside>
+
+    </div>
+
+    <div class="cell-footer-bar">
+      <span class="explored-pill">Ready to test what you've learned?</span>
+      <a href="quiz.html?module=selection" class="cta-button">Take the quiz →</a>
+    </div>
+  </main>
+
+  <footer class="site-footer">Built for Congressional App Challenge 2026</footer>
+
+  <script src="data/modules.js"></script>
+  <script src="data/ap-standards.js"></script>
+  <script src="data/selection-content.js"></script>
+  <script src="js/progress.js"></script>
+  <script src="js/selection.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
