@@ -11,6 +11,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   if (document.body.dataset.page !== 'goals') return;
 
+  renderXpCard();
   renderGoalRing();
   renderStreakCard();
   renderMasteryGrid();
@@ -19,6 +20,13 @@ document.addEventListener('DOMContentLoaded', () => {
   renderHeatmap();
   renderBadgeGrid();
   renderGoalSelector();
+
+  // Live-update the XP card if XP is earned while on this page.
+  window.addEventListener('xpgained', () => {
+    renderXpCard();
+    renderBadgeGrid();
+  });
+  window.addEventListener('achievementunlocked', renderBadgeGrid);
 
   document.getElementById('goal-selector')?.addEventListener('click', e => {
     const btn = e.target.closest('.goal-pill');
@@ -141,6 +149,47 @@ function renderMasteryGrid() {
       </a>
     `;
   }).join('');
+}
+
+/* ---------- XP + level card ---------- */
+
+// Flavor text keyed on level. Falls through to the last entry for higher levels.
+const XP_FLAVOR = [
+  null,                                 // L0 (unused)
+  'Just getting started',               // L1
+  'Picking up momentum',                // L2
+  'Settling into the work',             // L3
+  'Hitting your stride',                // L4
+  'Rising star',                        // L5
+  'You really know this stuff',         // L6
+  'Field guide author',                 // L7
+  'Apex student',                       // L8
+  'Approaching legend',                 // L9
+  'Bio legend'                          // L10+
+];
+
+function renderXpCard() {
+  if (typeof getLevelProgress !== 'function') return;
+  const p = getLevelProgress();
+
+  setText('xp-level-num',   p.level);
+  setText('xp-into',        p.into);
+  setText('xp-span',        p.span);
+  setText('xp-total',       p.xp);
+  setText('xp-tonext',      p.toNext);
+  setText('xp-card-title',  XP_FLAVOR[Math.min(p.level, XP_FLAVOR.length - 1)] || XP_FLAVOR[XP_FLAVOR.length - 1]);
+
+  const fill = document.getElementById('xp-card-fill');
+  if (fill) fill.style.width = p.pct + '%';
+
+  // Hide the "X XP to Level N+1" hint at maxed-out levels (defensive).
+  const hint = document.querySelector('.xp-card-hint');
+  if (hint) hint.innerHTML = `<strong id="xp-tonext">${p.toNext}</strong> XP to Level ${p.level + 1}`;
+}
+
+function setText(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = String(value);
 }
 
 /* ---------- Badge grid ---------- */

@@ -224,8 +224,8 @@ function initLevelBadge() {
 
   const badge = document.createElement('a');
   badge.className = 'level-badge';
-  badge.href      = 'achievements.html';
-  badge.setAttribute('aria-label', 'Your level and XP — open trophy case');
+  badge.href      = 'goals.html';
+  badge.setAttribute('aria-label', 'Your level and XP — open study log');
   badge.innerHTML = `
     <span class="level-badge-num">Lvl 1</span>
     <span class="level-badge-bar"><span class="level-badge-fill"></span></span>
