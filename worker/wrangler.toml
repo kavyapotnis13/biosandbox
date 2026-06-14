@@ -1,0 +1,7 @@
+name = "biosandbox-tutor"
+main = "src/index.js"
+compatibility_date = "2025-06-01"
+
+# Free-tier defaults. No KV, no D1, no Durable Objects needed.
+# The ANTHROPIC_API_KEY is set as a secret, not in this file:
+#   npx wrangler secret put ANTHROPIC_API_KEY

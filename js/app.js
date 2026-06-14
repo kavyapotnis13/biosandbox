@@ -194,6 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initApStandardsBlock();
   initXpGameification();
   initLevelBadge();
+  initTutorLink();
   initXpToasts();
 });
 
@@ -250,6 +251,38 @@ function initLevelBadge() {
 
   paint(false);
   window.addEventListener('xpgained', e => paint(!!(e.detail && e.detail.leveledUp)));
+}
+
+/* ---------- Nav: Lab Partner (tutor) link ----------
+   Adds a "Tutor" link to .nav-links on every page. Skips the
+   tutor page itself, and skips pages that don't have .nav-links
+   (about.html is the only one currently — it gets a standalone
+   link appended to .site-nav). */
+
+function initTutorLink() {
+  const nav = document.querySelector('.site-nav');
+  if (!nav) return;
+  if (document.body.dataset.page === 'tutor') return;
+  if (nav.querySelector('.nav-link-tutor')) return;
+
+  const link = document.createElement('a');
+  link.href = 'tutor.html';
+  link.className = 'nav-link nav-link-tutor';
+  link.setAttribute('aria-label', 'Open Lab Partner — biology chat tutor');
+  link.title = 'Lab Partner';
+  link.innerHTML = `<span class="nav-link-tutor-icon" aria-hidden="true">💬</span> Tutor`;
+
+  const links = nav.querySelector('.nav-links');
+  if (links) {
+    // Slot before the "About" text link if one exists, else append.
+    const about = Array.from(links.querySelectorAll('.nav-link')).find(
+      a => a.textContent.trim().toLowerCase() === 'about'
+    );
+    if (about) links.insertBefore(link, about);
+    else links.appendChild(link);
+  } else {
+    nav.appendChild(link);
+  }
 }
 
 /* ---------- XP + achievement toasts ----------

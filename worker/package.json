@@ -1,0 +1,13 @@
+{
+  "name": "biosandbox-tutor-worker",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Cloudflare Worker proxy for the BioSandbox Lab Partner — keeps the Anthropic API key out of the browser.",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^3.80.0"
+  }
+}
