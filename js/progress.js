@@ -85,17 +85,19 @@ function getOverallStats() {
 }
 
 // Helper: mark a single "part" of a module as explored (no duplicates).
-// Also counts as activity for today (streak + last-active).
+// Also counts as activity for today (streak + last-active) and awards XP.
 function markExplored(slug, partId) {
   const progress = getProgress();
   if (!progress[slug].explored.includes(partId)) {
     progress[slug].explored.push(partId);
     saveProgress(progress);
     markActiveToday();
+    addXP(XP_REWARDS.exploreItem, `explore:${slug}:${partId}`);
   }
 }
 
-// Helper: record a quiz score, keeping the highest.
+// Helper: record a quiz score, keeping the highest. Awards XP for each correct
+// answer plus a bonus for a perfect score.
 function recordQuizScore(slug, score) {
   const progress = getProgress();
   const current = progress[slug].bestScore;
@@ -103,6 +105,21 @@ function recordQuizScore(slug, score) {
     progress[slug].bestScore = score;
     saveProgress(progress);
   }
+  // XP for the attempt, regardless of whether it was a personal best.
+  const base = score * XP_REWARDS.perCorrect;
+  const bonus = (score === 5) ? XP_REWARDS.perfectBonus : 0;
+  if (base + bonus > 0) addXP(base + bonus, `quiz:${slug}`);
+}
+
+// Helper: mark a module as visited. Returns true on first visit; awards XP
+// then. Idempotent thereafter.
+function recordModuleVisit(slug) {
+  const stats = getStats();
+  if (stats.visitedModules.includes(slug)) return false;
+  stats.visitedModules.push(slug);
+  saveStats(stats);
+  addXP(XP_REWARDS.moduleVisit, `visit:${slug}`);
+  return true;
 }
 
 /* =========================================================
@@ -129,7 +146,11 @@ function emptyStats() {
     totalQuizzes:     0,
     earnedBadges:     [],
     badgeEarnedDates: {},
-    quizHistory:      []
+    quizHistory:      [],
+    xp:               0,
+    visitedModules:   [],
+    trackToggleCount: 0,
+    nightVisits:      0
   };
 }
 
@@ -401,3 +422,190 @@ function getAllBadgesWithStatus() {
     earnedOn: stats.badgeEarnedDates[b.id] || null
   }));
 }
+
+/* =========================================================
+   XP + levels
+   - addXP(amount, source) updates total XP and dispatches an
+     'xpgained' window event with { amount, source, total,
+     leveledUp, newLevel }. The nav badge + toast layer listen
+     for this event to animate; the page itself doesn't have to
+     know XP exists.
+   - Level curve: xpForLevel(n) = (n-1)(100n + 300)
+       L1: 0   L2: 500   L3: 1200   L4: 2100
+       L5: 3200  L6: 4500  L7: 6000  L8: 7700
+     Tuned so a fully-engaged student reaches ~Level 6 after
+     covering every module and acing every quiz.
+   ========================================================= */
+
+const XP_REWARDS = {
+  perCorrect:   50,    // quiz: per correct answer
+  perfectBonus: 200,   // quiz: bonus on a perfect 5/5
+  exploreItem:  25,    // organelle / interactive item explored
+  moduleVisit:  100    // first visit to a module page
+};
+
+function xpForLevel(n) {
+  if (n <= 1) return 0;
+  return (n - 1) * (100 * n + 300);
+}
+
+function getLevel(xp) {
+  const total = (xp === undefined) ? getXP() : xp;
+  if (total <= 0) return 1;
+  // Solved from xp = (n-1)(100n + 300): n = -1 + sqrt(4 + xp/100).
+  return Math.max(1, Math.floor(-1 + Math.sqrt(4 + total / 100)));
+}
+
+function getXP() {
+  return getStats().xp || 0;
+}
+
+// Progress through the current level. Returns { level, xp, into, span, pct }.
+function getLevelProgress() {
+  const xp = getXP();
+  const level = getLevel(xp);
+  const floor = xpForLevel(level);
+  const ceil  = xpForLevel(level + 1);
+  const span  = ceil - floor;
+  const into  = xp - floor;
+  return {
+    level,
+    xp,
+    into,
+    span,
+    pct:    span > 0 ? Math.round((into / span) * 100) : 0,
+    toNext: Math.max(0, ceil - xp)
+  };
+}
+
+// Add XP, save, fire 'xpgained' window event so UI can animate.
+function addXP(amount, source) {
+  if (!amount || amount <= 0) return 0;
+  const stats = getStats();
+  const before = stats.xp || 0;
+  const after  = before + amount;
+  const prevLevel = getLevel(before);
+  const nextLevel = getLevel(after);
+  stats.xp = after;
+  saveStats(stats);
+
+  // Re-check badges in case a level-based one was just earned.
+  const newBadges = checkAndAwardBadges();
+
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('xpgained', {
+      detail: {
+        amount,
+        source:    source || null,
+        total:     after,
+        leveledUp: nextLevel > prevLevel,
+        newLevel:  nextLevel
+      }
+    }));
+    for (const badge of newBadges) {
+      window.dispatchEvent(new CustomEvent('achievementunlocked', { detail: badge }));
+    }
+  }
+  return after;
+}
+
+/* ---------- Hidden-achievement bookkeeping ----------
+   These two counters power the "Bilingual" and "Night Owl" badges
+   below. Called from app.js (track toggle) and on each module page
+   load (between 0:00 and 3:00 local time). */
+
+function recordTrackToggle() {
+  const stats = getStats();
+  stats.trackToggleCount = (stats.trackToggleCount || 0) + 1;
+  saveStats(stats);
+  checkAndAwardBadges();
+}
+
+function recordNightVisit() {
+  const hour = new Date().getHours();
+  if (hour >= 3) return; // only between midnight and 3 AM
+  const stats = getStats();
+  stats.nightVisits = (stats.nightVisits || 0) + 1;
+  saveStats(stats);
+  checkAndAwardBadges();
+}
+
+/* ---------- Additional achievements ----------
+   Pushed onto BADGES after the catalog is declared so the original
+   entries stay grouped at the top of the file. */
+
+BADGES.push(
+  {
+    id: 'first-foot',
+    emoji: '🚪',
+    name: 'First Foot in the Door',
+    description: 'Open your first module page.',
+    check: (s) => (s.visitedModules || []).length >= 1
+  },
+  {
+    id: 'cartographer',
+    emoji: '🗺️',
+    name: 'Cartographer',
+    description: 'Visit a module from all 8 AP Bio units.',
+    check: (s) => {
+      if (typeof AP_BIO_UNITS === 'undefined') return false;
+      const visited = new Set(s.visitedModules || []);
+      const slugToUnit = new Map();
+      for (const m of MODULES) {
+        // Find which unit covers any of this module's apStandards.
+        if (!m.apStandards || !m.apStandards.length) continue;
+        for (const code of m.apStandards) {
+          const unit = AP_BIO_UNITS.find(u => u.los.some(lo => lo.code === code));
+          if (unit) { slugToUnit.set(m.slug, unit.number); break; }
+        }
+      }
+      const unitsCovered = new Set();
+      for (const slug of visited) {
+        const u = slugToUnit.get(slug);
+        if (u) unitsCovered.add(u);
+      }
+      return unitsCovered.size >= 8;
+    }
+  },
+  {
+    id: 'organelle-hunter',
+    emoji: '🔬',
+    name: 'Organelle Hunter',
+    description: 'Explore every organelle in both cell types.',
+    check: (s, p) => {
+      const cell      = (p.cell      && p.cell.explored.length)      || 0;
+      const cellPlant = (p['cell-plant'] && p['cell-plant'].explored.length) || 0;
+      const cellMod   = MODULES.find(m => m.slug === 'cell');
+      const target    = cellMod ? cellMod.totalParts : 12;
+      return (cell + cellPlant) >= target;
+    }
+  },
+  {
+    id: 'level-5',
+    emoji: '⭐',
+    name: 'Rising Star',
+    description: 'Reach Level 5.',
+    check: (s) => getLevel(s.xp || 0) >= 5
+  },
+  {
+    id: 'level-10',
+    emoji: '🌠',
+    name: 'Bio Legend',
+    description: 'Reach Level 10.',
+    check: (s) => getLevel(s.xp || 0) >= 10
+  },
+  {
+    id: 'night-owl',
+    emoji: '🦉',
+    name: 'Night Owl',
+    description: 'Study between midnight and 3 AM.',
+    check: (s) => (s.nightVisits || 0) >= 1
+  },
+  {
+    id: 'bilingual',
+    emoji: '🌐',
+    name: 'Bilingual',
+    description: 'Flip the Middle/High toggle 10 times.',
+    check: (s) => (s.trackToggleCount || 0) >= 10
+  }
+);

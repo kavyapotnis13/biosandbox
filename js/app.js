@@ -23,6 +23,8 @@ function initTrackToggle() {
       syncButtons();
       // Let other scripts (e.g. cell.js) re-render content for the new track.
       window.dispatchEvent(new CustomEvent('trackchanged', { detail: btn.dataset.track }));
+      // Powers the "Bilingual" hidden achievement.
+      if (typeof recordTrackToggle === 'function') recordTrackToggle();
     });
   });
 
@@ -190,4 +192,108 @@ document.addEventListener('DOMContentLoaded', () => {
   initTrackToggle();
   initHomePage();
   initApStandardsBlock();
+  initXpGameification();
+  initLevelBadge();
+  initXpToasts();
 });
+
+/* ---------- XP gameification hooks ----------
+   Records a first-time module visit (awards XP) and a "night owl"
+   visit if it's between midnight and 3 AM. */
+
+function initXpGameification() {
+  const slug = document.body.dataset.module;
+  if (slug && typeof recordModuleVisit === 'function') {
+    recordModuleVisit(slug);
+  }
+  if (typeof recordNightVisit === 'function') {
+    recordNightVisit();
+  }
+}
+
+/* ---------- Nav level badge ----------
+   Injects a level pill + thin XP bar into .site-nav, before the
+   .nav-links group. Listens for the 'xpgained' window event to
+   update live (with a brief glow on level-up). Auto-skips pages
+   that don't have a .site-nav (none currently). */
+
+function initLevelBadge() {
+  if (typeof getLevelProgress !== 'function') return;
+  const nav = document.querySelector('.site-nav');
+  if (!nav || nav.querySelector('.level-badge')) return;
+
+  const badge = document.createElement('a');
+  badge.className = 'level-badge';
+  badge.href      = 'achievements.html';
+  badge.setAttribute('aria-label', 'Your level and XP — open trophy case');
+  badge.innerHTML = `
+    <span class="level-badge-num">Lvl 1</span>
+    <span class="level-badge-bar"><span class="level-badge-fill"></span></span>
+  `;
+
+  // Slot it just before .nav-links so the order is: brand · toggle · badge · links.
+  const links = nav.querySelector('.nav-links');
+  if (links) nav.insertBefore(badge, links);
+  else nav.appendChild(badge);
+
+  function paint(animate) {
+    const p = getLevelProgress();
+    badge.querySelector('.level-badge-num').textContent = `Lvl ${p.level}`;
+    badge.querySelector('.level-badge-fill').style.width = p.pct + '%';
+    badge.title = `Level ${p.level} · ${p.into} / ${p.span} XP to next level`;
+    if (animate) {
+      badge.classList.remove('level-up');
+      void badge.offsetWidth;       // force reflow so animation restarts
+      badge.classList.add('level-up');
+    }
+  }
+
+  paint(false);
+  window.addEventListener('xpgained', e => paint(!!(e.detail && e.detail.leveledUp)));
+}
+
+/* ---------- XP + achievement toasts ----------
+   Floating notifications when XP is earned or a badge is unlocked.
+   Container is created on first event so pages with no XP traffic
+   don't pay for the DOM. */
+
+function initXpToasts() {
+  let container = null;
+  function ensureContainer() {
+    if (container) return container;
+    container = document.createElement('div');
+    container.className = 'xp-toasts';
+    container.setAttribute('aria-live', 'polite');
+    document.body.appendChild(container);
+    return container;
+  }
+
+  function spawn(html, kind) {
+    const root = ensureContainer();
+    const t = document.createElement('div');
+    t.className = `xp-toast xp-toast-${kind}`;
+    t.innerHTML = html;
+    root.appendChild(t);
+    // Auto-remove after the CSS animation finishes.
+    setTimeout(() => t.remove(), 2600);
+  }
+
+  window.addEventListener('xpgained', e => {
+    const d = e.detail || {};
+    spawn(`<span class="xp-toast-amount">+${d.amount} XP</span>`, 'xp');
+    if (d.leveledUp) {
+      spawn(`<span class="xp-toast-level">Level ${d.newLevel}!</span>`, 'levelup');
+    }
+  });
+
+  window.addEventListener('achievementunlocked', e => {
+    const b = e.detail || {};
+    spawn(`
+      <span class="xp-toast-emoji">${b.emoji || '🏆'}</span>
+      <span class="xp-toast-text">
+        <span class="xp-toast-kind">Achievement unlocked</span>
+        <span class="xp-toast-name">${b.name || ''}</span>
+      </span>
+    `, 'badge');
+  });
+}
