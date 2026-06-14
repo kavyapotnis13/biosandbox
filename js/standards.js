@@ -85,8 +85,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const unitsEl = document.getElementById('units-covered');
   const losEl   = document.getElementById('los-covered');
+  const totalEl = document.getElementById('los-total');
+  const totalLOs = AP_BIO_UNITS.reduce((n, u) => n + u.los.length, 0);
   if (unitsEl) unitsEl.textContent = unitsCovered;
   if (losEl)   losEl.textContent   = totalLOsCovered;
+  if (totalEl) totalEl.textContent = totalLOs;
 });
 
 function esc(s) {

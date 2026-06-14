@@ -146,7 +146,7 @@ function initApStandardsBlock() {
   const resolved = m.apStandards.map(code => getLO(code)).filter(Boolean);
   if (!resolved.length) return;
 
-  // Group LOs by unit so the banner reads like "Unit 6 · IST-1.G IST-1.H".
+  // Group LOs by unit so the banner reads like "Unit 6 · 6.2.A 6.3.A".
   const byUnit = new Map();
   for (const lo of resolved) {
     if (!byUnit.has(lo.unit)) byUnit.set(lo.unit, { name: lo.unitName, los: [] });

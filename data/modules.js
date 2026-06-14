@@ -46,7 +46,7 @@ const MODULES = [
     blurb: 'Snap monomers together into polymers — and watch each bond release a water molecule.',
     page: 'chemistry.html',
     totalParts: 4,
-    apStandards: ['SYI-1.A', 'SYI-1.B', 'SYI-1.C', 'SYI-1.D'],
+    apStandards: ['1.1.A', '1.2.A', '1.3.A', '1.4.A', '1.5.A', '1.7.A'],
     theme: 'aqua',
     iconSvg: `
       <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -80,7 +80,7 @@ const MODULES = [
     blurb: 'Tour the organelles inside an animal or plant cell.',
     page: 'cell.html',
     totalParts: 12,
-    apStandards: ['SYI-1.E', 'SYI-1.F', 'SYI-1.G', 'SYI-2.A', 'ENE-2.A'],
+    apStandards: ['2.1.A', '2.3.A', '2.3.B', '2.9.A', '2.9.B', '2.10.A'],
     theme: 'sunshine',
     iconSvg: `
       <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -116,7 +116,7 @@ const MODULES = [
     blurb: 'Watch molecules cross a phospholipid bilayer — by diffusion, channel, pump, and osmosis.',
     page: 'transport.html',
     totalParts: 4,
-    apStandards: ['ENE-2.B', 'ENE-2.C', 'ENE-2.D'],
+    apStandards: ['2.2.A', '2.4.A', '2.5.A', '2.5.B', '2.6.A', '2.7.A', '2.7.B', '2.8.A'],
     theme: 'coral',
     iconSvg: `
       <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -161,7 +161,7 @@ const MODULES = [
     blurb: 'Watch the double helix unwind and copy itself, step by step.',
     page: 'dna.html',
     totalParts: 6,
-    apStandards: ['IST-1.A', 'IST-1.G', 'IST-1.H'],
+    apStandards: ['1.6.A', '6.1.A', '6.1.B', '6.2.A'],
     theme: 'rose',
     iconSvg: `
       <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -190,7 +190,7 @@ const MODULES = [
     blurb: 'Decode DNA into amino acids and build a protein chain.',
     page: 'protein.html',
     totalParts: 5,
-    apStandards: ['IST-1.G', 'IST-1.I', 'IST-1.J'],
+    apStandards: ['6.3.A', '6.4.A'],
     theme: 'teal',
     iconSvg: `
       <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -230,7 +230,7 @@ const MODULES = [
     blurb: 'Flip the lac operon on and off, mutate a codon, and meet PCR and CRISPR.',
     page: 'regulation.html',
     totalParts: 4,
-    apStandards: ['IST-1.K', 'IST-1.L', 'IST-1.M'],
+    apStandards: ['6.5.A', '6.5.B', '6.6.A', '6.7.A', '6.7.B', '6.7.C', '6.8.A'],
     theme: 'plum',
     iconSvg: `
       <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -267,7 +267,7 @@ const MODULES = [
     blurb: 'Drop a substrate into an active site, adjust pH and temperature, and watch the rate change.',
     page: 'enzymes.html',
     totalParts: 4,
-    apStandards: ['ENE-1.A', 'ENE-1.B', 'ENE-1.J'],
+    apStandards: ['3.1.A', '3.2.A', '3.2.B'],
     theme: 'amber',
     iconSvg: `
       <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -315,7 +315,7 @@ const MODULES = [
     blurb: 'Follow sunlight, water, and CO₂ as a plant builds its own food.',
     page: 'photosynthesis.html',
     totalParts: 5,
-    apStandards: ['ENE-1.C', 'ENE-1.D', 'ENE-1.E'],
+    apStandards: ['3.4.A', '3.4.B'],
     theme: 'mint',
     iconSvg: `
       <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -355,7 +355,7 @@ const MODULES = [
     blurb: 'Turn glucose into ATP through glycolysis, the Krebs cycle, and the electron transport chain.',
     page: 'respiration.html',
     totalParts: 4,
-    apStandards: ['ENE-1.C', 'ENE-1.F', 'ENE-1.G', 'ENE-1.H', 'ENE-1.I'],
+    apStandards: ['3.3.A', '3.5.A', '3.5.B'],
     theme: 'lavender',
     iconSvg: `
       <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -380,7 +380,7 @@ const MODULES = [
     blurb: 'Bind a ligand, fire a signal cascade, and see what happens when the brakes fail (cancer).',
     page: 'signaling.html',
     totalParts: 4,
-    apStandards: ['IST-3.A', 'IST-3.B', 'IST-3.C', 'IST-3.F'],
+    apStandards: ['4.1.A', '4.1.B', '4.2.A', '4.2.B', '4.3.A', '4.3.B', '4.6.B'],
     theme: 'azure',
     iconSvg: `
       <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -419,7 +419,7 @@ const MODULES = [
     blurb: 'Watch one cell split into two through the five phases of division.',
     page: 'mitosis.html',
     totalParts: 5,
-    apStandards: ['IST-3.D', 'IST-3.E'],
+    apStandards: ['4.5.A', '4.5.B', '4.6.A', '4.6.B'],
     theme: 'peach',
     iconSvg: `
       <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -459,7 +459,7 @@ const MODULES = [
     blurb: 'Watch a population shift its color across generations under predator pressure.',
     page: 'selection.html',
     totalParts: 4,
-    apStandards: ['EVO-1.A', 'EVO-1.B', 'EVO-1.C', 'EVO-2.A', 'EVO-2.B', 'EVO-3.A', 'EVO-3.B'],
+    apStandards: ['7.1.A', '7.1.B', '7.2.A', '7.5.A', '7.6.A', '7.6.B', '7.7.A', '7.10.A', '7.10.C', '7.12.A'],
     theme: 'sky',
     iconSvg: `
       <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -490,7 +490,7 @@ const MODULES = [
     blurb: 'Click around a meadow food web to see how predators, prey, and producers connect.',
     page: 'ecology.html',
     totalParts: 4,
-    apStandards: ['SYI-2.B', 'SYI-2.C', 'SYI-2.D', 'SYI-2.E', 'SYI-2.F', 'SYI-2.G', 'SYI-2.H', 'ENE-1.K'],
+    apStandards: ['8.1.A', '8.1.B', '8.2.A', '8.2.B', '8.2.C', '8.3.A', '8.4.A', '8.5.A', '8.5.B', '8.6.A', '8.6.B', '8.7.B', '8.7.C'],
     theme: 'forest',
     iconSvg: `
       <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -513,7 +513,7 @@ const MODULES = [
     blurb: 'Cross two parents and predict their offspring with an interactive Punnett square.',
     page: 'heredity.html',
     totalParts: 4,
-    apStandards: ['IST-1.B', 'IST-1.C', 'IST-1.D', 'IST-1.E', 'IST-1.F'],
+    apStandards: ['5.1.A', '5.1.B', '5.2.A', '5.3.A', '5.4.A', '5.5.A'],
     theme: 'pink',
     iconSvg: `
       <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
