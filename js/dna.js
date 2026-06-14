@@ -44,6 +44,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'ArrowLeft')  moveCard(-1);
     if (e.key === 'ArrowRight') moveCard(1);
   });
+
+  // Re-render the current card when the user flips Middle/High.
+  window.addEventListener('trackchanged', renderCard);
 });
 
 /* ---------- Augment SVG rungs with hidden "new" bases ---------- */
@@ -366,7 +369,7 @@ function renderCard() {
   const label   = document.getElementById('section-label');
 
   if (titleEl) titleEl.textContent = card.title;
-  if (bodyEl)  bodyEl.innerHTML    = card.body;
+  if (bodyEl)  bodyEl.innerHTML    = pickBody(card.body);
   if (counter) counter.textContent = `${cardIndex + 1} / ${cards.length}`;
   // Prev disabled only at the very first card of basics (nothing before).
   if (prevBtn) prevBtn.disabled = (deckMode === DECK_INTRO && cardIndex === 0);
@@ -465,4 +468,14 @@ function flashGameError() {
     slot.classList.add('base-slot-shake');
     setTimeout(() => slot.classList.remove('base-slot-shake'), 350);
   }
+}
+
+// Card bodies may be { middle, high } or a plain string. Resolve to a
+// string for the current audience track, falling back to whichever track
+// exists.
+function pickBody(body) {
+  if (typeof body === 'string') return body;
+  if (!body) return '';
+  const track = (typeof getTrack === 'function') ? getTrack() : 'high';
+  return body[track] || body.high || body.middle || '';
 }
