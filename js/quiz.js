@@ -26,10 +26,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   quizSlug   = getSlugFromUrl();
   quizModule = quizSlug ? getModule(quizSlug) : null;
-  const pool = quizSlug ? getQuizPool(quizSlug) : null;
+  const pool = quizSlug ? getQuizPool(quizSlug, getTrack()) : null;
 
   if (!quizModule || !pool || pool.length === 0) {
     renderPicker();
+    window.addEventListener('trackchanged', renderPicker);
     return;
   }
 
@@ -44,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.location.href = 'index.html';
   });
   document.getElementById('quiz-retry')?.addEventListener('click', () => {
-    startQuiz(pool);
+    startQuiz(getQuizPool(quizSlug, getTrack()));
   });
 });
 
@@ -67,8 +68,9 @@ function renderPicker() {
   if (!grid) return;
 
   grid.innerHTML = '';
+  const track = getTrack();
   MODULES.forEach(m => {
-    const pool = getQuizPool(m.slug);
+    const pool = getQuizPool(m.slug, track);
     if (!pool || pool.length === 0) return;
 
     const a = document.createElement('a');

@@ -68,7 +68,7 @@ A living checklist of where we are. Tick boxes (`- [ ]` → `- [x]`) as you fini
 - [x] Home page cards reflect quiz status (already wired)
 
 ### Phase 6 — Polish & submit
-- [ ] Middle-school question pool (~30 more questions)
+- [x] Middle-school question pool (5 per module × 14 = 70 questions, tagged `track: 'middle'`)
 - [ ] Mobile testing on a real phone
 - [ ] Share live link with 2–3 testers
 - [ ] Fix top 3 feedback issues

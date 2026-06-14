@@ -7,15 +7,15 @@
      correct    — index (0-3) of the correct choice
      explanation— shown after the student answers, regardless of
                   whether they got it right. Reinforces the lesson.
-
-   The middle-school pool is a Phase 6 add — for now, the same
-   pool is used for both tracks.
+     track      — optional: 'middle' to tag a question for the
+                  middle-school pool. Absent/anything else =
+                  high-school pool. getQuizPool() filters by track.
 
    TO ADD A QUESTION:
      1. Find the right module key below (cell / dna / protein).
-     2. Push a new {q, choices, correct, explanation} object.
+     2. Push a new {q, choices, correct, explanation, track?} object.
      3. No code changes needed — js/quiz.js samples 5 at random
-        from whatever's in the array.
+        from whatever matches the current track.
    ========================================================= */
 
 const QUIZ_DATA = {
@@ -105,6 +105,48 @@ const QUIZ_DATA = {
       ],
       correct: 1,
       explanation: "Rough ER is studded with ribosomes that synthesize proteins. Smooth ER lacks ribosomes and instead makes lipids and helps detoxify the cell."
+    },
+
+    /* ---------- middle-school pool ---------- */
+    {
+      q: "What does the cell membrane do?",
+      choices: [
+        "Holds the cell's DNA",
+        "Acts as a gatekeeper, choosing what comes in and out",
+        "Makes the cell's energy",
+        "Builds new proteins"
+      ],
+      correct: 1,
+      explanation: "The cell membrane is the outer wrapper. It lets useful stuff in (like nutrients) and keeps bad stuff out (like toxins).",
+      track: 'middle'
+    },
+    {
+      q: "Which part of the cell is like a power plant?",
+      choices: ["Nucleus", "Ribosome", "Mitochondria", "Cell wall"],
+      correct: 2,
+      explanation: "Mitochondria turn food into ATP — a kind of energy the rest of the cell can spend, like a rechargeable battery.",
+      track: 'middle'
+    },
+    {
+      q: "Plant cells have a stiff outer layer that animal cells don't. What is it?",
+      choices: ["Cell wall", "Cell membrane", "Cytoplasm", "Nucleus"],
+      correct: 0,
+      explanation: "The cell wall is a tough shell made of cellulose. It's why plants can stand up tall without bones.",
+      track: 'middle'
+    },
+    {
+      q: "The nucleus is the cell's:",
+      choices: ["Energy maker", "Recycling center", "Control room", "Garbage disposal"],
+      correct: 2,
+      explanation: "The nucleus stores the DNA — the instruction book that tells the rest of the cell what to do.",
+      track: 'middle'
+    },
+    {
+      q: "Ribosomes are like tiny factories. What do they build?",
+      choices: ["DNA", "Proteins", "Sugar", "Fat"],
+      correct: 1,
+      explanation: "Ribosomes read instructions from RNA and snap amino acids together to build proteins — like stringing beads on a necklace.",
+      track: 'middle'
     }
   ],
 
@@ -198,6 +240,58 @@ const QUIZ_DATA = {
       ],
       correct: 1,
       explanation: "DNA polymerase can extend a strand but can't start one from scratch — it needs a few nucleotides already in place. Primase provides that short RNA \"starter.\""
+    },
+
+    /* ---------- middle-school pool ---------- */
+    {
+      q: "What does DNA stand for?",
+      choices: [
+        "Double nucleus arrangement",
+        "Deoxyribonucleic acid",
+        "Direct nucleotide assembly",
+        "Daily nutrient absorption"
+      ],
+      correct: 1,
+      explanation: "DNA = deoxyribonucleic acid. Long name, but it just describes the sugar (deoxyribose) and the building blocks (nucleic acids) that make it up.",
+      track: 'middle'
+    },
+    {
+      q: "DNA is shaped like a twisted ladder. What are the \"rungs\" made of?",
+      choices: [
+        "Pairs of bases (A–T and C–G)",
+        "Sugar molecules",
+        "Phosphate groups",
+        "Strands of RNA"
+      ],
+      correct: 0,
+      explanation: "The rungs are pairs of bases: A always pairs with T, and C always pairs with G. The sides of the ladder are sugars and phosphates.",
+      track: 'middle'
+    },
+    {
+      q: "If one strand of DNA reads A-T-G-C, what does the matching strand read?",
+      choices: ["A-T-G-C", "T-A-C-G", "G-C-A-T", "C-G-T-A"],
+      correct: 1,
+      explanation: "A pairs with T, and G pairs with C. So A-T-G-C matches up with T-A-C-G across the ladder.",
+      track: 'middle'
+    },
+    {
+      q: "Where in the cell is most of your DNA kept?",
+      choices: ["Cytoplasm", "Nucleus", "Cell wall", "Ribosomes"],
+      correct: 1,
+      explanation: "DNA is stored in the nucleus, packed up tightly so 6 feet of it fits inside a tiny cell.",
+      track: 'middle'
+    },
+    {
+      q: "Why does a cell need to copy its DNA before it divides?",
+      choices: [
+        "So each new cell gets a full set of instructions",
+        "To make energy for the cell",
+        "To get rid of old, broken DNA",
+        "To create different DNA for each new cell"
+      ],
+      correct: 0,
+      explanation: "When one cell splits into two, both new cells need a complete copy of the instructions. So the cell duplicates its DNA first.",
+      track: 'middle'
     }
   ],
 
@@ -271,6 +365,48 @@ const QUIZ_DATA = {
       ],
       correct: 1,
       explanation: "With 4³ = 64 possible codons coding for only 20 amino acids (plus stop), most amino acids end up with 2-6 different codons. The genetic code is \"redundant.\""
+    },
+
+    /* ---------- middle-school pool ---------- */
+    {
+      q: "Proteins are built from a chain of smaller pieces. What are those pieces called?",
+      choices: ["Nucleotides", "Amino acids", "Sugars", "Fatty acids"],
+      correct: 1,
+      explanation: "Amino acids are the building blocks of proteins, like beads on a necklace. There are 20 different ones and they snap together in different orders.",
+      track: 'middle'
+    },
+    {
+      q: "Where in the cell are proteins actually built?",
+      choices: ["Nucleus", "Mitochondria", "Ribosomes", "Cell wall"],
+      correct: 2,
+      explanation: "Ribosomes are the protein factories. They read the instructions on RNA and string amino acids together in the right order.",
+      track: 'middle'
+    },
+    {
+      q: "The cell makes a copy of a gene's instructions on a messenger molecule before building the protein. What is that messenger?",
+      choices: ["DNA", "mRNA", "ATP", "Glucose"],
+      correct: 1,
+      explanation: "DNA stays safe in the nucleus. mRNA is a copy that carries the instructions out to a ribosome where the protein gets built.",
+      track: 'middle'
+    },
+    {
+      q: "The ribosome reads RNA in groups of three letters. What is each three-letter group called?",
+      choices: ["Gene", "Codon", "Strand", "Helix"],
+      correct: 1,
+      explanation: "A codon is a three-letter \"word\" of RNA. Each codon tells the ribosome which amino acid to add next.",
+      track: 'middle'
+    },
+    {
+      q: "Which order do the steps go in?",
+      choices: [
+        "Protein → DNA → RNA",
+        "RNA → DNA → protein",
+        "DNA → RNA → protein",
+        "Protein → RNA → DNA"
+      ],
+      correct: 2,
+      explanation: "DNA is the master plan. It gets copied into RNA (transcription), and the RNA is read by the ribosome to build a protein (translation).",
+      track: 'middle'
     }
   ],
 
@@ -364,6 +500,68 @@ const QUIZ_DATA = {
       choices: ["23", "46", "92", "It depends on the cell type"],
       correct: 1,
       explanation: "Mitosis produces genetic clones — each daughter cell has the full 46 chromosomes. (Meiosis is the opposite process that halves the count for sex cells.)"
+    },
+
+    /* ---------- middle-school pool ---------- */
+    {
+      q: "What is mitosis?",
+      choices: [
+        "When a cell makes proteins",
+        "When one cell splits into two matching copies",
+        "When a cell dies",
+        "When DNA is destroyed"
+      ],
+      correct: 1,
+      explanation: "Mitosis is how one cell turns into two identical cells. It's how you grow, heal cuts, and replace old cells.",
+      track: 'middle'
+    },
+    {
+      q: "Before a cell divides, what's the very first thing it has to do?",
+      choices: [
+        "Shrink in size",
+        "Copy all of its DNA",
+        "Get rid of its mitochondria",
+        "Stop making proteins"
+      ],
+      correct: 1,
+      explanation: "Each new cell needs a full set of DNA. So the cell duplicates everything first — that way it has enough to give both daughters a complete copy.",
+      track: 'middle'
+    },
+    {
+      q: "When the two new cells finally split apart at the end of mitosis, how do they compare to the original cell?",
+      choices: [
+        "They are exact copies of the original",
+        "They are half the size and have half the DNA",
+        "They are completely different from each other",
+        "They have no DNA at all"
+      ],
+      correct: 0,
+      explanation: "Mitosis makes clones — each daughter cell has the same DNA as the original. That's how a cut on your arm heals back into the same skin.",
+      track: 'middle'
+    },
+    {
+      q: "Why is it important that mitosis copies DNA very carefully?",
+      choices: [
+        "So the new cells can be a different color",
+        "Mistakes in DNA copying can lead to problems like cancer",
+        "DNA is expensive to make",
+        "It isn't important — small mistakes don't matter"
+      ],
+      correct: 1,
+      explanation: "If the DNA gets copied wrong and the mistake survives, cells can start behaving badly. That's one of the ways cancer gets started.",
+      track: 'middle'
+    },
+    {
+      q: "Which of these does mitosis NOT do?",
+      choices: [
+        "Heal a scraped knee",
+        "Grow a kid into an adult",
+        "Make sperm and egg cells",
+        "Replace old skin cells"
+      ],
+      correct: 2,
+      explanation: "Sperm and eggs are made by a different process called meiosis. Meiosis cuts the chromosome count in half so an egg + sperm can combine into a complete cell.",
+      track: 'middle'
     }
   ],
 
@@ -447,6 +645,53 @@ const QUIZ_DATA = {
       choices: ["RuBP", "3-PGA", "Glucose (built from G3P)", "Chlorophyll"],
       correct: 2,
       explanation: "Each turn of the cycle nets G3P; two G3P molecules combine to make one glucose. The plant uses glucose for energy and as a building block for cellulose, starch, etc."
+    },
+
+    /* ---------- middle-school pool ---------- */
+    {
+      q: "What does a plant do during photosynthesis?",
+      choices: [
+        "Eats bugs for energy",
+        "Uses sunlight to turn water and air into food (sugar)",
+        "Breathes in sugar and breathes out water",
+        "Steals food from nearby plants"
+      ],
+      correct: 1,
+      explanation: "Plants are food-makers. They use sunlight to combine water (from the soil) and carbon dioxide (from the air) into sugar.",
+      track: 'middle'
+    },
+    {
+      q: "Photosynthesis happens in which part of a plant cell?",
+      choices: ["Nucleus", "Chloroplast", "Mitochondria", "Cell wall"],
+      correct: 1,
+      explanation: "Chloroplasts are the green parts of the cell where sunlight gets caught. They're full of a pigment called chlorophyll that's what makes leaves green.",
+      track: 'middle'
+    },
+    {
+      q: "What gas do plants release as a side effect of photosynthesis?",
+      choices: ["Carbon dioxide", "Nitrogen", "Oxygen", "Helium"],
+      correct: 2,
+      explanation: "When plants split water to grab the hydrogen, oxygen comes off as a byproduct. That oxygen is what every animal on Earth breathes.",
+      track: 'middle'
+    },
+    {
+      q: "Which color of light do plants mostly NOT use for photosynthesis?",
+      choices: ["Red", "Blue", "Green", "Violet"],
+      correct: 2,
+      explanation: "Plants reflect green light away instead of soaking it up — that's why leaves look green to us. They mostly absorb the red and blue parts of sunlight.",
+      track: 'middle'
+    },
+    {
+      q: "Where does the carbon in a tree's wood mostly come from?",
+      choices: [
+        "From the soil through the roots",
+        "From water the plant drinks",
+        "From carbon dioxide in the air",
+        "From sunlight itself"
+      ],
+      correct: 2,
+      explanation: "Surprising but true: most of a tree's mass comes out of thin air. Plants pull CO₂ from the air and use the carbon atoms to build wood, leaves, and fruit.",
+      track: 'middle'
     }
   ],
 
@@ -562,6 +807,53 @@ const QUIZ_DATA = {
       ],
       correct: 1,
       explanation: "In alcoholic fermentation, pyruvate is converted to acetaldehyde + CO₂, then NADH reduces acetaldehyde to ethanol (regenerating NAD⁺). The CO₂ makes bread rise; the ethanol bakes off in the oven and stays in beer."
+    },
+
+    /* ---------- middle-school pool ---------- */
+    {
+      q: "What does cellular respiration do?",
+      choices: [
+        "Turns food (sugar) into usable energy (ATP)",
+        "Makes new cells",
+        "Creates DNA",
+        "Cools the body down"
+      ],
+      correct: 0,
+      explanation: "Cellular respiration is how cells get energy. They break down sugar and store the energy in a molecule called ATP — kind of like a rechargeable battery.",
+      track: 'middle'
+    },
+    {
+      q: "Where in the cell does most of cellular respiration happen?",
+      choices: ["Nucleus", "Mitochondria", "Ribosomes", "Cell wall"],
+      correct: 1,
+      explanation: "Mitochondria are the cell's power plants. That's where the sugar's energy gets turned into ATP.",
+      track: 'middle'
+    },
+    {
+      q: "Cellular respiration needs which gas to work best?",
+      choices: ["Carbon dioxide", "Nitrogen", "Oxygen", "Helium"],
+      correct: 2,
+      explanation: "Oxygen helps cells get the most ATP out of each sugar molecule. That's why you breathe — to send oxygen to every cell.",
+      track: 'middle'
+    },
+    {
+      q: "What gas do your cells release as waste during respiration?",
+      choices: ["Oxygen", "Carbon dioxide", "Nitrogen", "Hydrogen"],
+      correct: 1,
+      explanation: "CO₂ is the waste product. You breathe it out — and plants then take that same CO₂ to do photosynthesis. Nice cycle.",
+      track: 'middle'
+    },
+    {
+      q: "When you sprint and your muscles run out of oxygen, they still need energy. They make a little ATP without oxygen, but a side product builds up. What is it?",
+      choices: [
+        "Sugar",
+        "Lactic acid",
+        "Water",
+        "Iron"
+      ],
+      correct: 1,
+      explanation: "Without enough oxygen, muscle cells switch to a backup process called fermentation. It produces lactic acid, which contributes to that burning, achy feeling.",
+      track: 'middle'
     }
   ],
 
@@ -681,6 +973,63 @@ const QUIZ_DATA = {
       ],
       correct: 1,
       explanation: "Multiple alleles means there are MORE than two versions of a gene in the gene pool. Each individual still only carries two of them — but across the population, three different ABO alleles circulate, giving four possible blood types."
+    },
+
+    /* ---------- middle-school pool ---------- */
+    {
+      q: "Where do you get your DNA from?",
+      choices: [
+        "Only your mom",
+        "Only your dad",
+        "Half from your mom, half from your dad",
+        "Random people in your family tree"
+      ],
+      correct: 2,
+      explanation: "You get one set of chromosomes from your mom (in the egg) and one set from your dad (in the sperm). That's why you might have your mom's eyes but your dad's smile.",
+      track: 'middle'
+    },
+    {
+      q: "Different versions of the same gene (like a gene for eye color) are called:",
+      choices: ["Chromosomes", "Alleles", "Cells", "Proteins"],
+      correct: 1,
+      explanation: "Alleles are gene variants — like different flavors of the same gene. One allele might code for brown eyes, another for blue.",
+      track: 'middle'
+    },
+    {
+      q: "If a kid has brown eyes and both parents have blue eyes, what's most likely going on?",
+      choices: [
+        "The kid is making up a new eye color",
+        "Eye color isn't actually inherited",
+        "Eye color is more complicated than one gene — multiple genes contribute",
+        "Only one parent is actually their biological parent"
+      ],
+      correct: 2,
+      explanation: "Eye color comes from several genes interacting, not just one. That's why kids sometimes have eye colors that don't simply match either parent.",
+      track: 'middle'
+    },
+    {
+      q: "A \"dominant\" version of a gene means:",
+      choices: [
+        "It's louder than other genes",
+        "Only one copy is needed for the trait to show up",
+        "It always wins, no matter what",
+        "It's the most common version in the population"
+      ],
+      correct: 1,
+      explanation: "A dominant allele only needs one copy to show its trait. Recessive alleles need two copies to show up because one dominant copy can override one recessive copy.",
+      track: 'middle'
+    },
+    {
+      q: "Identical twins have the same DNA. Why don't they end up exactly the same in every single way?",
+      choices: [
+        "Their DNA slowly changes to be different",
+        "Genes aren't real",
+        "Environment and experiences also shape who you become",
+        "One twin has more DNA than the other"
+      ],
+      correct: 2,
+      explanation: "DNA is only part of the story. What you eat, who you hang out with, what you practice, even random tiny differences in how cells develop — all of that shapes you too.",
+      track: 'middle'
     }
   ],
 
@@ -833,6 +1182,68 @@ const QUIZ_DATA = {
       ],
       correct: 1,
       explanation: "Ribozymes — catalytic RNA molecules — are real and known. An ancestral self-replicating ribozyme would do both jobs (store info AND copy itself), bridging the chicken-and-egg problem of which came first, proteins or DNA."
+    },
+
+    /* ---------- middle-school pool ---------- */
+    {
+      q: "What is natural selection?",
+      choices: [
+        "Living things choose how they want to evolve",
+        "Individuals with helpful traits survive and pass them on more often than others",
+        "Nature picks one species at random to be the best",
+        "Animals select where they want to live"
+      ],
+      correct: 1,
+      explanation: "Natural selection: helpful traits help an individual survive and have more babies, so those traits spread. Unhelpful traits fade away. No one is \"choosing\" — it just happens.",
+      track: 'middle'
+    },
+    {
+      q: "Why do bacteria become resistant to antibiotics over time?",
+      choices: [
+        "The bacteria decide to fight back",
+        "A few bacteria already have a resistance gene; antibiotics kill the rest and let the resistant ones multiply",
+        "The antibiotic turns into food for bacteria",
+        "Bacteria copy DNA from the antibiotic"
+      ],
+      correct: 1,
+      explanation: "Mutations create some lucky bacteria with resistance. When antibiotics kill the others, the resistant ones have the field to themselves and multiply. That's natural selection happening in real time.",
+      track: 'middle'
+    },
+    {
+      q: "If a moth has dark wings and lives on dark tree bark, why does that help it survive?",
+      choices: [
+        "Dark wings make it fly faster",
+        "Birds can't see it as easily, so it's less likely to get eaten",
+        "Dark colors warm the moth up",
+        "Other moths are scared of it"
+      ],
+      correct: 1,
+      explanation: "Camouflage hides the moth from hungry birds. Dark moths on dark bark survive longer and have more babies, so dark wings become more common.",
+      track: 'middle'
+    },
+    {
+      q: "Galapagos finches have many different beak shapes. Where did those different shapes come from?",
+      choices: [
+        "Each finch chose its own beak",
+        "Different islands favored different food sources, so beaks evolved to match",
+        "Humans bred them to look different",
+        "Their beaks change as they grow up"
+      ],
+      correct: 1,
+      explanation: "Different islands had different food: tough seeds, soft fruit, insects. Finches with beaks that matched the local food survived better — and over generations, beaks split into different shapes.",
+      track: 'middle'
+    },
+    {
+      q: "Why is DNA so important to evolution?",
+      choices: [
+        "Without DNA, traits couldn't be passed from parents to babies",
+        "DNA decides which animals get to mate",
+        "DNA only matters in humans",
+        "DNA tells animals where to live"
+      ],
+      correct: 0,
+      explanation: "Evolution needs traits that get inherited. DNA is what carries those traits from one generation to the next — without it, helpful traits couldn't build up over time.",
+      track: 'middle'
     }
   ],
 
@@ -986,6 +1397,58 @@ const QUIZ_DATA = {
       ],
       correct: 1,
       explanation: "Energy flows in one direction (sun → producers → consumers → heat lost). Matter cycles — atoms of carbon, nitrogen, phosphorus are used and reused indefinitely as living things grow, die, and decompose."
+    },
+
+    /* ---------- middle-school pool ---------- */
+    {
+      q: "Where does almost all the energy in an ecosystem originally come from?",
+      choices: ["The soil", "The Sun", "The wind", "Underground water"],
+      correct: 1,
+      explanation: "Sunlight powers plants (photosynthesis). Plants get eaten by animals, those animals get eaten by other animals — so almost all energy in life starts as sunlight.",
+      track: 'middle'
+    },
+    {
+      q: "In a food chain like grass → rabbit → fox, the fox is called a:",
+      choices: ["Producer", "Decomposer", "Consumer", "Pollinator"],
+      correct: 2,
+      explanation: "Consumers eat other living things. Producers (like grass) make their own food. Decomposers (like fungi) break down dead stuff.",
+      track: 'middle'
+    },
+    {
+      q: "Why are there usually way more plants than top predators in an ecosystem?",
+      choices: [
+        "Plants are smaller and easier to make",
+        "Most of the energy is lost as heat at each step, so less is available for animals higher up",
+        "Top predators don't need much food",
+        "Plants reproduce by accident"
+      ],
+      correct: 1,
+      explanation: "Only about 10% of energy passes up each step of the food chain. So you need tons of grass to support a few rabbits, and tons of rabbits to support one fox.",
+      track: 'middle'
+    },
+    {
+      q: "Bees pollinate flowers, and flowers feed bees nectar. That's an example of:",
+      choices: [
+        "Competition (both sides fight)",
+        "Predation (one eats the other)",
+        "Mutualism (both sides benefit)",
+        "Parasitism (one benefits, one is harmed)"
+      ],
+      correct: 2,
+      explanation: "Mutualism is when both species help each other out. The flower gets pollinated and the bee gets food — both win.",
+      track: 'middle'
+    },
+    {
+      q: "Carbon atoms in your body have been recycled through countless other living things over time. The big idea is:",
+      choices: [
+        "Matter (atoms) cycles through ecosystems — it gets reused over and over",
+        "Atoms are made fresh inside each living thing",
+        "Carbon only stays in plants",
+        "Atoms disappear when an animal dies"
+      ],
+      correct: 0,
+      explanation: "Atoms aren't created or destroyed. The carbon in your body was once in plants, dinosaurs, the air — and someday will be in something else. Matter cycles; energy doesn't.",
+      track: 'middle'
     }
   ],
 
@@ -1095,6 +1558,63 @@ const QUIZ_DATA = {
       ],
       correct: 1,
       explanation: "Every nucleotide = a 5-carbon sugar (ribose or deoxyribose) + a phosphate group + a nitrogenous base (A, T/U, G, or C). The sugar-phosphate backbones link via phosphodiester bonds, and the bases pair across the double helix."
+    },
+
+    /* ---------- middle-school pool ---------- */
+    {
+      q: "Almost everything in your body is made from just six elements. Which set?",
+      choices: [
+        "Iron, gold, silver, copper, zinc, lead",
+        "Carbon, hydrogen, nitrogen, oxygen, phosphorus, sulfur",
+        "Helium, neon, argon, krypton, xenon, radon",
+        "Sodium, chlorine, magnesium, calcium, potassium, iodine"
+      ],
+      correct: 1,
+      explanation: "CHNOPS — carbon, hydrogen, nitrogen, oxygen, phosphorus, sulfur. These six elements make up 99% of every living thing on Earth.",
+      track: 'middle'
+    },
+    {
+      q: "Why is carbon so important for life?",
+      choices: [
+        "It glows in the dark",
+        "It can bond with up to four other atoms, like a LEGO brick",
+        "It dissolves in water",
+        "It's the heaviest element on Earth"
+      ],
+      correct: 1,
+      explanation: "Carbon has 4 spots to connect to other atoms, so it can build giant, complicated molecules — like LEGO bricks that snap together into anything.",
+      track: 'middle'
+    },
+    {
+      q: "Water sticks to itself because it's a polar molecule. What does \"polar\" mean here?",
+      choices: [
+        "It's frozen",
+        "One end has a tiny negative charge and the other has a tiny positive charge",
+        "It only exists at the North and South poles",
+        "It's made of two different kinds of water"
+      ],
+      correct: 1,
+      explanation: "In water, oxygen pulls harder on shared electrons than hydrogen does. So the oxygen end is slightly negative and the hydrogen ends are slightly positive — that's polarity.",
+      track: 'middle'
+    },
+    {
+      q: "Why does ice float on top of liquid water?",
+      choices: [
+        "Ice is warmer than water",
+        "Ice has air bubbles trapped inside",
+        "Water molecules spread out when they freeze, so ice is less dense",
+        "Ice is made of a different chemical than water"
+      ],
+      correct: 2,
+      explanation: "When water freezes, its molecules lock into a spaced-out crystal pattern. Ice ends up taking more room than the same amount of liquid water — so it floats.",
+      track: 'middle'
+    },
+    {
+      q: "Big molecules like proteins and starches are built from smaller repeating pieces. What are those small pieces called?",
+      choices: ["Polymers", "Monomers", "Atoms", "Elements"],
+      correct: 1,
+      explanation: "Monomers are the small building blocks (like LEGO bricks). When you snap a bunch together you get a polymer (like a LEGO tower).",
+      track: 'middle'
     }
   ],
 
@@ -1198,6 +1718,58 @@ const QUIZ_DATA = {
       ],
       correct: 1,
       explanation: "Same genome, different gene expression. Each cell type makes its own characteristic suite of enzymes (and other proteins), so different reactions are catalyzed at different speeds — that's how one genome supports many specialized cell types."
+    },
+
+    /* ---------- middle-school pool ---------- */
+    {
+      q: "What does an enzyme do?",
+      choices: [
+        "Stores DNA inside the cell",
+        "Speeds up chemical reactions in the body",
+        "Carries oxygen in the blood",
+        "Builds the cell wall"
+      ],
+      correct: 1,
+      explanation: "Enzymes are helpers that make chemical reactions happen way faster. Without them, things like digesting food would take years instead of minutes.",
+      track: 'middle'
+    },
+    {
+      q: "Most enzymes are made of what kind of molecule?",
+      choices: ["Sugar", "Fat", "DNA", "Protein"],
+      correct: 3,
+      explanation: "Almost all enzymes are proteins. Their shape is what lets them grab onto the right molecule and speed up the reaction.",
+      track: 'middle'
+    },
+    {
+      q: "An enzyme works on one specific molecule — like a lock that only opens with one key. What's that molecule called?",
+      choices: ["Product", "Substrate", "Catalyst", "Solution"],
+      correct: 1,
+      explanation: "The substrate is the molecule the enzyme grabs and changes. The enzyme's shape fits its substrate like a lock fits its key.",
+      track: 'middle'
+    },
+    {
+      q: "What usually happens to an enzyme if it gets too hot?",
+      choices: [
+        "It works faster forever",
+        "It changes shape and stops working",
+        "It turns into DNA",
+        "It splits into two enzymes"
+      ],
+      correct: 1,
+      explanation: "Heat can crumple up the enzyme's shape — that's called denaturing. Once the shape is gone, the enzyme can't grab its substrate anymore.",
+      track: 'middle'
+    },
+    {
+      q: "Why does spit start digesting bread the moment it hits your mouth?",
+      choices: [
+        "Bread dissolves in any liquid",
+        "Saliva contains an enzyme (amylase) that breaks down starch",
+        "Teeth crush starch into sugar",
+        "Stomach acid leaks up into your mouth"
+      ],
+      correct: 1,
+      explanation: "Your spit has an enzyme called amylase. It chops the long starch molecules in bread into smaller sugar pieces — that's why bread starts tasting sweet if you chew it long enough.",
+      track: 'middle'
     }
   ],
 
@@ -1301,6 +1873,63 @@ const QUIZ_DATA = {
       ],
       correct: 2,
       explanation: "Same upstream cascade, different downstream targets → different responses. Specialized cell types express different signaling components, so an identical signal can drive division in one cell and differentiation in another."
+    },
+
+    /* ---------- middle-school pool ---------- */
+    {
+      q: "How do most cells talk to each other?",
+      choices: [
+        "They send tiny letters through the bloodstream",
+        "They release chemical signals that other cells receive",
+        "They touch each other and pass on the message",
+        "They use sound waves"
+      ],
+      correct: 1,
+      explanation: "Cells release chemical messengers (like hormones). Other cells have matching receivers that pick up the message — like a phone ringing.",
+      track: 'middle'
+    },
+    {
+      q: "A signal molecule lands on a cell. What part of the cell catches it?",
+      choices: ["Nucleus", "Mitochondria", "Receptor", "Ribosome"],
+      correct: 2,
+      explanation: "Receptors are special proteins on (or inside) the cell. Each receptor is shaped to grab one kind of signal — like a lock that only one key fits.",
+      track: 'middle'
+    },
+    {
+      q: "What's the best comparison for a cell-signaling cascade?",
+      choices: [
+        "One person whispering to another in a long line",
+        "A row of dominoes falling — each one knocks over the next",
+        "A locked door no one can open",
+        "A frozen pond that never melts"
+      ],
+      correct: 1,
+      explanation: "A cascade is like dominoes: the first signal flips one protein, that one flips the next, and so on. Each step boosts the message so a tiny signal can cause a big response.",
+      track: 'middle'
+    },
+    {
+      q: "Insulin is a chemical messenger that tells your cells to do what?",
+      choices: [
+        "Build new bone",
+        "Pull sugar (glucose) out of the blood",
+        "Make more DNA",
+        "Stop breathing"
+      ],
+      correct: 1,
+      explanation: "After you eat, insulin tells body cells to soak up glucose from the blood for energy or storage. That's why blood sugar drops after a meal.",
+      track: 'middle'
+    },
+    {
+      q: "Cells that can't respond to a signal anymore (a broken receptor, say) usually:",
+      choices: [
+        "Get extra-strong over time",
+        "Cause problems because the body's messages no longer get through",
+        "Turn into a different kind of cell",
+        "Start making their own hormones"
+      ],
+      correct: 1,
+      explanation: "If the receiver is broken, the message never lands. Lots of diseases (including type 2 diabetes) happen because cells stop responding properly to a signal.",
+      track: 'middle'
     }
   ],
 
@@ -1404,6 +2033,63 @@ const QUIZ_DATA = {
       ],
       correct: 2,
       explanation: "Intestinal cells have microvilli, root hair cells have long projections, neurons have branching dendrites — all of these are surface-area boosters. Any cell that needs heavy transport evolves features that push SA/V up."
+    },
+
+    /* ---------- middle-school pool ---------- */
+    {
+      q: "When salt moves from a salty spot in water to a less-salty spot — without any energy from the cell — what's that called?",
+      choices: ["Active transport", "Diffusion", "Photosynthesis", "Mitosis"],
+      correct: 1,
+      explanation: "Diffusion is molecules drifting from where they're crowded to where they're not, no energy needed. Like a drop of food coloring slowly spreading through a glass of water.",
+      track: 'middle'
+    },
+    {
+      q: "Osmosis is a fancy word for what?",
+      choices: [
+        "Water moving across a membrane to even out concentrations",
+        "Salt dissolving",
+        "Cells getting bigger",
+        "A reaction that needs energy"
+      ],
+      correct: 0,
+      explanation: "Osmosis is just diffusion, but specifically for water through a membrane. Water moves from where things are dilute toward where they're more concentrated.",
+      track: 'middle'
+    },
+    {
+      q: "Sometimes a cell needs to pull in a molecule even though there's already more of it inside than outside. To do that, the cell has to:",
+      choices: [
+        "Spend energy (ATP) to move it against the flow",
+        "Just wait — it'll happen on its own",
+        "Break the molecule apart",
+        "Open more pores in the membrane"
+      ],
+      correct: 0,
+      explanation: "Moving things uphill — from low concentration to high — needs energy. That's called active transport, and it uses ATP like a pump.",
+      track: 'middle'
+    },
+    {
+      q: "A freshwater fish is dropped in salty ocean water. What happens to its cells?",
+      choices: [
+        "They swell up",
+        "They lose water and shrink",
+        "Nothing — cells don't care about salt",
+        "They make extra mitochondria"
+      ],
+      correct: 1,
+      explanation: "Salty water pulls water out of the fish's cells (osmosis). Without protection, the cells shrivel — which is why freshwater fish can't survive in the ocean.",
+      track: 'middle'
+    },
+    {
+      q: "Why do tiny molecules like oxygen pass through the cell membrane easily, but big molecules like proteins need help?",
+      choices: [
+        "Small molecules can slip between membrane molecules; big ones can't fit",
+        "Big molecules are too heavy to move",
+        "Cells don't actually let oxygen in",
+        "Proteins repel the membrane"
+      ],
+      correct: 0,
+      explanation: "The membrane is mostly oily, so small uncharged things (like O₂ and CO₂) slip right through. Big or charged molecules need a special protein gate to get across.",
+      track: 'middle'
     }
   ],
 
@@ -1512,13 +2198,85 @@ const QUIZ_DATA = {
       ],
       correct: 1,
       explanation: "CRISPR–Cas9: the guide RNA you design targets the matching DNA sequence; Cas9 cuts it. The cell's repair machinery then either knocks the gene out (introducing mutations) or, with a template, splices in a precise new sequence."
+    },
+
+    /* ---------- middle-school pool ---------- */
+    {
+      q: "Every cell in your body has the same DNA, but a skin cell looks nothing like a brain cell. Why?",
+      choices: [
+        "Skin cells lose half their DNA when they're made",
+        "Different cells turn different genes on and off",
+        "Skin cells use RNA instead of DNA",
+        "Brain cells make their own DNA from scratch"
+      ],
+      correct: 1,
+      explanation: "Same instruction book, different pages open. Each cell type reads only the genes it needs, which is why one DNA blueprint can build skin, brain, bone, and everything else.",
+      track: 'middle'
+    },
+    {
+      q: "A bacterial cell suddenly has lots of sugar around it. It quickly turns ON the genes for digesting that sugar. Why doesn't it just leave those genes on all the time?",
+      choices: [
+        "It would waste energy making proteins it doesn't need",
+        "The DNA would wear out",
+        "The cell would become a different species",
+        "Bacteria can't keep genes on"
+      ],
+      correct: 0,
+      explanation: "Making proteins costs energy. Cells save resources by switching genes on only when they're needed — like turning off lights in empty rooms.",
+      track: 'middle'
+    },
+    {
+      q: "What is a mutation?",
+      choices: [
+        "A change in the DNA sequence",
+        "A new cell being born",
+        "A protein folding incorrectly",
+        "A cell splitting in half"
+      ],
+      correct: 0,
+      explanation: "A mutation is any change to the DNA letters — a swap, an insert, a delete. Some mutations are harmless, some cause disease, and some are even helpful.",
+      track: 'middle'
+    },
+    {
+      q: "CRISPR is a tool scientists use to edit DNA. The simplest way to describe it is:",
+      choices: [
+        "A microscope that reads DNA",
+        "A find-and-replace for DNA letters",
+        "A way to copy DNA millions of times",
+        "A liquid that dissolves DNA"
+      ],
+      correct: 1,
+      explanation: "CRISPR uses a guide molecule to find a specific spot in the DNA, and then a protein cuts there. Scientists can replace or remove that section — like find-and-replace in a document.",
+      track: 'middle'
+    },
+    {
+      q: "Why do many cancers involve broken control of genes that tell cells when to divide?",
+      choices: [
+        "Cancer cells don't have DNA",
+        "Without the brakes, cells keep dividing when they shouldn't",
+        "The cells stop making protein altogether",
+        "The mitochondria turn into cancer cells"
+      ],
+      correct: 1,
+      explanation: "Normally, certain genes act like brakes on cell division. If those control genes get broken, cells divide out of control — that's how a tumor starts to grow.",
+      track: 'middle'
     }
   ]
 
 };
 
-/* Convenience helper: returns the question pool for a module slug,
-   or null if no such pool exists. */
-function getQuizPool(slug) {
-  return QUIZ_DATA[slug] || null;
+/* Returns the question pool for a module slug, filtered by track.
+   - High track (or omitted): all questions NOT tagged track:'middle'.
+   - Middle track: only questions tagged track:'middle'. If that
+     subset has fewer than QUIZ_LEN, fall back to the full pool so
+     the quiz can still run.
+   Returns null if the slug is unknown. */
+function getQuizPool(slug, track) {
+  const all = QUIZ_DATA[slug];
+  if (!all) return null;
+  if (track === 'middle') {
+    const middle = all.filter(q => q.track === 'middle');
+    return middle.length >= 5 ? middle : all;
+  }
+  return all.filter(q => q.track !== 'middle');
 }
