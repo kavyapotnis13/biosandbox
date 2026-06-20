@@ -9,7 +9,7 @@
    To point at a different Worker URL, edit WORKER_URL below.
    ========================================================= */
 
-const WORKER_URL = 'https://biosandbox-tutor.YOUR-SUBDOMAIN.workers.dev/chat';
+const WORKER_URL = 'https://biosandbox-tutor.kpotnis.workers.dev/chat';
 
 const STORAGE_KEY = 'biosandbox-tutor-history';
 const MAX_TURNS_KEPT = 16; // last N messages sent back to the model
