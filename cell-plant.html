@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body data-cell-type="plant">
+  <a href="#main" class="skip-link">Skip to main content</a>
   <header class="site-nav">
     <a href="index.html" class="brand">
       <span class="brand-icon" aria-hidden="true">🧬</span>
@@ -27,7 +28,7 @@
 
   <nav class="breadcrumb"><a href="index.html">Home</a> / Cell Explorer / Plant</nav>
 
-  <main>
+  <main id="main">
     <div class="cell-layout">
 
       <div class="diagram-pane">
@@ -40,7 +41,9 @@
         <svg viewBox="0 0 600 500" class="cell-diagram"
              xmlns="http://www.w3.org/2000/svg"
              role="img"
-             aria-label="Plant cell diagram. Click any organelle to learn about it.">
+             aria-labelledby="plant-svg-title plant-svg-desc">
+          <title id="plant-svg-title">Plant cell diagram</title>
+          <desc id="plant-svg-desc">A plant cell with a rigid cell wall, large central vacuole, and green chloroplasts. Use Tab to move between organelles and Enter or Space to open each one's info card.</desc>
 
           <!-- Cytoplasm (rounded rect, green tint) -->
           <g data-organelle="cytoplasm" class="organelle" data-arrow-x="300" data-arrow-y="100" tabindex="0" role="button" aria-label="Cytoplasm">

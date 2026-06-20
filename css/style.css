@@ -13,7 +13,7 @@
   /* Ink */
   --color-ink:       #141414;       /* graphite, not pure black */
   --color-ink-2:     #4A4845;       /* secondary ink */
-  --color-muted:     #8A8680;       /* labels, captions, metadata */
+  --color-muted:     #6B6862;       /* labels, captions, metadata (WCAG AA on bg/card) */
   --color-border:    #E5E3DE;       /* hairline rule */
   --color-rule-strong: #C9C5BD;     /* stronger hairline */
 
@@ -70,6 +70,37 @@ h1, h2, h3 {
   font-weight: 500;
   letter-spacing: -0.01em;
   color: var(--color-ink);
+}
+
+/* Global focus ring — keyboard users see where they are.
+   Mouse clicks don't trigger :focus-visible, so this stays invisible
+   for pointer users. Per-component rules can override if they need
+   a tighter offset or different color. */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* Skip-to-content link — hidden until focused, then jumps to <main> */
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -3rem;
+  z-index: 1000;
+  padding: 0.6rem 1rem;
+  background: var(--color-ink);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  transition: top 180ms ease;
+}
+.skip-link:focus {
+  top: 0.75rem;
 }
 
 /* --- Field Manual structural primitives --- */

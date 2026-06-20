@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body data-module="regulation">
+  <a href="#main" class="skip-link">Skip to main content</a>
   <header class="site-nav">
     <a href="index.html" class="brand">
       <span class="brand-icon" aria-hidden="true">🧬</span>
@@ -27,7 +28,7 @@
 
   <nav class="breadcrumb"><a href="index.html">Home</a> / Gene Regulation</nav>
 
-  <main>
+  <main id="main">
     <div class="regulation-layout">
 
       <!-- Left pane: lac operon + mutation playground -->
@@ -35,7 +36,9 @@
 
         <!-- lac operon switch -->
         <h2 class="transport-section-title">Lac operon — click to flip</h2>
-        <svg id="lac-svg" class="lac-svg" viewBox="0 0 460 200" xmlns="http://www.w3.org/2000/svg" aria-label="lac operon switch">
+        <svg id="lac-svg" class="lac-svg" viewBox="0 0 460 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="lac-svg-title lac-svg-desc">
+          <title id="lac-svg-title">Lac operon switch</title>
+          <desc id="lac-svg-desc">A stretch of DNA with the promoter, operator, and three lac genes (Z, Y, A). When lactose is absent, a repressor sits on the operator and blocks transcription; when lactose is present, the repressor falls off and the genes are expressed.</desc>
           <!-- Two DNA strands -->
           <line x1="20" y1="100" x2="440" y2="100" stroke="#2D2154" stroke-width="2"/>
           <line x1="20" y1="120" x2="440" y2="120" stroke="#2D2154" stroke-width="2"/>

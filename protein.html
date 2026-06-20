@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body data-module="protein">
+  <a href="#main" class="skip-link">Skip to main content</a>
   <header class="site-nav">
     <a href="index.html" class="brand">
       <span class="brand-icon" aria-hidden="true">🧬</span>
@@ -27,14 +28,16 @@
 
   <nav class="breadcrumb"><a href="index.html">Home</a> / Protein Synthesis</nav>
 
-  <main>
+  <main id="main">
     <div class="protein-layout">
 
       <div class="scene-pane">
         <svg viewBox="0 0 600 640" class="protein-svg protein-svg-tx"
              xmlns="http://www.w3.org/2000/svg"
              role="img"
-             aria-label="Protein synthesis diagram showing transcription in the nucleus and translation at the ribosome.">
+             aria-labelledby="protein-svg-title protein-svg-desc">
+          <title id="protein-svg-title">Protein synthesis diagram</title>
+          <desc id="protein-svg-desc">Two scenes side by side: transcription inside the nucleus, where DNA is copied into messenger RNA, and translation at a ribosome in the cytoplasm, where mRNA is read three bases at a time to build a protein.</desc>
 
           <!-- ============================================================
                TRANSCRIPTION SCENE — visible by default. Fades out when
