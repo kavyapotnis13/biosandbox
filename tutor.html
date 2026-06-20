@@ -28,8 +28,14 @@
 
   <main id="main" class="tutor-page">
     <header class="tutor-intro">
-      <h1>Lab Partner</h1>
-      <p class="tutor-subtitle">Ask me anything about biology. I'll explain it for your level — and point you to the right module if one fits.</p>
+      <div class="tutor-intro-text">
+        <h1>Lab Partner</h1>
+        <p class="tutor-subtitle">Ask me anything about biology. I'll explain it for your level — and point you to the right module if one fits.</p>
+      </div>
+      <button class="tutor-new-chat" id="tutor-new-chat" type="button" hidden>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M3 4v5h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        New chat
+      </button>
     </header>
 
     <section class="tutor-chat" id="tutor-chat" aria-live="polite" aria-label="Conversation"></section>

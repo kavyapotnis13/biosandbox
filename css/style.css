@@ -6993,6 +6993,14 @@ body[data-page="tutor"] {
   min-height: calc(100vh - 5rem);
 }
 
+.tutor-intro {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.tutor-intro-text { flex: 1 1 20rem; min-width: 0; }
 .tutor-intro h1 {
   font-family: 'Newsreader', serif;
   font-size: 2.6rem;
@@ -7007,6 +7015,29 @@ body[data-page="tutor"] {
   color: #5B4F88;
   line-height: 1.5;
 }
+.tutor-new-chat {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.55rem;
+  padding: 0.45rem 0.85rem;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #5B4F88;
+  background: transparent;
+  border: 1px solid #C7B8E4;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 180ms ease, color 180ms ease, border-color 180ms ease;
+}
+.tutor-new-chat:hover {
+  background: #E8DEF5;
+  color: #2D2154;
+  border-color: #8E69C9;
+}
+.tutor-new-chat svg { width: 0.85rem; height: 0.85rem; }
 
 /* Chat scroll area */
 .tutor-chat {

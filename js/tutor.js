@@ -21,11 +21,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const input    = document.getElementById('tutor-input');
   const chat     = document.getElementById('tutor-chat');
   const starters = document.getElementById('tutor-starters');
+  const newChat  = document.getElementById('tutor-new-chat');
   if (!form || !input || !chat) return;
 
   history = loadHistory();
   history.forEach(m => renderMessage(m.role, m.content));
-  if (history.length > 0) hideStarters();
+  if (history.length > 0) { hideStarters(); showResetButton(); }
+
+  newChat?.addEventListener('click', () => {
+    resetChat();
+    input.focus();
+  });
 
   // Auto-grow textarea up to 6 lines.
   input.addEventListener('input', () => autoGrow(input));
@@ -56,6 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function sendMessage(text) {
   hideStarters();
+  showResetButton();
   pushHistory('user', text);
   renderMessage('user', text);
 
@@ -166,6 +173,30 @@ function scrollToBottom() {
 function hideStarters() {
   const s = document.getElementById('tutor-starters');
   if (s) s.hidden = true;
+}
+
+function showStarters() {
+  const s = document.getElementById('tutor-starters');
+  if (s) s.hidden = false;
+}
+
+function showResetButton() {
+  const b = document.getElementById('tutor-new-chat');
+  if (b) b.hidden = false;
+}
+
+function hideResetButton() {
+  const b = document.getElementById('tutor-new-chat');
+  if (b) b.hidden = true;
+}
+
+function resetChat() {
+  history = [];
+  try { sessionStorage.removeItem(STORAGE_KEY); } catch (_) {}
+  const chat = document.getElementById('tutor-chat');
+  if (chat) chat.innerHTML = '';
+  showStarters();
+  hideResetButton();
 }
 
 function autoGrow(el) {
