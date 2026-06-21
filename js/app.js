@@ -228,7 +228,10 @@ function initLevelBadge() {
   badge.href      = 'goals.html';
   badge.setAttribute('aria-label', 'Your level and XP — open study log');
   badge.innerHTML = `
-    <span class="level-badge-num">Lvl 1</span>
+    <span class="level-badge-row">
+      <span class="level-badge-label">Goals</span>
+      <span class="level-badge-num">Lvl 1</span>
+    </span>
     <span class="level-badge-bar"><span class="level-badge-fill"></span></span>
   `;
 
@@ -253,36 +256,31 @@ function initLevelBadge() {
   window.addEventListener('xpgained', e => paint(!!(e.detail && e.detail.leveledUp)));
 }
 
-/* ---------- Nav: Lab Partner (tutor) link ----------
-   Adds a "Tutor" link to .nav-links on every page. Skips the
-   tutor page itself, and skips pages that don't have .nav-links
-   (about.html is the only one currently — it gets a standalone
-   link appended to .site-nav). */
+/* ---------- Floating Lab Partner (tutor) button ----------
+   Injects a fixed circular FAB in the bottom-right corner of every
+   page except tutor.html itself, so the tutor is always one click
+   away without taking nav real estate. */
 
 function initTutorLink() {
-  const nav = document.querySelector('.site-nav');
-  if (!nav) return;
   if (document.body.dataset.page === 'tutor') return;
-  if (nav.querySelector('.nav-link-tutor')) return;
+  if (document.querySelector('.tutor-fab')) return;
 
-  const link = document.createElement('a');
-  link.href = 'tutor.html';
-  link.className = 'nav-link nav-link-tutor';
-  link.setAttribute('aria-label', 'Open Lab Partner — biology chat tutor');
-  link.title = 'Lab Partner';
-  link.innerHTML = `<span class="nav-link-tutor-icon" aria-hidden="true">💬</span> Tutor`;
-
-  const links = nav.querySelector('.nav-links');
-  if (links) {
-    // Slot before the "About" text link if one exists, else append.
-    const about = Array.from(links.querySelectorAll('.nav-link')).find(
-      a => a.textContent.trim().toLowerCase() === 'about'
-    );
-    if (about) links.insertBefore(link, about);
-    else links.appendChild(link);
-  } else {
-    nav.appendChild(link);
-  }
+  const fab = document.createElement('a');
+  fab.href = 'tutor.html';
+  fab.className = 'tutor-fab';
+  fab.setAttribute('aria-label', 'Open Lab Partner — biology chat tutor');
+  fab.title = 'Lab Partner';
+  fab.innerHTML = `
+    <svg class="tutor-fab-icon" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 5 H20 A1 1 0 0 1 21 6 V16 A1 1 0 0 1 20 17 H12 L7 21 V17 H4 A1 1 0 0 1 3 16 V6 A1 1 0 0 1 4 5 Z"
+            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      <circle cx="8.5"  cy="11" r="1" fill="currentColor"/>
+      <circle cx="12"   cy="11" r="1" fill="currentColor"/>
+      <circle cx="15.5" cy="11" r="1" fill="currentColor"/>
+    </svg>
+    <span class="tutor-fab-label">Lab Partner</span>
+  `;
+  document.body.appendChild(fab);
 }
 
 /* ---------- XP + achievement toasts ----------

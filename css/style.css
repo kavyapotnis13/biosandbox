@@ -6727,6 +6727,20 @@ h1, h2, h3 {
   border-color: var(--accent, #7A2E2E);
   box-shadow: 0 1px 0 rgba(122, 46, 46, 0.15);
 }
+.level-badge-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+.level-badge-label {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.66rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: var(--color-muted, #6B6862);
+  text-transform: uppercase;
+}
 .level-badge-num {
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-size: 0.74rem;
@@ -6761,7 +6775,10 @@ h1, h2, h3 {
 .xp-toasts {
   position: fixed;
   right: 1.2rem;
-  bottom: 1.2rem;
+  /* Sit above the tutor FAB (3.5rem tall + 1.5rem inset) so they stack
+     rather than overlap. On tutor.html the FAB is absent — toasts just
+     appear a bit higher, which is fine. */
+  bottom: 5.6rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -6826,7 +6843,9 @@ h1, h2, h3 {
 @media (max-width: 700px) {
   .level-badge { min-width: 4.6rem; padding: 0.28rem 0.5rem 0.32rem; }
   .level-badge-num { font-size: 0.7rem; }
-  .xp-toasts { right: 0.6rem; bottom: 0.6rem; }
+  .level-badge-label { font-size: 0.6rem; letter-spacing: 0.1em; }
+  /* Lift toasts above the mobile FAB (3rem tall + 1rem inset). */
+  .xp-toasts { right: 0.6rem; bottom: 4.6rem; }
   .xp-toast { font-size: 0.8rem; padding: 0.45rem 0.7rem; }
 }
 
@@ -6963,17 +6982,80 @@ h1, h2, h3 {
   .xp-card-title { font-size: 1rem; }
 }
 
-/* Nav Tutor link — chat-bubble icon + label. Auto-injected by
-   js/app.js so the markup lives there too. */
-.nav-link-tutor {
+/* Floating Lab Partner button — auto-injected by js/app.js on every
+   page except tutor.html itself. Field-manual palette: paper-white
+   circle, specimen-red glyph + hairline ring. Hover reveals the
+   "Lab Partner" label as a small mono tag to its left. */
+.tutor-fab {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  width: 3.5rem;
+  height: 3.5rem;
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
+  justify-content: center;
+  background: var(--color-card);
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  border-radius: 999px;
+  text-decoration: none;
+  box-shadow: var(--shadow-card-hover);
+  transition: transform var(--transition), background var(--transition), color var(--transition), box-shadow var(--transition);
+  z-index: 60;
 }
-.nav-link-tutor-icon {
-  font-size: 1.05em;
-  line-height: 1;
-  transform: translateY(-0.05em);
+.tutor-fab:hover,
+.tutor-fab:focus-visible {
+  background: var(--color-primary);
+  color: var(--color-card);
+  transform: translateY(-2px);
+  box-shadow: 0 2px 0 rgba(20, 20, 20, 0.06), 0 10px 24px rgba(122, 46, 46, 0.18);
+}
+.tutor-fab-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  display: block;
+}
+.tutor-fab-label {
+  position: absolute;
+  right: calc(100% + 0.6rem);
+  top: 50%;
+  transform: translateY(-50%) translateX(0.4rem);
+  background: var(--color-ink);
+  color: var(--color-card);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.6rem;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition), transform var(--transition);
+}
+.tutor-fab:hover .tutor-fab-label,
+.tutor-fab:focus-visible .tutor-fab-label {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+@media (max-width: 600px) {
+  .tutor-fab {
+    bottom: 1rem;
+    right: 1rem;
+    width: 3rem;
+    height: 3rem;
+  }
+  .tutor-fab-icon { width: 1.3rem; height: 1.3rem; }
+  /* Hide the label on small screens — the icon alone is enough. */
+  .tutor-fab-label { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tutor-fab,
+  .tutor-fab-label { transition: none; }
+  .tutor-fab:hover,
+  .tutor-fab:focus-visible { transform: none; }
 }
 
 /* =========================================================
