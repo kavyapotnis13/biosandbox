@@ -2,19 +2,22 @@
    BioSandbox Lab Partner — Cloudflare Worker proxy
 
    Forwards chat requests from the static frontend to the
-   Anthropic API. Keeps the API key out of the browser.
+   Google Gemini API. Keeps the API key out of the browser.
 
    Endpoint:
      POST /chat
        body: { messages: [{role, content}, ...], audience: 'middle'|'high' }
-       returns: the raw Anthropic /v1/messages response JSON.
+       returns: { content: [{ type: 'text', text: '...' }], model, finishReason, usage }
+       (the response is normalized to the Anthropic-style shape the
+        frontend already understands, so swapping providers stays
+        invisible to js/tutor.js.)
 
    Configured via wrangler secrets:
-     ANTHROPIC_API_KEY  — your sk-ant-... key
+     GEMINI_API_KEY  — your Google AI Studio key (free tier OK)
    ========================================================= */
 
-const MODEL                = 'claude-haiku-4-5-20251001';
-const MAX_TOKENS           = 800;
+const MODEL                = 'gemini-2.5-flash';
+const MAX_TOKENS           = 2000;   // headroom for full multi-topic answers
 const MAX_MESSAGES         = 24;     // upper bound on conversation length
 const MAX_MESSAGE_CHARS    = 4000;   // per-message hard cap
 const ALLOWED_ORIGIN       = '*';    // tighten to your GitHub Pages URL if you want
@@ -30,8 +33,8 @@ export default {
     if (request.method !== 'POST') {
       return cors(new Response('Method not allowed', { status: 405 }));
     }
-    if (!env.ANTHROPIC_API_KEY) {
-      return cors(json({ error: 'Server is missing ANTHROPIC_API_KEY' }, 500));
+    if (!env.GEMINI_API_KEY) {
+      return cors(json({ error: 'Server is missing GEMINI_API_KEY' }, 500));
     }
 
     let body;
@@ -47,23 +50,53 @@ export default {
     const audience = body.audience === 'middle' ? 'middle' : 'high';
     const system   = buildSystemPrompt(audience);
 
-    const upstream = await fetch('https://api.anthropic.com/v1/messages', {
+    // Map the Anthropic-shaped conversation to Gemini's request shape.
+    // Gemini uses 'model' where Anthropic uses 'assistant', and wraps
+    // text content in a parts array.
+    const contents = validation.messages.map(m => ({
+      role: m.role === 'assistant' ? 'model' : 'user',
+      parts: [{ text: m.content }],
+    }));
+
+    const upstreamUrl = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`;
+    const upstream = await fetch(upstreamUrl, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
-        'anthropic-version': '2023-06-01',
-        'x-api-key': env.ANTHROPIC_API_KEY,
+        'x-goog-api-key': env.GEMINI_API_KEY,
       },
       body: JSON.stringify({
-        model: MODEL,
-        max_tokens: MAX_TOKENS,
-        system,
-        messages: validation.messages,
+        system_instruction: { parts: [{ text: system }] },
+        contents,
+        generationConfig: {
+          maxOutputTokens: MAX_TOKENS,
+          temperature: 0.7,
+          // Gemini 2.5 Flash spends "thinking" tokens before answering,
+          // and those tokens count against maxOutputTokens — so a long
+          // chain of thought can truncate the visible reply. We don't
+          // need internal reasoning for tutoring; turn it off so every
+          // budgeted token goes to the actual answer.
+          thinkingConfig: { thinkingBudget: 0 },
+        },
       }),
     });
 
     const data = await upstream.json().catch(() => ({ error: 'Upstream returned non-JSON' }));
-    return cors(json(data, upstream.status));
+    if (!upstream.ok) return cors(json(data, upstream.status));
+
+    // Re-shape Gemini's response into the {content:[{type,text}]} envelope
+    // the frontend already parses (see extractText in js/tutor.js).
+    const text = (data.candidates?.[0]?.content?.parts || [])
+      .map(p => p.text || '')
+      .join('')
+      .trim();
+    const normalized = {
+      content: text ? [{ type: 'text', text }] : [],
+      model: MODEL,
+      finishReason: data.candidates?.[0]?.finishReason,
+      usage: data.usageMetadata,
+    };
+    return cors(json(normalized, 200));
   },
 };
 
@@ -89,7 +122,7 @@ function validateMessages(messages) {
     cleaned.push({ role: m.role, content });
   }
   if (cleaned.length === 0) return { error: 'no non-empty messages' };
-  // First message in the conversation we send to Anthropic must be a user turn.
+  // First message we send upstream must be a user turn.
   while (cleaned.length > 0 && cleaned[0].role !== 'user') cleaned.shift();
   if (cleaned.length === 0) return { error: 'no user message' };
   return { messages: cleaned };
@@ -130,7 +163,8 @@ ${isMiddle
   : `- Explain at AP Biology depth. Use proper terminology (e.g. \"selectively permeable\", \"electrochemical gradient\") but always show what it means in plain language too.
 - It's fine to use chemical notation (CO₂, H₂O, ATP) and standard codon/protein shorthand.
 - Walk through mechanisms step by step when a question is mechanistic.`}
-- Keep replies short: 1-3 short paragraphs is usually enough. Use bullet lists for comparisons or step-throughs.
+- Match the question's scope. A short factual question gets a short reply (1-3 paragraphs). A "walk me through X" or a multi-topic question ("X AND Y", "compare X with Y", "all the steps of X") gets a full multi-part answer — cover everything the student asked about in one reply. Don't stop partway and ask "ready to move on?" when they already asked for the full thing.
+- Use bullet lists for comparisons or step-throughs.
 - Sound like a smart, friendly older sibling. Not a textbook.
 
 # Modules you can recommend
