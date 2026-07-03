@@ -72,7 +72,7 @@ A living checklist of where we are. Tick boxes (`- [ ]` → `- [x]`) as you fini
 - [ ] Mobile testing on a real phone
 - [ ] Share live link with 2–3 testers
 - [ ] Fix top 3 feedback issues
-- [ ] Accessibility pass (SVG `<title>`, keyboard, color contrast)
+- [x] Accessibility pass (SVG `<title>`, keyboard, color contrast)
 - [ ] App description for the submission
 - [ ] 1–3 minute demo video
 - [ ] Final GitHub Pages deploy

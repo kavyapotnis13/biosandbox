@@ -1058,6 +1058,22 @@ h1, h2, h3 {
   .progress-strip { padding: 0 1rem; }
   .breadcrumb { padding: 0 1rem; }
 
+  /* Center content that leaves awkward right-side whitespace on
+     narrow viewports. On desktop these read as intentional
+     left-aligned specimen labels; on a phone they just look off. */
+  .hero-colophon {
+    grid-template-columns: 1fr;
+    gap: 0.15rem;
+  }
+  .hero-colophon > span:first-child,
+  .hero-colophon > span:nth-child(2),
+  .hero-colophon > span:last-child { text-align: center; }
+  .progress-summary { text-align: center; }
+  .home-chips { justify-content: center; }
+  .ap-coverage-summary { justify-content: center; text-align: center; }
+  .ap-standards-block { justify-content: center; }
+  .ap-standards-units { justify-content: center; flex: 0 1 auto; }
+
   /* Cell explorer: stack panes on mobile */
   .cell-layout {
     grid-template-columns: 1fr;
