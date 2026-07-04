@@ -1145,8 +1145,30 @@ h1, h2, h3 {
   .chemistry-layout {
     grid-template-columns: 1fr;
     padding: 0 1rem;
+    min-width: 0;
   }
-  .chem-pane { min-height: 0; padding: 1rem; }
+  /* chem-pane was `display: flex` with justify-content: center on desktop;
+     on a narrow phone that centers a chem-tool that's shrinking to its
+     largest un-breakable child (the monomer SVG buttons), so everything
+     ends up jammed into a ~100px column with the right half empty.
+     Reset to a normal block so the tool fills the pane's actual width. */
+  .chem-pane {
+    display: block;
+    min-height: 0;
+    padding: 1rem;
+    min-width: 0;
+  }
+  .chem-tool { max-width: none; width: 100%; min-width: 0; }
+  .monomer-pool { justify-content: center; }
+  .builder-canvas { min-width: 0; }
+  .builder-hint { max-width: 100%; }
+}
+
+/* Belt-and-braces: prevent accidental horizontal overflow anywhere from
+   causing the whole viewport to render wider than the screen, which
+   shows up on iOS as content squished into a narrow left column. */
+@media (max-width: 768px) {
+  html, body { overflow-x: hidden; max-width: 100vw; }
 }
 
 /* =========================================================
