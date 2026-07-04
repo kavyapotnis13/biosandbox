@@ -1141,19 +1141,14 @@ h1, h2, h3 {
   }
   .web-pane { min-height: 0; padding: 1rem; }
 
-  /* ---------- Chemistry module: the "individual boxes" refactor ----------
-     Every internal widget of the macromolecule builder is made to shrink
-     and wrap independently, so nothing forces the parent chem-tool to be
-     wider than the viewport. Root causes we're closing:
-     1. The two big boxes (chem-pane, info-pane) were still feeling
-        side-by-side because CSS grid was doing something subtle.
-     2. .builder-tabs (4 tabs with flex: 1) couldn't shrink below the
-        widest tab's min-content ("Nucleic Acids" ≈ 110px), forcing the
-        whole sim to be ≥440px and causing horizontal overflow at any
-        narrower viewport. That overflow was making everything downstream
-        look squished into a narrow left column. */
+  /* ---------- Chemistry module: individual-boxes refactor ----------
+     IMPORTANT: every selector below is prefixed with `.chemistry-layout`
+     so its specificity (0, 2, 0) beats the single-class desktop rules
+     defined LATER in the file (0, 1, 0). Without this bump, CSS's "later
+     rule wins on equal specificity" makes the desktop `display: flex`
+     override our mobile `display: block`, silently reverting every fix
+     to the desktop layout on phone viewports. */
 
-  /* Outer stack: plain block, no grid */
   .chemistry-layout {
     display: block;
     padding: 0 0.75rem;
@@ -1166,24 +1161,27 @@ h1, h2, h3 {
     min-width: 0;
   }
 
-  /* Pane container: block, no flex-centering */
-  .chem-pane {
+  .chemistry-layout .chem-pane {
     display: block;
     min-height: 0;
     padding: 0.75rem;
     min-width: 0;
   }
-  .chem-tool { max-width: none; width: 100%; min-width: 0; gap: 0.7rem; }
+  .chemistry-layout .chem-tool {
+    max-width: none;
+    width: 100%;
+    min-width: 0;
+    gap: 0.7rem;
+  }
 
-  /* Tabs: allow wrapping to 2 rows when 4 don't fit horizontally */
-  .builder-tabs {
+  .chemistry-layout .builder-tabs {
     flex-wrap: wrap;
     align-self: stretch;
     width: 100%;
     padding: 3px;
     gap: 3px;
   }
-  .builder-tab {
+  .chemistry-layout .builder-tab {
     flex: 1 1 45%;
     min-width: 0;
     padding: 0.4rem 0.5rem;
@@ -1191,48 +1189,60 @@ h1, h2, h3 {
     white-space: nowrap;
   }
 
-  /* Info blurb: allow shrinking */
-  .builder-info { min-width: 0; }
-  .builder-blurb { font-size: 0.85rem; }
+  .chemistry-layout .builder-info { min-width: 0; }
+  .chemistry-layout .builder-blurb { font-size: 0.85rem; }
 
-  /* Canvas: no min-height so it doesn't waste vertical space, allow shrink */
-  .builder-canvas { min-width: 0; min-height: 90px; padding: 0.75rem; }
+  .chemistry-layout .builder-canvas {
+    min-width: 0;
+    min-height: 90px;
+    padding: 0.75rem;
+  }
 
-  /* Stats: wrap to stack if needed, tighten sizing */
-  .builder-stats { flex-wrap: wrap; gap: 0.5rem; }
-  .builder-stat { flex: 1 1 45%; min-width: 0; padding: 0.5rem 0.7rem; }
-  .builder-stat-value { font-size: 1.35rem; }
+  .chemistry-layout .builder-stats { flex-wrap: wrap; gap: 0.5rem; }
+  .chemistry-layout .builder-stat {
+    flex: 1 1 45%;
+    min-width: 0;
+    padding: 0.5rem 0.7rem;
+  }
+  .chemistry-layout .builder-stat-value { font-size: 1.35rem; }
 
-  /* Monomer pool: grid auto-fit so cards resize to whatever fits */
-  .monomer-pool-wrap { padding: 0.55rem 0.6rem 0.7rem; }
-  .monomer-pool {
+  .chemistry-layout .monomer-pool-wrap { padding: 0.55rem 0.6rem 0.7rem; }
+  .chemistry-layout .monomer-pool {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
     gap: 0.4rem;
   }
-  .monomer-btn {
+  .chemistry-layout .monomer-btn {
     min-width: 0;
     padding: 0.3rem 0.35rem;
   }
-  .monomer-name { font-size: 0.7rem; }
-  .monomer-btn .shape-tail { width: 100%; max-width: 90px; }
+  .chemistry-layout .monomer-name { font-size: 0.7rem; }
+  .chemistry-layout .monomer-btn .shape-tail {
+    width: 100%;
+    max-width: 90px;
+  }
 
-  /* Hint: full width, sensible sizing */
-  .builder-hint { max-width: 100%; font-size: 0.8rem; }
+  .chemistry-layout .builder-hint {
+    max-width: 100%;
+    font-size: 0.8rem;
+  }
 }
 
-/* Extra-narrow phones (iPhone SE, or DevTools testing narrow) — tighten
-   padding further so the sim stays usable down to ~300px viewport. */
+/* Extra-narrow phones (iPhone SE, or DevTools testing narrow) — same
+   specificity trick applies here. */
 @media (max-width: 400px) {
   .chemistry-layout { padding: 0 0.5rem; }
-  .chem-pane { padding: 0.5rem; }
-  .builder-tabs { padding: 2px; gap: 2px; }
-  .builder-tab { padding: 0.3rem 0.35rem; font-size: 0.78rem; }
-  .monomer-pool-wrap { padding: 0.4rem; }
-  .monomer-pool { gap: 0.3rem; }
-  .monomer-btn { padding: 0.25rem 0.3rem; }
-  .builder-stat { padding: 0.4rem 0.5rem; }
-  .builder-stat-value { font-size: 1.2rem; }
+  .chemistry-layout .chem-pane { padding: 0.5rem; }
+  .chemistry-layout .builder-tabs { padding: 2px; gap: 2px; }
+  .chemistry-layout .builder-tab {
+    padding: 0.3rem 0.35rem;
+    font-size: 0.78rem;
+  }
+  .chemistry-layout .monomer-pool-wrap { padding: 0.4rem; }
+  .chemistry-layout .monomer-pool { gap: 0.3rem; }
+  .chemistry-layout .monomer-btn { padding: 0.25rem 0.3rem; }
+  .chemistry-layout .builder-stat { padding: 0.4rem 0.5rem; }
+  .chemistry-layout .builder-stat-value { font-size: 1.2rem; }
 }
 
 /* Belt-and-braces: prevent accidental horizontal overflow anywhere from
