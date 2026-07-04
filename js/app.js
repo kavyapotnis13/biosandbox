@@ -170,7 +170,7 @@ function initApStandardsBlock() {
   block.className = 'ap-standards-block';
   block.setAttribute('aria-label', 'AP Biology learning objectives covered');
   block.innerHTML = `
-    <span class="ap-standards-label">AP Bio aligned</span>
+    <span class="ap-standards-label">AP Bio topic</span>
     <div class="ap-standards-units">${unitsHtml}</div>
   `;
 
