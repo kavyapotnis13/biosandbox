@@ -1141,37 +1141,70 @@ h1, h2, h3 {
   }
   .web-pane { min-height: 0; padding: 1rem; }
 
-  /* Chemistry module: force plain vertical stack on mobile.
-     Using display: block (not grid) so the two big boxes —
-     the demo (chem-pane) and the description (info-pane) —
-     are guaranteed to sit one above the other with no
-     side-by-side artifacts. */
+  /* ---------- Chemistry module: the "individual boxes" refactor ----------
+     Every internal widget of the macromolecule builder is made to shrink
+     and wrap independently, so nothing forces the parent chem-tool to be
+     wider than the viewport. Root causes we're closing:
+     1. The two big boxes (chem-pane, info-pane) were still feeling
+        side-by-side because CSS grid was doing something subtle.
+     2. .builder-tabs (4 tabs with flex: 1) couldn't shrink below the
+        widest tab's min-content ("Nucleic Acids" ≈ 110px), forcing the
+        whole sim to be ≥440px and causing horizontal overflow at any
+        narrower viewport. That overflow was making everything downstream
+        look squished into a narrow left column. */
+
+  /* Outer stack: plain block, no grid */
   .chemistry-layout {
     display: block;
-    padding: 0 1rem;
+    padding: 0 0.75rem;
     min-width: 0;
   }
   .chemistry-layout > .chem-pane,
   .chemistry-layout > .info-pane {
     width: 100%;
     margin: 0 0 1rem;
+    min-width: 0;
   }
-  /* chem-pane was `display: flex` with justify-content: center on desktop;
-     on a narrow phone that centers a chem-tool that's shrinking to its
-     largest un-breakable child (the monomer SVG buttons), so everything
-     ends up jammed into a ~100px column with the right half empty.
-     Reset to a normal block so the tool fills the pane's actual width. */
+
+  /* Pane container: block, no flex-centering */
   .chem-pane {
     display: block;
     min-height: 0;
-    padding: 1rem;
+    padding: 0.75rem;
     min-width: 0;
   }
-  .chem-tool { max-width: none; width: 100%; min-width: 0; }
-  /* Flex-wrap was stacking the monomers 1-per-row on narrow phones
-     because 3 × 80px cards + gaps didn't fit. Grid auto-fit lets
-     each card shrink to fill the row, so we get 2-3 per row on
-     iPhone widths instead of a single vertical column. */
+  .chem-tool { max-width: none; width: 100%; min-width: 0; gap: 0.7rem; }
+
+  /* Tabs: allow wrapping to 2 rows when 4 don't fit horizontally */
+  .builder-tabs {
+    flex-wrap: wrap;
+    align-self: stretch;
+    width: 100%;
+    padding: 3px;
+    gap: 3px;
+  }
+  .builder-tab {
+    flex: 1 1 45%;
+    min-width: 0;
+    padding: 0.4rem 0.5rem;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+
+  /* Info blurb: allow shrinking */
+  .builder-info { min-width: 0; }
+  .builder-blurb { font-size: 0.85rem; }
+
+  /* Canvas: no min-height so it doesn't waste vertical space, allow shrink */
+  .builder-canvas { min-width: 0; min-height: 90px; padding: 0.75rem; }
+
+  /* Stats: wrap to stack if needed, tighten sizing */
+  .builder-stats { flex-wrap: wrap; gap: 0.5rem; }
+  .builder-stat { flex: 1 1 45%; min-width: 0; padding: 0.5rem 0.7rem; }
+  .builder-stat-value { font-size: 1.35rem; }
+
+  /* Monomer pool: grid auto-fit so cards resize to whatever fits */
+  .monomer-pool-wrap { padding: 0.55rem 0.6rem 0.7rem; }
   .monomer-pool {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
@@ -1183,11 +1216,23 @@ h1, h2, h3 {
   }
   .monomer-name { font-size: 0.7rem; }
   .monomer-btn .shape-tail { width: 100%; max-width: 90px; }
-  .builder-canvas { min-width: 0; }
-  .builder-hint { max-width: 100%; }
-  /* Two stats boxes side-by-side can still be tight — let them shrink */
-  .builder-stat { min-width: 0; padding: 0.5rem 0.7rem; }
-  .builder-stat-value { font-size: 1.35rem; }
+
+  /* Hint: full width, sensible sizing */
+  .builder-hint { max-width: 100%; font-size: 0.8rem; }
+}
+
+/* Extra-narrow phones (iPhone SE, or DevTools testing narrow) — tighten
+   padding further so the sim stays usable down to ~300px viewport. */
+@media (max-width: 400px) {
+  .chemistry-layout { padding: 0 0.5rem; }
+  .chem-pane { padding: 0.5rem; }
+  .builder-tabs { padding: 2px; gap: 2px; }
+  .builder-tab { padding: 0.3rem 0.35rem; font-size: 0.78rem; }
+  .monomer-pool-wrap { padding: 0.4rem; }
+  .monomer-pool { gap: 0.3rem; }
+  .monomer-btn { padding: 0.25rem 0.3rem; }
+  .builder-stat { padding: 0.4rem 0.5rem; }
+  .builder-stat-value { font-size: 1.2rem; }
 }
 
 /* Belt-and-braces: prevent accidental horizontal overflow anywhere from
