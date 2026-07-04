@@ -1165,13 +1165,15 @@ h1, h2, h3 {
      iPhone widths instead of a single vertical column. */
   .monomer-pool {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(72px, 1fr));
-    gap: 0.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+    gap: 0.4rem;
   }
   .monomer-btn {
     min-width: 0;
-    padding: 0.35rem 0.4rem;
+    padding: 0.3rem 0.35rem;
   }
+  .monomer-name { font-size: 0.7rem; }
+  .monomer-btn .shape-tail { width: 100%; max-width: 90px; }
   .builder-canvas { min-width: 0; }
   .builder-hint { max-width: 100%; }
   /* Two stats boxes side-by-side can still be tight — let them shrink */
