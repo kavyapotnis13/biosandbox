@@ -1159,9 +1159,24 @@ h1, h2, h3 {
     min-width: 0;
   }
   .chem-tool { max-width: none; width: 100%; min-width: 0; }
-  .monomer-pool { justify-content: center; }
+  /* Flex-wrap was stacking the monomers 1-per-row on narrow phones
+     because 3 × 80px cards + gaps didn't fit. Grid auto-fit lets
+     each card shrink to fill the row, so we get 2-3 per row on
+     iPhone widths instead of a single vertical column. */
+  .monomer-pool {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(72px, 1fr));
+    gap: 0.5rem;
+  }
+  .monomer-btn {
+    min-width: 0;
+    padding: 0.35rem 0.4rem;
+  }
   .builder-canvas { min-width: 0; }
   .builder-hint { max-width: 100%; }
+  /* Two stats boxes side-by-side can still be tight — let them shrink */
+  .builder-stat { min-width: 0; padding: 0.5rem 0.7rem; }
+  .builder-stat-value { font-size: 1.35rem; }
 }
 
 /* Belt-and-braces: prevent accidental horizontal overflow anywhere from
