@@ -1141,11 +1141,20 @@ h1, h2, h3 {
   }
   .web-pane { min-height: 0; padding: 1rem; }
 
-  /* Chemistry module: stack panes on mobile */
+  /* Chemistry module: force plain vertical stack on mobile.
+     Using display: block (not grid) so the two big boxes —
+     the demo (chem-pane) and the description (info-pane) —
+     are guaranteed to sit one above the other with no
+     side-by-side artifacts. */
   .chemistry-layout {
-    grid-template-columns: 1fr;
+    display: block;
     padding: 0 1rem;
     min-width: 0;
+  }
+  .chemistry-layout > .chem-pane,
+  .chemistry-layout > .info-pane {
+    width: 100%;
+    margin: 0 0 1rem;
   }
   /* chem-pane was `display: flex` with justify-content: center on desktop;
      on a narrow phone that centers a chem-tool that's shrinking to its
