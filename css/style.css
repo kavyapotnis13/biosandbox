@@ -1359,6 +1359,36 @@ h1, h2, h3 {
     position: static !important;
     align-self: auto !important;
   }
+
+  /* Sticky "action pane" — the diagram/interactive pane stays pinned
+     at the top of the viewport as the user scrolls down through the
+     info-pane content. Solves the walkthrough UX problem where the
+     diagram + step description need to be visible together, but
+     stacking them makes it impossible to see both at once.
+
+     Chemistry-layout deliberately excluded: chem-pane IS the builder
+     the user clicks around inside, so pinning it with a scroll cap
+     would fight interaction. */
+  .cell-layout > .diagram-pane,
+  .dna-layout > .helix-pane,
+  .protein-layout > .scene-pane,
+  .mitosis-layout > .scene-pane,
+  .photo-layout > .scene-pane,
+  .resp-layout > .scene-pane,
+  .heredity-layout > .punnett-pane,
+  .selection-layout > .habitat-pane,
+  .ecology-layout > .web-pane,
+  .enzymes-layout > .enzyme-pane,
+  .signaling-layout > .signal-pane,
+  .transport-layout > .transport-pane,
+  .regulation-layout > .regulation-pane {
+    position: sticky !important;
+    top: 0.5rem;
+    min-height: 0 !important;
+    max-height: 60vh;
+    overflow: auto !important;
+    z-index: 5;
+  }
 }
 
 /* =========================================================
