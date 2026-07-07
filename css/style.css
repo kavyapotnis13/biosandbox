@@ -1141,30 +1141,39 @@ h1, h2, h3 {
   }
   .web-pane { min-height: 0; padding: 1rem; }
 
-  /* ---------- Chemistry module: individual-boxes refactor ----------
-     IMPORTANT: every selector below is prefixed with `.chemistry-layout`
-     so its specificity (0, 2, 0) beats the single-class desktop rules
-     defined LATER in the file (0, 1, 0). Without this bump, CSS's "later
-     rule wins on equal specificity" makes the desktop `display: flex`
-     override our mobile `display: block`, silently reverting every fix
-     to the desktop layout on phone viewports. */
+  /* ---------- Chemistry module: TWO STACKED BOXES on phones ----------
+     Nuclear-option !important rules to guarantee the two big boxes
+     (demo + description) always stack vertically on phones, no matter
+     what else in the file tries to override. This is scoped to
+     ≤768px so desktop is untouched.
+
+     Also strengthens visual separation between the two boxes so they
+     clearly read as separate cards, not one squished layout. */
 
   .chemistry-layout {
-    display: block;
+    display: block !important;
+    grid-template-columns: none !important;
     padding: 0 0.75rem;
     min-width: 0;
   }
   .chemistry-layout > .chem-pane,
   .chemistry-layout > .info-pane {
-    width: 100%;
-    margin: 0 0 1rem;
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 0 1rem !important;
     min-width: 0;
+    /* Visual: each box gets a real card treatment so they read as two
+       distinct stacked panels, not one merged blob. */
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
   }
 
   .chemistry-layout .chem-pane {
-    display: block;
-    min-height: 0;
-    padding: 0.75rem;
+    min-height: 0 !important;
+    padding: 0.9rem !important;
     min-width: 0;
   }
   .chemistry-layout .chem-tool {
