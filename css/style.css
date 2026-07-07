@@ -1284,6 +1284,84 @@ h1, h2, h3 {
 }
 
 /* =========================================================
+   Universal mobile pane-stack for ALL module pages.
+
+   Every module page uses the same overall structure:
+     <div class="X-layout">
+       <div class="X-pane">…interactive left pane…</div>
+       <aside class="info-pane">…description right pane…</aside>
+     </div>
+
+   On desktop the layout is a 2-column grid. On mobile the two
+   boxes need to stack vertically, full-width, with clean margins.
+   The original mobile @media block up around line 1040 already
+   tried to do this (grid-template-columns: 1fr), but the desktop
+   rules for most layouts appear LATER in the file — so at equal
+   specificity CSS's "later wins" makes the desktop 2-column grid
+   apply at every viewport width, phone included.
+
+   !important is the least-invasive fix that guarantees mobile
+   wins the cascade regardless of source order or later additions.
+   ========================================================= */
+@media (max-width: 768px) {
+  .cell-layout,
+  .dna-layout,
+  .protein-layout,
+  .mitosis-layout,
+  .photo-layout,
+  .resp-layout,
+  .heredity-layout,
+  .selection-layout,
+  .ecology-layout,
+  .enzymes-layout,
+  .signaling-layout,
+  .transport-layout,
+  .regulation-layout {
+    display: block !important;
+    grid-template-columns: none !important;
+    padding: 0 0.75rem !important;
+    min-width: 0;
+  }
+  .cell-layout > *,
+  .dna-layout > *,
+  .protein-layout > *,
+  .mitosis-layout > *,
+  .photo-layout > *,
+  .resp-layout > *,
+  .heredity-layout > *,
+  .selection-layout > *,
+  .ecology-layout > *,
+  .enzymes-layout > *,
+  .signaling-layout > *,
+  .transport-layout > *,
+  .regulation-layout > * {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 0 1rem !important;
+    min-width: 0;
+  }
+  /* Kill sticky/flex-centering behaviors from the per-pane desktop
+     rules that would otherwise fight the stack layout on mobile. */
+  .cell-layout .info-pane,
+  .dna-layout .info-pane,
+  .protein-layout .info-pane,
+  .mitosis-layout .info-pane,
+  .photo-layout .info-pane,
+  .resp-layout .info-pane,
+  .heredity-layout .info-pane,
+  .selection-layout .info-pane,
+  .ecology-layout .info-pane,
+  .enzymes-layout .info-pane,
+  .signaling-layout .info-pane,
+  .transport-layout .info-pane,
+  .regulation-layout .info-pane {
+    position: static !important;
+    align-self: auto !important;
+  }
+}
+
+/* =========================================================
    DNA & Replication module
    ========================================================= */
 .dna-layout {
