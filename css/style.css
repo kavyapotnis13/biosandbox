@@ -1189,6 +1189,12 @@ h1, h2, h3 {
     width: 100%;
     padding: 3px;
     gap: 3px;
+    /* Container was `border-radius: pill` (999px) inherited from desktop;
+       with tabs wrapping to 2 rows, that pill radius made the selected
+       tab's red pill visually poke past the container's rounded corners.
+       Squared corners + clip anything that overflows so nothing spills. */
+    border-radius: var(--radius);
+    overflow: hidden;
   }
   .chemistry-layout .builder-tab {
     flex: 1 1 45%;
@@ -1196,6 +1202,8 @@ h1, h2, h3 {
     padding: 0.4rem 0.5rem;
     font-size: 0.85rem;
     white-space: nowrap;
+    /* Match the container radius so the active pill stays inside cleanly. */
+    border-radius: var(--radius-sm);
   }
 
   .chemistry-layout .builder-info { min-width: 0; }
@@ -1225,7 +1233,21 @@ h1, h2, h3 {
     min-width: 0;
     padding: 0.3rem 0.35rem;
   }
-  .chemistry-layout .monomer-name { font-size: 0.7rem; }
+  .chemistry-layout .monomer-name {
+    font-size: 0.7rem;
+    /* Long fatty-acid names (Monounsaturated, Polyunsaturated) were
+       overflowing the narrow grid tiles horizontally. Wrap them
+       instead so each tile stays within its grid track. */
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.15;
+    text-align: center;
+    max-width: 100%;
+  }
+  .chemistry-layout .monomer-btn {
+    overflow: hidden;
+    text-align: center;
+  }
   .chemistry-layout .monomer-btn .shape-tail {
     width: 100%;
     max-width: 90px;
