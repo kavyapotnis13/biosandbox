@@ -7678,3 +7678,7 @@ body[data-page="tutor"] {
   .tutor-form { gap: 0.4rem; padding: 0.45rem 0.5rem 0.45rem 0.75rem; }
   .tutor-mic, .tutor-send { width: 2.3rem; height: 2.3rem; }
 }
+
+/* Congressional App Challenge branding toggle.
+   To bring the branding back, delete the ONE line below this comment. */
+.app-challenge-branding { display: none; }
