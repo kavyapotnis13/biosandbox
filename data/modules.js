@@ -36,7 +36,8 @@ const THEMES = {
   amber:    { bg: '#FFE3B0', accent: '#C77E2A' },  // warm amber — enzymes
   azure:    { bg: '#CFE6F2', accent: '#3F86B0' },  // clean azure — cell signaling
   coral:    { bg: '#FFD6CC', accent: '#C95C46' },  // soft coral — membrane transport
-  plum:     { bg: '#E2D2EA', accent: '#7B528F' }   // dusty plum — gene regulation
+  plum:     { bg: '#E2D2EA', accent: '#7B528F' },  // dusty plum — gene regulation
+  ochre:    { bg: '#E8D6A8', accent: '#A47432' }   // warm ochre — biodiversity
 };
 
 const MODULES = [
@@ -152,112 +153,6 @@ const MODULES = [
         <!-- Inside molecules (already crossed) -->
         <circle cx="32" cy="88" r="2.5" fill="#C77E2A" stroke="#2D2154" stroke-width="1"/>
         <circle cx="80" cy="86" r="2.5" fill="#C77E2A" stroke="#2D2154" stroke-width="1"/>
-      </svg>
-    `
-  },
-  {
-    slug: 'dna',
-    name: 'DNA & Replication',
-    blurb: 'Watch the double helix unwind and copy itself, step by step.',
-    page: 'dna.html',
-    totalParts: 6,
-    apStandards: ['1.6.A', '6.1.A', '6.1.B', '6.2.A'],
-    theme: 'rose',
-    iconSvg: `
-      <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <!-- Sugar-phosphate backbones (twisted ladder) -->
-        <path d="M42 10 Q56 30 42 50 Q28 70 42 90" fill="none" stroke="#2D2154" stroke-width="2"/>
-        <path d="M78 10 Q64 30 78 50 Q92 70 78 90" fill="none" stroke="#2D2154" stroke-width="2"/>
-        <!-- Base-pair rungs: A–T (blue) and G–C (green) alternating -->
-        <line x1="44" y1="18" x2="76" y2="18" stroke="#7A95B5" stroke-width="3" stroke-linecap="round"/>
-        <line x1="48" y1="28" x2="72" y2="28" stroke="#6A9D6F" stroke-width="3" stroke-linecap="round"/>
-        <line x1="50" y1="40" x2="70" y2="40" stroke="#7A95B5" stroke-width="3" stroke-linecap="round"/>
-        <line x1="50" y1="52" x2="70" y2="52" stroke="#6A9D6F" stroke-width="3" stroke-linecap="round"/>
-        <line x1="48" y1="64" x2="72" y2="64" stroke="#7A95B5" stroke-width="3" stroke-linecap="round"/>
-        <line x1="44" y1="76" x2="76" y2="76" stroke="#6A9D6F" stroke-width="3" stroke-linecap="round"/>
-        <line x1="42" y1="86" x2="78" y2="86" stroke="#7A95B5" stroke-width="3" stroke-linecap="round"/>
-        <!-- Base-pair labels: A–T on top rung, G–C on second -->
-        <text x="40" y="20" font-family="serif" font-size="6.5" font-style="italic" font-weight="700" fill="#2D2154" text-anchor="end">A</text>
-        <text x="80" y="20" font-family="serif" font-size="6.5" font-style="italic" font-weight="700" fill="#2D2154" text-anchor="start">T</text>
-        <text x="44" y="30" font-family="serif" font-size="6.5" font-style="italic" font-weight="700" fill="#2D2154" text-anchor="end">G</text>
-        <text x="76" y="30" font-family="serif" font-size="6.5" font-style="italic" font-weight="700" fill="#2D2154" text-anchor="start">C</text>
-      </svg>
-    `
-  },
-  {
-    slug: 'protein',
-    name: 'Protein Synthesis',
-    blurb: 'Decode DNA into amino acids and build a protein chain.',
-    page: 'protein.html',
-    totalParts: 5,
-    apStandards: ['6.3.A', '6.4.A'],
-    theme: 'teal',
-    iconSvg: `
-      <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <!-- mRNA strand with codon tick marks -->
-        <line x1="6" y1="68" x2="114" y2="68" stroke="#2D2154" stroke-width="1.8"/>
-        <g stroke="#2D2154" stroke-width="1">
-          <line x1="20" y1="64" x2="20" y2="72"/>
-          <line x1="38" y1="64" x2="38" y2="72"/>
-          <line x1="56" y1="64" x2="56" y2="72"/>
-          <line x1="74" y1="64" x2="74" y2="72"/>
-          <line x1="92" y1="64" x2="92" y2="72"/>
-        </g>
-        <!-- Codon labels under mRNA -->
-        <g font-family="monospace" font-size="5.5" fill="#2D2154">
-          <text x="11" y="80">AUG</text>
-          <text x="29" y="80">UUC</text>
-          <text x="47" y="80">GCA</text>
-          <text x="65" y="80">AAA</text>
-          <text x="83" y="80">UGG</text>
-        </g>
-        <!-- Ribosome (large + small subunits sitting on mRNA) -->
-        <ellipse cx="58" cy="48" rx="22" ry="12" fill="#FBF6E8" stroke="#2D2154" stroke-width="1.8"/>
-        <ellipse cx="58" cy="58" rx="22" ry="8"  fill="#FBF6E8" stroke="#2D2154" stroke-width="1.8"/>
-        <line x1="58" y1="54" x2="58" y2="50" stroke="#2D2154" stroke-width="0.8"/>
-        <!-- Polypeptide chain emerging up-right -->
-        <line x1="78" y1="42" x2="104" y2="14" stroke="#2D2154" stroke-width="1.2"/>
-        <circle cx="80" cy="38" r="3.5" fill="#FBF6E8" stroke="#2D2154" stroke-width="1.4"/>
-        <circle cx="88" cy="30" r="3.5" fill="#FBF6E8" stroke="#2D2154" stroke-width="1.4"/>
-        <circle cx="96" cy="22" r="3.5" fill="#FBF6E8" stroke="#2D2154" stroke-width="1.4"/>
-        <circle cx="104" cy="14" r="3.5" fill="#FBF6E8" stroke="#2D2154" stroke-width="1.4"/>
-      </svg>
-    `
-  },
-  {
-    slug: 'regulation',
-    name: 'Gene Regulation',
-    blurb: 'Flip the lac operon on and off, mutate a codon, and meet PCR and CRISPR.',
-    page: 'regulation.html',
-    totalParts: 4,
-    apStandards: ['6.5.A', '6.5.B', '6.6.A', '6.7.A', '6.7.B', '6.7.C', '6.8.A'],
-    theme: 'plum',
-    iconSvg: `
-      <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <!-- DNA strand (horizontal) -->
-        <line x1="6" y1="46" x2="114" y2="46" stroke="#2D2154" stroke-width="2"/>
-        <line x1="6" y1="58" x2="114" y2="58" stroke="#2D2154" stroke-width="2"/>
-        <!-- Base-pair ticks between the strands -->
-        <g stroke="#2D2154" stroke-width="0.8">
-          <line x1="14" y1="46" x2="14" y2="58"/><line x1="22" y1="46" x2="22" y2="58"/>
-          <line x1="30" y1="46" x2="30" y2="58"/><line x1="38" y1="46" x2="38" y2="58"/>
-          <line x1="78" y1="46" x2="78" y2="58"/><line x1="86" y1="46" x2="86" y2="58"/>
-          <line x1="94" y1="46" x2="94" y2="58"/><line x1="102" y1="46" x2="102" y2="58"/>
-          <line x1="110" y1="46" x2="110" y2="58"/>
-        </g>
-        <!-- Operator region (highlighted segment) -->
-        <rect x="44" y="42" width="28" height="20" fill="#FBF6E8" stroke="#2D2154" stroke-width="1.6" rx="2"/>
-        <text x="58" y="55" font-family="monospace" font-size="6.5" font-weight="700" fill="#2D2154" text-anchor="middle">OPERATOR</text>
-        <!-- Repressor protein binding the operator -->
-        <path d="M44 42 Q44 24 58 24 Q72 24 72 42 Z" fill="#FBF6E8" stroke="#2D2154" stroke-width="1.8"/>
-        <text x="58" y="34" font-family="serif" font-size="7" font-style="italic" font-weight="700" fill="#2D2154" text-anchor="middle">R</text>
-        <!-- ON/OFF switch indicator (right side) -->
-        <rect x="86" y="74" width="24" height="14" rx="7" fill="#FBF6E8" stroke="#2D2154" stroke-width="1.5"/>
-        <circle cx="93" cy="81" r="4" fill="#7B528F" stroke="#2D2154" stroke-width="1.2"/>
-        <text x="104" y="83.5" font-family="monospace" font-size="6.5" font-weight="700" fill="#2D2154" text-anchor="middle">OFF</text>
-        <!-- Promoter (small box left) -->
-        <rect x="12" y="74" width="22" height="14" fill="#FBF6E8" stroke="#2D2154" stroke-width="1.5" rx="2"/>
-        <text x="23" y="83.5" font-family="monospace" font-size="6.5" font-weight="700" fill="#2D2154" text-anchor="middle">PROM</text>
       </svg>
     `
   },
@@ -454,6 +349,141 @@ const MODULES = [
     `
   },
   {
+    slug: 'heredity',
+    name: 'Heredity',
+    blurb: 'Cross two parents and predict their offspring with an interactive Punnett square.',
+    page: 'heredity.html',
+    totalParts: 4,
+    apStandards: ['5.1.A', '5.1.B', '5.2.A', '5.3.A', '5.4.A', '5.5.A'],
+    theme: 'pink',
+    iconSvg: `
+      <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- Parent allele labels (top + left) -->
+        <text x="45" y="18" font-family="serif" font-size="10" font-style="italic" font-weight="700" fill="#2D2154" text-anchor="middle">B</text>
+        <text x="75" y="18" font-family="serif" font-size="10" font-style="italic" font-weight="700" fill="#2D2154" text-anchor="middle">b</text>
+        <text x="22" y="42" font-family="serif" font-size="10" font-style="italic" font-weight="700" fill="#2D2154" text-anchor="middle">B</text>
+        <text x="22" y="72" font-family="serif" font-size="10" font-style="italic" font-weight="700" fill="#2D2154" text-anchor="middle">b</text>
+        <!-- Punnett square frame + dividers -->
+        <rect x="30" y="22" width="60" height="60" fill="#FBF6E8" stroke="#2D2154" stroke-width="2"/>
+        <line x1="60" y1="22" x2="60" y2="82" stroke="#2D2154" stroke-width="1.6"/>
+        <line x1="30" y1="52" x2="90" y2="52" stroke="#2D2154" stroke-width="1.6"/>
+        <!-- Genotype contents (serif italic — textbook convention) -->
+        <text x="45" y="42" font-family="serif" font-size="11" font-style="italic" font-weight="700" fill="#2D2154" text-anchor="middle">BB</text>
+        <text x="75" y="42" font-family="serif" font-size="11" font-style="italic" font-weight="700" fill="#2D2154" text-anchor="middle">Bb</text>
+        <text x="45" y="72" font-family="serif" font-size="11" font-style="italic" font-weight="700" fill="#2D2154" text-anchor="middle">Bb</text>
+        <text x="75" y="72" font-family="serif" font-size="11" font-style="italic" font-weight="700" fill="#2D2154" text-anchor="middle">bb</text>
+        <!-- Phenotype ratio caption -->
+        <text x="60" y="94" font-family="serif" font-size="6.5" font-style="italic" fill="#2D2154" text-anchor="middle">3 : 1 dominant</text>
+      </svg>
+    `
+  },
+  {
+    slug: 'dna',
+    name: 'DNA & Replication',
+    blurb: 'Watch the double helix unwind and copy itself, step by step.',
+    page: 'dna.html',
+    totalParts: 6,
+    apStandards: ['1.6.A', '6.1.A', '6.1.B', '6.2.A'],
+    theme: 'rose',
+    iconSvg: `
+      <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- Sugar-phosphate backbones (twisted ladder) -->
+        <path d="M42 10 Q56 30 42 50 Q28 70 42 90" fill="none" stroke="#2D2154" stroke-width="2"/>
+        <path d="M78 10 Q64 30 78 50 Q92 70 78 90" fill="none" stroke="#2D2154" stroke-width="2"/>
+        <!-- Base-pair rungs: A–T (blue) and G–C (green) alternating -->
+        <line x1="44" y1="18" x2="76" y2="18" stroke="#7A95B5" stroke-width="3" stroke-linecap="round"/>
+        <line x1="48" y1="28" x2="72" y2="28" stroke="#6A9D6F" stroke-width="3" stroke-linecap="round"/>
+        <line x1="50" y1="40" x2="70" y2="40" stroke="#7A95B5" stroke-width="3" stroke-linecap="round"/>
+        <line x1="50" y1="52" x2="70" y2="52" stroke="#6A9D6F" stroke-width="3" stroke-linecap="round"/>
+        <line x1="48" y1="64" x2="72" y2="64" stroke="#7A95B5" stroke-width="3" stroke-linecap="round"/>
+        <line x1="44" y1="76" x2="76" y2="76" stroke="#6A9D6F" stroke-width="3" stroke-linecap="round"/>
+        <line x1="42" y1="86" x2="78" y2="86" stroke="#7A95B5" stroke-width="3" stroke-linecap="round"/>
+        <!-- Base-pair labels: A–T on top rung, G–C on second -->
+        <text x="40" y="20" font-family="serif" font-size="6.5" font-style="italic" font-weight="700" fill="#2D2154" text-anchor="end">A</text>
+        <text x="80" y="20" font-family="serif" font-size="6.5" font-style="italic" font-weight="700" fill="#2D2154" text-anchor="start">T</text>
+        <text x="44" y="30" font-family="serif" font-size="6.5" font-style="italic" font-weight="700" fill="#2D2154" text-anchor="end">G</text>
+        <text x="76" y="30" font-family="serif" font-size="6.5" font-style="italic" font-weight="700" fill="#2D2154" text-anchor="start">C</text>
+      </svg>
+    `
+  },
+  {
+    slug: 'protein',
+    name: 'Protein Synthesis',
+    blurb: 'Decode DNA into amino acids and build a protein chain.',
+    page: 'protein.html',
+    totalParts: 5,
+    apStandards: ['6.3.A', '6.4.A'],
+    theme: 'teal',
+    iconSvg: `
+      <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- mRNA strand with codon tick marks -->
+        <line x1="6" y1="68" x2="114" y2="68" stroke="#2D2154" stroke-width="1.8"/>
+        <g stroke="#2D2154" stroke-width="1">
+          <line x1="20" y1="64" x2="20" y2="72"/>
+          <line x1="38" y1="64" x2="38" y2="72"/>
+          <line x1="56" y1="64" x2="56" y2="72"/>
+          <line x1="74" y1="64" x2="74" y2="72"/>
+          <line x1="92" y1="64" x2="92" y2="72"/>
+        </g>
+        <!-- Codon labels under mRNA -->
+        <g font-family="monospace" font-size="5.5" fill="#2D2154">
+          <text x="11" y="80">AUG</text>
+          <text x="29" y="80">UUC</text>
+          <text x="47" y="80">GCA</text>
+          <text x="65" y="80">AAA</text>
+          <text x="83" y="80">UGG</text>
+        </g>
+        <!-- Ribosome (large + small subunits sitting on mRNA) -->
+        <ellipse cx="58" cy="48" rx="22" ry="12" fill="#FBF6E8" stroke="#2D2154" stroke-width="1.8"/>
+        <ellipse cx="58" cy="58" rx="22" ry="8"  fill="#FBF6E8" stroke="#2D2154" stroke-width="1.8"/>
+        <line x1="58" y1="54" x2="58" y2="50" stroke="#2D2154" stroke-width="0.8"/>
+        <!-- Polypeptide chain emerging up-right -->
+        <line x1="78" y1="42" x2="104" y2="14" stroke="#2D2154" stroke-width="1.2"/>
+        <circle cx="80" cy="38" r="3.5" fill="#FBF6E8" stroke="#2D2154" stroke-width="1.4"/>
+        <circle cx="88" cy="30" r="3.5" fill="#FBF6E8" stroke="#2D2154" stroke-width="1.4"/>
+        <circle cx="96" cy="22" r="3.5" fill="#FBF6E8" stroke="#2D2154" stroke-width="1.4"/>
+        <circle cx="104" cy="14" r="3.5" fill="#FBF6E8" stroke="#2D2154" stroke-width="1.4"/>
+      </svg>
+    `
+  },
+  {
+    slug: 'regulation',
+    name: 'Gene Regulation',
+    blurb: 'Flip the lac operon on and off, mutate a codon, and meet PCR and CRISPR.',
+    page: 'regulation.html',
+    totalParts: 4,
+    apStandards: ['6.5.A', '6.5.B', '6.6.A', '6.7.A', '6.7.B', '6.7.C', '6.8.A'],
+    theme: 'plum',
+    iconSvg: `
+      <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- DNA strand (horizontal) -->
+        <line x1="6" y1="46" x2="114" y2="46" stroke="#2D2154" stroke-width="2"/>
+        <line x1="6" y1="58" x2="114" y2="58" stroke="#2D2154" stroke-width="2"/>
+        <!-- Base-pair ticks between the strands -->
+        <g stroke="#2D2154" stroke-width="0.8">
+          <line x1="14" y1="46" x2="14" y2="58"/><line x1="22" y1="46" x2="22" y2="58"/>
+          <line x1="30" y1="46" x2="30" y2="58"/><line x1="38" y1="46" x2="38" y2="58"/>
+          <line x1="78" y1="46" x2="78" y2="58"/><line x1="86" y1="46" x2="86" y2="58"/>
+          <line x1="94" y1="46" x2="94" y2="58"/><line x1="102" y1="46" x2="102" y2="58"/>
+          <line x1="110" y1="46" x2="110" y2="58"/>
+        </g>
+        <!-- Operator region (highlighted segment) -->
+        <rect x="44" y="42" width="28" height="20" fill="#FBF6E8" stroke="#2D2154" stroke-width="1.6" rx="2"/>
+        <text x="58" y="55" font-family="monospace" font-size="6.5" font-weight="700" fill="#2D2154" text-anchor="middle">OPERATOR</text>
+        <!-- Repressor protein binding the operator -->
+        <path d="M44 42 Q44 24 58 24 Q72 24 72 42 Z" fill="#FBF6E8" stroke="#2D2154" stroke-width="1.8"/>
+        <text x="58" y="34" font-family="serif" font-size="7" font-style="italic" font-weight="700" fill="#2D2154" text-anchor="middle">R</text>
+        <!-- ON/OFF switch indicator (right side) -->
+        <rect x="86" y="74" width="24" height="14" rx="7" fill="#FBF6E8" stroke="#2D2154" stroke-width="1.5"/>
+        <circle cx="93" cy="81" r="4" fill="#7B528F" stroke="#2D2154" stroke-width="1.2"/>
+        <text x="104" y="83.5" font-family="monospace" font-size="6.5" font-weight="700" fill="#2D2154" text-anchor="middle">OFF</text>
+        <!-- Promoter (small box left) -->
+        <rect x="12" y="74" width="22" height="14" fill="#FBF6E8" stroke="#2D2154" stroke-width="1.5" rx="2"/>
+        <text x="23" y="83.5" font-family="monospace" font-size="6.5" font-weight="700" fill="#2D2154" text-anchor="middle">PROM</text>
+      </svg>
+    `
+  },
+  {
     slug: 'selection',
     name: 'Natural Selection',
     blurb: 'Watch a population shift its color across generations under predator pressure.',
@@ -485,6 +515,42 @@ const MODULES = [
     `
   },
   {
+    slug: 'biodiversity',
+    name: 'Biodiversity',
+    blurb: 'Climb the tree of life — three domains, four kingdoms, and the hotspots that hold most of Earth\'s species.',
+    page: 'biodiversity.html',
+    totalParts: 8,
+    apStandards: ['7.8.A', '7.9.A', '7.9.B', '7.11.A', '8.5.A', '8.6.A', '8.6.B', '8.7.A', '8.7.B', '8.7.C'],
+    theme: 'ochre',
+    iconSvg: `
+      <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- Tree of life: root at bottom, three main branches -->
+        <line x1="60" y1="90" x2="60" y2="70" stroke="#2D2154" stroke-width="2"/>
+        <line x1="60" y1="70" x2="26" y2="42" stroke="#2D2154" stroke-width="1.8"/>
+        <line x1="60" y1="70" x2="60" y2="38" stroke="#2D2154" stroke-width="1.8"/>
+        <line x1="60" y1="70" x2="94" y2="42" stroke="#2D2154" stroke-width="1.8"/>
+        <!-- Sub-branches off the right (Eukarya) branch -->
+        <line x1="94" y1="42" x2="82" y2="22" stroke="#2D2154" stroke-width="1.4"/>
+        <line x1="94" y1="42" x2="94" y2="18" stroke="#2D2154" stroke-width="1.4"/>
+        <line x1="94" y1="42" x2="106" y2="22" stroke="#2D2154" stroke-width="1.4"/>
+        <!-- Root node -->
+        <circle cx="60" cy="90" r="4" fill="#2D2154"/>
+        <!-- Domain tips -->
+        <circle cx="26" cy="42" r="6" fill="#A47432" stroke="#2D2154" stroke-width="1.6"/>
+        <circle cx="60" cy="38" r="6" fill="#A47432" stroke="#2D2154" stroke-width="1.6"/>
+        <circle cx="94" cy="42" r="6" fill="#A47432" stroke="#2D2154" stroke-width="1.6"/>
+        <!-- Kingdom tips (smaller) off Eukarya -->
+        <circle cx="82" cy="22" r="4" fill="#E8D6A8" stroke="#2D2154" stroke-width="1.4"/>
+        <circle cx="94" cy="18" r="4" fill="#E8D6A8" stroke="#2D2154" stroke-width="1.4"/>
+        <circle cx="106" cy="22" r="4" fill="#E8D6A8" stroke="#2D2154" stroke-width="1.4"/>
+        <!-- Labels -->
+        <text x="26" y="54" font-family="serif" font-size="6" font-style="italic" fill="#2D2154" text-anchor="middle">Bact.</text>
+        <text x="60" y="30" font-family="serif" font-size="6" font-style="italic" fill="#2D2154" text-anchor="middle">Arch.</text>
+        <text x="94" y="54" font-family="serif" font-size="6" font-style="italic" fill="#2D2154" text-anchor="middle">Euk.</text>
+      </svg>
+    `
+  },
+  {
     slug: 'ecology',
     name: 'Ecology',
     blurb: 'Click around a meadow food web to see how predators, prey, and producers connect.',
@@ -506,36 +572,8 @@ const MODULES = [
         <text x="60" y="81" font-family="serif" font-size="9" font-weight="700" fill="#FBF6E8" text-anchor="middle">I</text>
       </svg>
     `
-  },
-  {
-    slug: 'heredity',
-    name: 'Heredity',
-    blurb: 'Cross two parents and predict their offspring with an interactive Punnett square.',
-    page: 'heredity.html',
-    totalParts: 4,
-    apStandards: ['5.1.A', '5.1.B', '5.2.A', '5.3.A', '5.4.A', '5.5.A'],
-    theme: 'pink',
-    iconSvg: `
-      <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <!-- Parent allele labels (top + left) -->
-        <text x="45" y="18" font-family="serif" font-size="10" font-style="italic" font-weight="700" fill="#2D2154" text-anchor="middle">B</text>
-        <text x="75" y="18" font-family="serif" font-size="10" font-style="italic" font-weight="700" fill="#2D2154" text-anchor="middle">b</text>
-        <text x="22" y="42" font-family="serif" font-size="10" font-style="italic" font-weight="700" fill="#2D2154" text-anchor="middle">B</text>
-        <text x="22" y="72" font-family="serif" font-size="10" font-style="italic" font-weight="700" fill="#2D2154" text-anchor="middle">b</text>
-        <!-- Punnett square frame + dividers -->
-        <rect x="30" y="22" width="60" height="60" fill="#FBF6E8" stroke="#2D2154" stroke-width="2"/>
-        <line x1="60" y1="22" x2="60" y2="82" stroke="#2D2154" stroke-width="1.6"/>
-        <line x1="30" y1="52" x2="90" y2="52" stroke="#2D2154" stroke-width="1.6"/>
-        <!-- Genotype contents (serif italic — textbook convention) -->
-        <text x="45" y="42" font-family="serif" font-size="11" font-style="italic" font-weight="700" fill="#2D2154" text-anchor="middle">BB</text>
-        <text x="75" y="42" font-family="serif" font-size="11" font-style="italic" font-weight="700" fill="#2D2154" text-anchor="middle">Bb</text>
-        <text x="45" y="72" font-family="serif" font-size="11" font-style="italic" font-weight="700" fill="#2D2154" text-anchor="middle">Bb</text>
-        <text x="75" y="72" font-family="serif" font-size="11" font-style="italic" font-weight="700" fill="#2D2154" text-anchor="middle">bb</text>
-        <!-- Phenotype ratio caption -->
-        <text x="60" y="94" font-family="serif" font-size="6.5" font-style="italic" fill="#2D2154" text-anchor="middle">3 : 1 dominant</text>
-      </svg>
-    `
   }
+
 ];
 
 // Convenience helper — used by progress.js and app.js.

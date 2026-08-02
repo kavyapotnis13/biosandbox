@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="assets/iconic.png">
+  <title>Sign in — BioSandbox</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .auth-wrap {
+      max-width: 420px;
+      margin: 4rem auto;
+      padding: 2rem 1.5rem;
+    }
+    .auth-title {
+      font-family: 'Newsreader', serif;
+      font-size: 2rem;
+      margin: 0 0 0.25rem;
+    }
+    .auth-sub {
+      font-family: 'Inter', sans-serif;
+      color: #666;
+      margin: 0 0 2rem;
+      font-size: 0.95rem;
+    }
+    .auth-tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid #ddd;
+    }
+    .auth-tab {
+      flex: 1;
+      background: none;
+      border: none;
+      padding: 0.75rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      color: #888;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+    }
+    .auth-tab.is-active {
+      color: #c0392b;
+      border-bottom-color: #c0392b;
+    }
+    .auth-form label {
+      display: block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #666;
+      margin: 1rem 0 0.4rem;
+    }
+    .auth-form input {
+      width: 100%;
+      padding: 0.65rem 0.75rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background: #fff;
+      box-sizing: border-box;
+    }
+    .auth-form input:focus {
+      outline: none;
+      border-color: #c0392b;
+    }
+    .auth-submit {
+      width: 100%;
+      margin-top: 1.5rem;
+      padding: 0.75rem;
+      background: #c0392b;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .auth-submit:hover { background: #a53324; }
+    .auth-submit:disabled { opacity: 0.6; cursor: wait; }
+    .auth-msg {
+      margin-top: 1rem;
+      padding: 0.65rem 0.75rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      border-radius: 4px;
+      display: none;
+    }
+    .auth-msg.is-error { background: #fdecea; color: #a53324; display: block; }
+    .auth-msg.is-info  { background: #eef4fb; color: #2a5db0; display: block; }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+  <header class="site-nav">
+    <a href="index.html" class="brand">
+      <span class="brand-icon" aria-hidden="true"></span>
+      BioSandbox
+    </a>
+  </header>
+
+  <main id="main">
+    <div class="auth-wrap">
+      <h1 class="auth-title">Sign in</h1>
+      <p class="auth-sub">Save your progress across devices.</p>
+
+      <div class="auth-tabs" role="tablist">
+        <button class="auth-tab is-active" data-mode="signin" type="button">Sign in</button>
+        <button class="auth-tab" data-mode="signup" type="button">Create account</button>
+      </div>
+
+      <form class="auth-form" id="auth-form">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" autocomplete="email" required>
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" autocomplete="current-password" required minlength="6">
+
+        <button class="auth-submit" type="submit" id="auth-submit">Sign in</button>
+        <div class="auth-msg" id="auth-msg" role="status"></div>
+        <button type="button" id="forgot-btn" hidden
+          style="margin-top:0.75rem;background:none;border:none;padding:0;color:#7a1f1f;
+                 font:500 0.85rem 'Inter',sans-serif;text-decoration:underline;cursor:pointer;">
+          Forgot your password? Send a reset link.
+        </button>
+      </form>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    let mode = 'signin';
+    const tabs   = document.querySelectorAll('.auth-tab');
+    const form   = document.getElementById('auth-form');
+    const submit = document.getElementById('auth-submit');
+    const msg    = document.getElementById('auth-msg');
+
+    const forgotBtn = document.getElementById('forgot-btn');
+
+    function switchTo(nextMode) {
+      mode = nextMode;
+      tabs.forEach(t => t.classList.toggle('is-active', t.dataset.mode === mode));
+      submit.textContent = mode === 'signin' ? 'Sign in' : 'Create account';
+      msg.className = 'auth-msg';
+      msg.textContent = '';
+      forgotBtn.hidden = true;
+    }
+    tabs.forEach(t => t.addEventListener('click', () => switchTo(t.dataset.mode)));
+
+    forgotBtn.addEventListener('click', async () => {
+      const email = document.getElementById('email').value.trim();
+      if (!email) {
+        msg.className = 'auth-msg is-error';
+        msg.textContent = 'Enter your email above first, then click "Send a reset link".';
+        return;
+      }
+      forgotBtn.disabled = true;
+      const { error } = await sendPasswordReset(email);
+      forgotBtn.disabled = false;
+      if (error) {
+        msg.className = 'auth-msg is-error';
+        msg.textContent = error.message;
+        return;
+      }
+      msg.className = 'auth-msg is-info';
+      msg.textContent = 'Reset link sent. Check your email inbox (and spam folder).';
+      forgotBtn.hidden = true;
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      submit.disabled = true;
+      msg.className = 'auth-msg';
+      msg.textContent = '';
+
+      const email    = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      const fn = mode === 'signin' ? signIn : signUp;
+      const { data, error } = await fn(email, password);
+
+      if (error) {
+        msg.className = 'auth-msg is-error';
+        msg.textContent = error.message;
+        submit.disabled = false;
+        // On failed sign-in, offer the password-reset shortcut.
+        if (mode === 'signin') forgotBtn.hidden = false;
+        return;
+      }
+
+      // If this was a signup and Supabase returned a user with NO identities,
+      // that email already has an account. Supabase does this quietly (to
+      // prevent leaking which emails are registered), so we detect it here
+      // and bounce the visitor over to the sign-in tab.
+      if (mode === 'signup' && data.user && (!data.user.identities || data.user.identities.length === 0)) {
+        switchTo('signin');
+        msg.className = 'auth-msg is-info';
+        msg.textContent = 'That email already has an account. Sign in instead.';
+        document.getElementById('password').value = '';
+        document.getElementById('password').focus();
+        submit.disabled = false;
+        return;
+      }
+
+      // If email confirmation is ON in Supabase and this was a real signup,
+      // there's no session yet — tell the user to check their inbox.
+      if (mode === 'signup' && !data.session) {
+        msg.className = 'auth-msg is-info';
+        msg.textContent = 'Account created. Check your email to confirm, then sign in.';
+        submit.disabled = false;
+        return;
+      }
+
+      // Signed in — go to the app.
+      window.location.href = 'index.html';
+    });
+
+    // If already signed in, skip the form entirely.
+    getCurrentUser().then(user => {
+      if (user) window.location.href = 'index.html';
+    });
+  </script>
+</body>
+</html>

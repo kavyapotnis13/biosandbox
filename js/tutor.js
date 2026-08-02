@@ -28,7 +28,10 @@ document.addEventListener('DOMContentLoaded', () => {
   history.forEach(m => renderMessage(m.role, m.content));
   if (history.length > 0) { hideStarters(); showResetButton(); }
 
+  initVoiceInput(input);
+
   newChat?.addEventListener('click', () => {
+    stopSpeaking();
     resetChat();
     input.focus();
   });
@@ -61,6 +64,8 @@ document.addEventListener('DOMContentLoaded', () => {
 /* ---------- Sending ---------- */
 
 async function sendMessage(text) {
+  stopListening();
+  stopSpeaking();
   hideStarters();
   showResetButton();
   pushHistory('user', text);
@@ -134,6 +139,7 @@ function renderMessage(role, text) {
   bubble.appendChild(avatar);
   bubble.appendChild(body);
   chat.appendChild(bubble);
+  if (role === 'assistant') attachSpeaker(body, text);
   scrollToBottom();
   return bubble;
 }
@@ -279,4 +285,132 @@ function loadHistory() {
   } catch (_) {
     return [];
   }
+}
+
+/* ---------- Voice input (Web Speech API) ---------- */
+
+let recognition = null;
+let listening = false;
+let baseInputText = '';
+
+function initVoiceInput(input) {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const mic = document.getElementById('tutor-mic');
+  if (!SR || !mic) return;
+  mic.hidden = false;
+
+  recognition = new SR();
+  recognition.lang = 'en-US';
+  recognition.interimResults = true;
+  recognition.continuous = false;
+
+  recognition.addEventListener('result', e => {
+    let finalText = '';
+    let interimText = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      const t = e.results[i][0].transcript;
+      if (e.results[i].isFinal) finalText += t;
+      else interimText += t;
+    }
+    input.value = baseInputText + finalText + interimText;
+    autoGrow(input);
+  });
+
+  recognition.addEventListener('end', () => {
+    listening = false;
+    mic.classList.remove('recording');
+    mic.setAttribute('aria-label', 'Start voice input');
+  });
+
+  recognition.addEventListener('error', e => {
+    listening = false;
+    mic.classList.remove('recording');
+    mic.setAttribute('aria-label', 'Start voice input');
+    if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
+      renderError("I couldn't access the mic. Check your browser's mic permissions and try again.");
+      mic.hidden = true;
+    }
+    // 'no-speech' and 'aborted' are silent — user just stopped or paused.
+  });
+
+  mic.addEventListener('click', () => {
+    if (listening) { stopListening(); return; }
+    stopSpeaking();
+    baseInputText = input.value;
+    if (baseInputText && !baseInputText.endsWith(' ')) baseInputText += ' ';
+    try {
+      recognition.start();
+      listening = true;
+      mic.classList.add('recording');
+      mic.setAttribute('aria-label', 'Stop voice input');
+      input.focus();
+    } catch (_) {
+      // start() throws if already running — treat as no-op.
+    }
+  });
+}
+
+function stopListening() {
+  if (recognition && listening) {
+    try { recognition.stop(); } catch (_) {}
+  }
+}
+
+/* ---------- Voice output (SpeechSynthesis) ---------- */
+
+function speechSupported() {
+  return typeof window.speechSynthesis !== 'undefined'
+      && typeof window.SpeechSynthesisUtterance !== 'undefined';
+}
+
+function stopSpeaking() {
+  if (!speechSupported()) return;
+  window.speechSynthesis.cancel();
+  document.querySelectorAll('.tutor-speak-btn.speaking')
+    .forEach(b => b.classList.remove('speaking'));
+}
+
+function attachSpeaker(body, rawText) {
+  if (!speechSupported()) return;
+  const actions = document.createElement('div');
+  actions.className = 'tutor-body-actions';
+
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'tutor-speak-btn';
+  btn.setAttribute('aria-label', 'Read this reply aloud');
+  btn.title = 'Read aloud';
+  btn.innerHTML = `
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 9v6h4l5 4V5L8 9H4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      <path d="M16 8a5 5 0 0 1 0 8M19 5a9 9 0 0 1 0 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>
+  `;
+
+  btn.addEventListener('click', () => {
+    const wasSpeaking = btn.classList.contains('speaking');
+    stopSpeaking();
+    if (wasSpeaking) return; // toggle off
+    const u = new SpeechSynthesisUtterance(stripMarkdown(rawText));
+    u.lang = 'en-US';
+    u.rate = 1.0;
+    u.pitch = 1.0;
+    u.onend   = () => btn.classList.remove('speaking');
+    u.onerror = () => btn.classList.remove('speaking');
+    btn.classList.add('speaking');
+    btn.setAttribute('aria-label', 'Stop reading aloud');
+    window.speechSynthesis.speak(u);
+  });
+
+  actions.appendChild(btn);
+  body.appendChild(actions);
+}
+
+function stripMarkdown(s) {
+  return s
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/(?<!\w)\*([^*]+)\*(?!\w)/g, '$1')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/^\s*[-*]\s+/gm, '');
 }

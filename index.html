@@ -3,12 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="assets/iconic.png">
   <title>BioSandbox — Explore biology, hands-on</title>
   <meta name="description" content="An interactive biology learning app for middle and high schoolers. Click organelles, step through DNA replication, decode proteins, and test your knowledge.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/auth-gate.js"></script>
 </head>
 <body>
   <a href="#main" class="skip-link">Skip to main content</a>
@@ -51,7 +55,7 @@
         <p class="eyebrow">Section Index</p>
         <h2>Modules</h2>
       </div>
-      <span class="module-grid-header-count" id="module-grid-count">14 specimens</span>
+      <span class="module-grid-header-count" id="module-grid-count">15 specimens</span>
     </header>
 
     <!-- The module grid is rendered by js/app.js from data/modules.js.

@@ -3,11 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="assets/iconic.png">
   <title>Lab Partner — BioSandbox</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/auth-gate.js"></script>
 </head>
 <body data-page="tutor">
   <a href="#main" class="skip-link">Skip to main content</a>
@@ -19,9 +23,6 @@
     <div class="track-toggle" role="group" aria-label="Audience level">
       <button class="track-option" data-track="middle" type="button">Middle</button>
       <button class="track-option" data-track="high" type="button">High</button>
-    </div>
-    <div class="nav-links">
-      <a href="index.html" class="nav-link nav-link-icon" aria-label="Home" title="Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12 L12 3 L22 12 L20 12 L20 21 L4 21 L4 12 Z" fill="#F07C99" stroke="#2D2154" stroke-width="1.8" stroke-linejoin="round"/><rect x="10" y="14" width="4" height="7" fill="#2D2154" rx="0.5"/></svg></a>
     </div>
   </header>
 
@@ -55,6 +56,13 @@
         rows="1"
         aria-label="Your question"
         required></textarea>
+      <button type="button" id="tutor-mic" class="tutor-mic" aria-label="Start voice input" title="Voice input" hidden>
+        <svg class="tutor-mic-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="9" y="3" width="6" height="12" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/>
+          <path d="M5 11a7 7 0 0 0 14 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M12 18v3M9 21h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
       <button type="submit" id="tutor-send" class="tutor-send" aria-label="Send message">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11L21 3L13 21L11 13Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg>
       </button>

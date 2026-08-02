@@ -2261,6 +2261,128 @@ const QUIZ_DATA = {
       explanation: "Normally, certain genes act like brakes on cell division. If those control genes get broken, cells divide out of control — that's how a tumor starts to grow.",
       track: 'middle'
     }
+  ],
+
+  biodiversity: [
+    {
+      q: "Which of the following is NOT one of the three domains of life?",
+      choices: ["Bacteria", "Archaea", "Eukarya", "Fungi"],
+      correct: 3,
+      explanation: "The three domains are Bacteria, Archaea, and Eukarya. Fungi is a kingdom within Eukarya — not a domain of its own."
+    },
+    {
+      q: "Biodiversity is measured at three nested levels. Which is NOT one of them?",
+      choices: [
+        "Genetic diversity within a species",
+        "Species diversity within a community",
+        "Ecosystem diversity across a region",
+        "Population size of the largest species"
+      ],
+      correct: 3,
+      explanation: "The three levels are genetic, species, and ecosystem diversity. The size of the biggest population doesn't capture variety — biodiversity is about variation, not abundance of one thing."
+    },
+    {
+      q: "Molecular phylogenies place Archaea closest to which other group?",
+      choices: [
+        "Bacteria — since both are prokaryotes",
+        "Eukarya — despite superficially resembling bacteria",
+        "Fungi specifically",
+        "None — Archaea evolved independently"
+      ],
+      correct: 1,
+      explanation: "Ribosomal RNA and membrane chemistry both show Archaea share a more recent common ancestor with Eukarya than with Bacteria. That's why Woese proposed three domains in the first place — the old prokaryote/eukaryote split was wrong."
+    },
+    {
+      q: "Why is species diversity higher in the tropics than at the poles?",
+      choices: [
+        "Only the tropics have flowering plants",
+        "The tropics have more solar energy, stable climate, and longer uninterrupted evolutionary time",
+        "Polar regions were never colonized",
+        "Species can't reproduce in cold temperatures"
+      ],
+      correct: 1,
+      explanation: "The latitudinal diversity gradient has multiple drivers: more energy → higher productivity, climatic stability → narrower niches, and no repeated glaciation → more time for speciation to accumulate."
+    },
+    {
+      q: "A species that lives in one place and nowhere else is called:",
+      choices: ["Invasive", "Cosmopolitan", "Endemic", "Keystone"],
+      correct: 2,
+      explanation: "Endemic species (like lemurs in Madagascar or kiwis in New Zealand) are restricted to a single geographic area — which makes them especially vulnerable to habitat loss."
+    },
+    {
+      q: "Which is currently the leading cause of species extinction worldwide?",
+      choices: [
+        "Overhunting",
+        "Habitat destruction",
+        "Volcanic eruptions",
+        "Genetic drift"
+      ],
+      correct: 1,
+      explanation: "Habitat destruction — deforestation, wetland drainage, coral bleaching, agricultural expansion — is #1. E. O. Wilson's HIPPO mnemonic ranks it above invasives, pollution, human population, and overharvesting."
+    },
+    {
+      q: "Why do invasive species often thrive in new environments?",
+      choices: [
+        "They mutate faster than native species",
+        "They arrive without their natural predators, parasites, and competitors",
+        "They can photosynthesize even without sunlight",
+        "They always outcompete larger organisms"
+      ],
+      correct: 1,
+      explanation: "The 'enemy release' hypothesis: an invader left its co-evolved regulators behind in its native range. Without them, its population grows unchecked — see brown tree snakes on Guam or cane toads in Australia."
+    },
+    {
+      q: "The Shannon diversity index H' rewards a community that has:",
+      choices: [
+        "High species richness AND even abundances",
+        "Many individuals of a single dominant species",
+        "Only endemic species",
+        "The lowest number of trophic levels"
+      ],
+      correct: 0,
+      explanation: "H' = −Σ pᵢ ln(pᵢ) rises with both richness (S) and evenness (E). Ten species with even abundances score higher than ten species where one takes up 95% of individuals."
+    },
+    {
+      q: "A wildlife corridor between two nature reserves is meant to:",
+      choices: [
+        "Increase the total protected area",
+        "Reduce genetic isolation by letting animals move between reserves",
+        "Attract tourists",
+        "Filter pollution from streams"
+      ],
+      correct: 1,
+      explanation: "Corridors reconnect fragmented habitat, restoring gene flow and letting populations shift their range in response to climate change. Isolated small populations are prone to inbreeding and extinction vortex."
+    },
+    {
+      q: "What are two words for the traditional two-part Latin naming system for species?",
+      choices: [
+        "Cladistic classification",
+        "Binomial nomenclature",
+        "Phylogenetic partitioning",
+        "Taxonomic sequencing"
+      ],
+      correct: 1,
+      explanation: "Binomial nomenclature (Linnaeus, 1753): Genus species, always italicized, genus capitalized — e.g. Homo sapiens, Panthera tigris."
+    },
+    {
+      q: "Which group does BEST fit the description \"single-celled, no nucleus, extreme environments\"?",
+      choices: ["Archaea", "Protista", "Animalia", "Fungi"],
+      correct: 0,
+      explanation: "Archaea are prokaryotes (no nucleus) famous for thriving in extreme habitats — hot springs, salt lakes, deep-sea vents. Protists are eukaryotic; Animalia and Fungi are multicellular Eukarya.",
+      track: 'middle'
+    },
+    {
+      q: "Why do scientists say we're in a \"sixth mass extinction\"?",
+      choices: [
+        "An asteroid is expected to hit soon",
+        "Species are going extinct 100–1000× faster than the normal background rate, mostly due to human activity",
+        "All bacteria have died out",
+        "The ice ages are returning"
+      ],
+      correct: 1,
+      explanation: "The current rate of extinction, driven by habitat loss, invasives, pollution, climate change, and overharvesting, is comparable to the previous five mass extinctions in the fossil record — but this one is caused by us.",
+      track: 'middle'
+    }
   ]
 
 };

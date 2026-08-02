@@ -3,11 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="assets/iconic.png">
   <title>Plant Cell — BioSandbox</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/auth-gate.js"></script>
 </head>
 <body data-cell-type="plant">
   <a href="#main" class="skip-link">Skip to main content</a>
@@ -20,12 +24,9 @@
       <button class="track-option" data-track="middle" type="button">Middle</button>
       <button class="track-option" data-track="high" type="button">High</button>
     </div>
-    <div class="nav-links">
-      <a href="index.html" class="nav-link nav-link-icon" aria-label="Home" title="Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12 L12 3 L22 12 L20 12 L20 21 L4 21 L4 12 Z" fill="#F07C99" stroke="#2D2154" stroke-width="1.8" stroke-linejoin="round"/><rect x="10" y="14" width="4" height="7" fill="#2D2154" rx="0.5"/></svg></a>
-    </div>
   </header>
 
-  <nav class="breadcrumb"><a href="index.html">Home</a> / Cell Explorer / Plant</nav>
+  <nav class="breadcrumb"><a href="index.html" aria-label="Home" title="Home" class="breadcrumb-home"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12 L12 3 L22 12 L20 12 L20 21 L4 21 L4 12 Z" fill="#7a1f1f" stroke="#2D2154" stroke-width="1.8" stroke-linejoin="round"/><rect x="10" y="14" width="4" height="7" fill="#2D2154" rx="0.5"/></svg></a> / Cell Explorer / Plant</nav>
 
   <main id="main">
     <div class="cell-layout">
@@ -101,20 +102,20 @@
             <path d="M388 192 Q430 188 458 215 Q470 240 418 252 Q398 257 405 278 Q418 300 462 302 Q472 322 428 328"
                   fill="none" stroke="#2D2154" stroke-width="2.5" stroke-linecap="round"/>
             <!-- rough ER bumps (attached ribosomes) on outer curves -->
-            <circle cx="455" cy="207" r="3" fill="#F07C99" stroke="#2D2154" stroke-width="1.2"/>
-            <circle cx="468" cy="227" r="3" fill="#F07C99" stroke="#2D2154" stroke-width="1.2"/>
-            <circle cx="408" cy="263" r="3" fill="#F07C99" stroke="#2D2154" stroke-width="1.2"/>
-            <circle cx="465" cy="295" r="3" fill="#F07C99" stroke="#2D2154" stroke-width="1.2"/>
-            <circle cx="473" cy="315" r="3" fill="#F07C99" stroke="#2D2154" stroke-width="1.2"/>
+            <circle cx="455" cy="207" r="3" fill="#7a1f1f" stroke="#2D2154" stroke-width="1.2"/>
+            <circle cx="468" cy="227" r="3" fill="#7a1f1f" stroke="#2D2154" stroke-width="1.2"/>
+            <circle cx="408" cy="263" r="3" fill="#7a1f1f" stroke="#2D2154" stroke-width="1.2"/>
+            <circle cx="465" cy="295" r="3" fill="#7a1f1f" stroke="#2D2154" stroke-width="1.2"/>
+            <circle cx="473" cy="315" r="3" fill="#7a1f1f" stroke="#2D2154" stroke-width="1.2"/>
 
             <!-- left ER: smaller folded ribbon -->
             <path d="M218 200 Q170 210 168 238 Q175 260 213 262 Q232 268 215 288 Q197 300 178 290"
                   fill="none" stroke="#A484D9" stroke-width="11" stroke-linecap="round"/>
             <path d="M218 200 Q170 210 168 238 Q175 260 213 262 Q232 268 215 288 Q197 300 178 290"
                   fill="none" stroke="#2D2154" stroke-width="2.5" stroke-linecap="round"/>
-            <circle cx="172" cy="220" r="2.8" fill="#F07C99" stroke="#2D2154" stroke-width="1.2"/>
-            <circle cx="160" cy="245" r="2.8" fill="#F07C99" stroke="#2D2154" stroke-width="1.2"/>
-            <circle cx="225" cy="275" r="2.8" fill="#F07C99" stroke="#2D2154" stroke-width="1.2"/>
+            <circle cx="172" cy="220" r="2.8" fill="#7a1f1f" stroke="#2D2154" stroke-width="1.2"/>
+            <circle cx="160" cy="245" r="2.8" fill="#7a1f1f" stroke="#2D2154" stroke-width="1.2"/>
+            <circle cx="225" cy="275" r="2.8" fill="#7a1f1f" stroke="#2D2154" stroke-width="1.2"/>
           </g>
 
           <!-- Nucleus (center) -->
@@ -286,14 +287,14 @@
           <g data-organelle="ribosomes" class="organelle" data-arrow-x="525" data-arrow-y="287" tabindex="0" role="button" aria-label="Ribosomes">
             <title>Ribosomes</title>
             <g stroke="#2D2154" stroke-width="1.5">
-              <circle cx="400" cy="217" r="5" fill="#F07C99"/><circle cx="400" cy="211" r="3.2" fill="#FFA8BC"/>
-              <circle cx="440" cy="247" r="5" fill="#F07C99"/><circle cx="440" cy="241" r="3.2" fill="#FFA8BC"/>
-              <circle cx="455" cy="287" r="5" fill="#F07C99"/><circle cx="455" cy="281" r="3.2" fill="#FFA8BC"/>
-              <circle cx="425" cy="322" r="5" fill="#F07C99"/><circle cx="425" cy="316" r="3.2" fill="#FFA8BC"/>
-              <circle cx="200" cy="222" r="5" fill="#F07C99"/><circle cx="200" cy="216" r="3.2" fill="#FFA8BC"/>
-              <circle cx="210" cy="292" r="5" fill="#F07C99"/><circle cx="210" cy="286" r="3.2" fill="#FFA8BC"/>
-              <circle cx="265" cy="402" r="5" fill="#F07C99"/><circle cx="265" cy="396" r="3.2" fill="#FFA8BC"/>
-              <circle cx="525" cy="287" r="5" fill="#F07C99"/><circle cx="525" cy="281" r="3.2" fill="#FFA8BC"/>
+              <circle cx="400" cy="217" r="5" fill="#7a1f1f"/><circle cx="400" cy="211" r="3.2" fill="#FFA8BC"/>
+              <circle cx="440" cy="247" r="5" fill="#7a1f1f"/><circle cx="440" cy="241" r="3.2" fill="#FFA8BC"/>
+              <circle cx="455" cy="287" r="5" fill="#7a1f1f"/><circle cx="455" cy="281" r="3.2" fill="#FFA8BC"/>
+              <circle cx="425" cy="322" r="5" fill="#7a1f1f"/><circle cx="425" cy="316" r="3.2" fill="#FFA8BC"/>
+              <circle cx="200" cy="222" r="5" fill="#7a1f1f"/><circle cx="200" cy="216" r="3.2" fill="#FFA8BC"/>
+              <circle cx="210" cy="292" r="5" fill="#7a1f1f"/><circle cx="210" cy="286" r="3.2" fill="#FFA8BC"/>
+              <circle cx="265" cy="402" r="5" fill="#7a1f1f"/><circle cx="265" cy="396" r="3.2" fill="#FFA8BC"/>
+              <circle cx="525" cy="287" r="5" fill="#7a1f1f"/><circle cx="525" cy="281" r="3.2" fill="#FFA8BC"/>
             </g>
           </g>
 

@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pedigree 001 — Family Risk Explorer</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #F0EBE0;
+      --paper-2: #E8E2D3;
+      --ink: #181614;
+      --ink-soft: #3D3A34;
+      --rule: #C4BBA8;
+      --rule-soft: #DDD5C2;
+      --muted: #6D6A62;
+      --accent: #2A4A6B;
+      --moss: #4A6B4A;
+      --copper: #B87333;
+      --oxblood: #7A2A2A;
+    }
+    html, body { background: var(--paper); color: var(--ink); }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .font-display { font-family: 'Fraunces', 'Times New Roman', serif; font-optical-sizing: auto; }
+    .font-mono    { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+    .tracked      { letter-spacing: 0.14em; text-transform: uppercase; }
+    .tracked-lg   { letter-spacing: 0.22em; text-transform: uppercase; }
+
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--rule);
+    }
+
+    .paper-grain {
+      background-image:
+        radial-gradient(circle at 15% 25%, rgba(24,22,20,0.018) 0%, transparent 45%),
+        radial-gradient(circle at 85% 75%, rgba(24,22,20,0.018) 0%, transparent 45%);
+    }
+  </style>
+</head>
+<body class="paper-grain">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    /* ============ Data model ============
+       Each person has a `reportedStatus` dict keyed by condition id.
+       Values: 'affected' | 'carrier' | 'none-known' | 'unknown'.
+       This is family-history data (self-reported), not lab-confirmed. */
+
+    const CONDITIONS = [
+      {
+        id: 'sickle-cell',
+        short: 'SCT',
+        name: 'Sickle cell',
+        gene: 'HBB',
+        inheritance: 'Autosomal recessive'
+      },
+      {
+        id: 'cystic-fibrosis',
+        short: 'CF',
+        name: 'Cystic fibrosis',
+        gene: 'CFTR',
+        inheritance: 'Autosomal recessive'
+      }
+    ];
+
+    const PEOPLE = [
+      {
+        id: 'p1', name: 'Parent A', role: 'Parent',
+        reportedStatus: {
+          'sickle-cell': 'affected',
+          'cystic-fibrosis': 'none-known'
+        }
+      },
+      {
+        id: 'p2', name: 'Parent B', role: 'Parent',
+        reportedStatus: {
+          'sickle-cell': 'none-known',
+          'cystic-fibrosis': 'carrier'
+        }
+      },
+      {
+        id: 'c1', name: 'Child', role: 'Child', parents: ['p1', 'p2'],
+        reportedStatus: {
+          'sickle-cell': 'unknown',
+          'cystic-fibrosis': 'unknown'
+        }
+      }
+    ];
+
+    /* ============ Semantics ============ */
+
+    const STATUS_META = {
+      'affected':   { label: 'Affected',        color: 'var(--oxblood)' },
+      'carrier':    { label: 'Reported carrier', color: 'var(--copper)' },
+      'none-known': { label: 'No known cases',  color: 'var(--moss)' },
+      'unknown':    { label: 'Unknown',         color: 'var(--muted)' }
+    };
+
+    /* ============ Inference (shell version)
+       Real Phase 3 engine will replace this with pattern-recognition
+       across arbitrary tree shapes. This is enough for the demo family. */
+
+    function inferFor(person, condition, family) {
+      const status = person.reportedStatus[condition.id];
+      const inhLower = condition.inheritance.toLowerCase();
+
+      if (status === 'affected') {
+        return {
+          reported: `${person.name} is reported affected by ${condition.name.toLowerCase()}.`,
+          estimated: `Under ${inhLower} inheritance, an affected person has two variant copies of ${condition.gene}. Each biological child of this person will inherit one variant copy — making the child, at minimum, an estimated carrier.`
+        };
+      }
+
+      if (status === 'carrier') {
+        return {
+          reported: `${person.name} is reported as a carrier — based on family history, not lab-confirmed in this app.`,
+          estimated: `Under ${inhLower} inheritance, a carrier has one variant copy of ${condition.gene}. Each biological child of this person has an estimated 50% chance of also being a carrier, based on this reported status alone.`
+        };
+      }
+
+      if (status === 'none-known') {
+        return {
+          reported: `No cases of ${condition.name.toLowerCase()} reported in ${person.name}'s known family history.`,
+          estimated: `Carrier status can't be ruled out from history alone — under ${inhLower} inheritance, carriers usually have no symptoms and may not appear in family history without prior testing.`
+        };
+      }
+
+      // unknown — try to infer from parents
+      if (status === 'unknown') {
+        const parentIds = person.parents || [];
+        const parents = parentIds.map(id => family.find(p => p.id === id)).filter(Boolean);
+        if (parents.length === 0) {
+          return {
+            reported: `${person.name}'s status is not reported.`,
+            estimated: `No family context available to estimate from.`
+          };
+        }
+
+        const statuses = parents.map(p => p.reportedStatus[condition.id]);
+        const affected = statuses.filter(s => s === 'affected').length;
+        const carriers = statuses.filter(s => s === 'carrier').length;
+        const none     = statuses.filter(s => s === 'none-known').length;
+
+        if (affected === 2) {
+          return {
+            reported: `Status not reported — both parents reported affected.`,
+            estimated: `Estimated 100% affected under ${inhLower} inheritance.`
+          };
+        }
+        if (affected === 1 && carriers === 1) {
+          return {
+            reported: `Status not reported — one parent reported affected, one reported carrier.`,
+            estimated: `Estimated ~50% chance affected, ~50% chance carrier under ${inhLower} inheritance.`
+          };
+        }
+        if (affected === 1 && none === 1) {
+          return {
+            reported: `Status not reported — one parent reported affected, the other reports no known cases.`,
+            estimated: `The affected parent passes one variant copy to every child — this person is estimated to be at minimum a carrier. Chance of being affected depends on whether the other parent is an unknown carrier, which reported history alone can't rule out.`
+          };
+        }
+        if (carriers === 2) {
+          return {
+            reported: `Status not reported — both parents reported as carriers.`,
+            estimated: `Under ${inhLower} inheritance, estimated 25% chance affected, 50% chance carrier, 25% chance neither.`
+          };
+        }
+        if (carriers === 1) {
+          return {
+            reported: `Status not reported — one parent reported carrier, the other reports no known cases.`,
+            estimated: `Estimated ~50% chance of being a carrier, low chance of being affected — based on the reported parent statuses alone, without lab testing.`
+          };
+        }
+        return {
+          reported: `Status not reported — neither parent reports any cases in known family history.`,
+          estimated: `No elevated risk indicated by this reported history alone. Recessive carriers can still exist without any family history, so this doesn't rule the condition out.`
+        };
+      }
+
+      return { reported: '', estimated: '' };
+    }
+
+    /* ============ Components ============ */
+
+    function Disclaimer() {
+      return (
+        <div className="bg-[var(--ink)] text-[var(--paper)] border-b border-[var(--ink)]">
+          <div className="max-w-5xl mx-auto px-6 py-2.5 flex items-center gap-4 text-[13px]">
+            <span className="font-mono tracked-lg text-[10px] font-medium opacity-70">Notice</span>
+            <span className="h-3 w-px bg-[var(--paper)] opacity-30"></span>
+            <span className="leading-snug">
+              Educational tool using reported family history — <span className="font-semibold">not lab-confirmed, not diagnostic</span>.
+              Estimates are based on the pattern reported, not on genetic testing. For medical questions, talk to a doctor or genetic counselor.
+            </span>
+          </div>
+        </div>
+      );
+    }
+
+    function Masthead() {
+      return (
+        <header className="max-w-5xl mx-auto px-6 pt-16 md:pt-20 pb-14">
+          <div className="grid md:grid-cols-12 gap-8 items-end">
+            <div className="md:col-span-8">
+              <div className="font-mono tracked-lg text-[11px] text-[var(--muted)] mb-5">
+                Pedigree 001 · mock family
+              </div>
+              <h1 className="font-display text-[44px] md:text-[64px] leading-[0.98] tracking-tight text-[var(--ink)]">
+                How recessive conditions<br />
+                <em className="font-normal">run in a family.</em>
+              </h1>
+            </div>
+            <div className="md:col-span-4 text-[14px] text-[var(--ink-soft)] leading-relaxed border-l border-[var(--rule)] pl-5">
+              Mark which relatives have — or are known to carry — a condition, and see what the reported pattern suggests for anyone whose status is unknown. Nothing here is confirmed by lab testing.
+            </div>
+          </div>
+        </header>
+      );
+    }
+
+    /* --- Pedigree glyph primitive --- shared between chart and cards --- */
+
+    function halfPath(cx, cy, r, side) {
+      const sweep = side === 'right' ? 1 : 0;
+      return `M ${cx} ${cy - r} A ${r} ${r} 0 0 ${sweep} ${cx} ${cy + r} Z`;
+    }
+
+    function fillForStatus(status) {
+      if (status === 'affected') return '#181614';
+      if (status === 'carrier')  return 'url(#carrier-hatch)';
+      return 'transparent';
+    }
+
+    // Renders a single pedigree circle divided into left/right for two conditions.
+    // Includes `?` for unknown segments.
+    function PedigreeGlyph({ cx, cy, r, statuses, showLabels = false, isSelected = false, onClick }) {
+      const [leftStatus, rightStatus] = statuses;
+
+      return (
+        <g onClick={onClick} style={onClick ? { cursor: 'pointer' } : undefined}>
+          {isSelected && (
+            <circle cx={cx} cy={cy} r={r + 10}
+              fill="none" stroke="#2A4A6B" strokeWidth="1.2" strokeDasharray="2 3" />
+          )}
+          <path d={halfPath(cx, cy, r, 'left')}  fill={fillForStatus(leftStatus)}  />
+          <path d={halfPath(cx, cy, r, 'right')} fill={fillForStatus(rightStatus)} />
+          <circle cx={cx} cy={cy} r={r} fill="none" stroke="#181614" strokeWidth="1.6" />
+          <line x1={cx} y1={cy - r} x2={cx} y2={cy + r} stroke="#181614" strokeWidth="1.2" />
+
+          {leftStatus === 'unknown' && (
+            <text x={cx - r * 0.45} y={cy + r * 0.18} textAnchor="middle"
+              fill="#6D6A62" fontFamily="JetBrains Mono, monospace"
+              fontSize={r * 0.7} fontWeight="500">?</text>
+          )}
+          {rightStatus === 'unknown' && (
+            <text x={cx + r * 0.45} y={cy + r * 0.18} textAnchor="middle"
+              fill="#6D6A62" fontFamily="JetBrains Mono, monospace"
+              fontSize={r * 0.7} fontWeight="500">?</text>
+          )}
+
+          {showLabels && (
+            <>
+              <text x={cx - r * 0.5} y={cy + r + 22} textAnchor="middle"
+                fill="#6D6A62" fontFamily="JetBrains Mono, monospace"
+                fontSize="9" style={{ letterSpacing: '0.14em' }}>SCT</text>
+              <text x={cx + r * 0.5} y={cy + r + 22} textAnchor="middle"
+                fill="#6D6A62" fontFamily="JetBrains Mono, monospace"
+                fontSize="9" style={{ letterSpacing: '0.14em' }}>CF</text>
+            </>
+          )}
+        </g>
+      );
+    }
+
+    function PedigreeDefs() {
+      return (
+        <defs>
+          <pattern id="carrier-hatch" patternUnits="userSpaceOnUse"
+                   width="5" height="5" patternTransform="rotate(45)">
+            <rect width="5" height="5" fill="#F0EBE0" />
+            <line x1="0" y1="0" x2="0" y2="5" stroke="#181614" strokeWidth="1.6" />
+          </pattern>
+        </defs>
+      );
+    }
+
+    function PedigreeChart({ selectedId, onSelect }) {
+      const positions = {
+        p1: { cx: 140, cy: 80 },
+        p2: { cx: 360, cy: 80 },
+        c1: { cx: 250, cy: 250 }
+      };
+      const r = 44;
+
+      return (
+        <svg viewBox="0 0 500 340" className="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+          <PedigreeDefs />
+          <line x1={positions.p1.cx + r} y1={positions.p1.cy}
+                x2={positions.p2.cx - r} y2={positions.p2.cy}
+                stroke="#181614" strokeWidth="1.4" />
+          <line x1="250" y1={positions.p1.cy}
+                x2="250" y2={positions.c1.cy - r}
+                stroke="#181614" strokeWidth="1.4" />
+
+          {PEOPLE.map(person => {
+            const pos = positions[person.id];
+            const statuses = CONDITIONS.map(c => person.reportedStatus[c.id]);
+            return (
+              <g key={person.id}>
+                <PedigreeGlyph
+                  cx={pos.cx} cy={pos.cy} r={r}
+                  statuses={statuses}
+                  isSelected={selectedId === person.id}
+                  onClick={() => onSelect(person.id)}
+                />
+                <text x={pos.cx} y={pos.cy + r + 24}
+                  textAnchor="middle" fill="#3D3A34"
+                  fontFamily="JetBrains Mono, monospace"
+                  fontSize="11" style={{ letterSpacing: '0.18em' }}>
+                  {person.name.toUpperCase()}
+                </text>
+              </g>
+            );
+          })}
+        </svg>
+      );
+    }
+
+    function LegendKey() {
+      const swatches = [
+        { label: 'No known cases', render: () => (
+            <circle cx="12" cy="12" r="9" fill="none" stroke="#181614" strokeWidth="1.5" />
+        ) },
+        { label: 'Reported carrier', render: () => (
+            <circle cx="12" cy="12" r="9" fill="url(#legend-hatch)" stroke="#181614" strokeWidth="1.5" />
+        ) },
+        { label: 'Affected', render: () => (
+            <circle cx="12" cy="12" r="9" fill="#181614" stroke="#181614" strokeWidth="1.5" />
+        ) },
+        { label: 'Unknown', render: () => (
+          <g>
+            <circle cx="12" cy="12" r="9" fill="none" stroke="#181614" strokeWidth="1.5" />
+            <text x="12" y="16" textAnchor="middle" fill="#6D6A62"
+              fontFamily="JetBrains Mono, monospace" fontSize="12" fontWeight="500">?</text>
+          </g>
+        ) }
+      ];
+
+      return (
+        <div className="mt-10 pt-6 border-t border-[var(--rule-soft)]">
+          <div className="font-mono tracked text-[10px] text-[var(--muted)] mb-4">Legend</div>
+          <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
+            <svg width="0" height="0">
+              <defs>
+                <pattern id="legend-hatch" patternUnits="userSpaceOnUse"
+                         width="5" height="5" patternTransform="rotate(45)">
+                  <rect width="5" height="5" fill="#F0EBE0" />
+                  <line x1="0" y1="0" x2="0" y2="5" stroke="#181614" strokeWidth="1.6" />
+                </pattern>
+              </defs>
+            </svg>
+            {swatches.map(s => (
+              <div key={s.label} className="flex items-center gap-2.5">
+                <svg width="24" height="24" viewBox="0 0 24 24">{s.render()}</svg>
+                <span className="text-[13px] text-[var(--ink-soft)]">{s.label}</span>
+              </div>
+            ))}
+            <div className="flex items-center gap-2.5 ml-auto">
+              <svg width="24" height="24" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="9" fill="none" stroke="#181614" strokeWidth="1.5" />
+                <line x1="12" y1="3" x2="12" y2="21" stroke="#181614" strokeWidth="1" />
+              </svg>
+              <span className="text-[13px] text-[var(--ink-soft)]">
+                <span className="font-mono tracked text-[10px] text-[var(--muted)] mr-1">L</span>Sickle cell
+                <span className="mx-2 text-[var(--rule)]">/</span>
+                <span className="font-mono tracked text-[10px] text-[var(--muted)] mr-1">R</span>Cystic fibrosis
+              </span>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function PedigreeSection({ selectedId, onSelect }) {
+      return (
+        <section className="max-w-5xl mx-auto px-6 mb-20">
+          <div className="border-b border-[var(--rule)] pb-3 mb-10">
+            <h2 className="font-mono tracked-lg text-xs text-[var(--ink-soft)]">Pedigree</h2>
+          </div>
+          <div className="max-w-2xl mx-auto">
+            <PedigreeChart selectedId={selectedId} onSelect={onSelect} />
+            <LegendKey />
+          </div>
+        </section>
+      );
+    }
+
+    /* Specimen card — big pedigree glyph as the signature moment,
+       plus split "Reported status" / "Estimated pattern" copy. */
+
+    function SpecimenCard({ person, condition }) {
+      const status = person.reportedStatus[condition.id];
+      const meta = STATUS_META[status];
+      const inferred = inferFor(person, condition, PEOPLE);
+
+      // For the big glyph, isolate this condition's fill by making the
+      // "other" side visually mute (transparent, so it looks like a plain
+      // pedigree circle rather than a multi-condition one).
+      const statuses = condition.id === 'sickle-cell'
+        ? [status, 'none-known']    // right side rendered as empty
+        : ['none-known', status];
+
+      return (
+        <div className="card p-7 md:p-9 flex flex-col">
+          <div className="flex items-start justify-between mb-6 gap-4">
+            <div>
+              <div className="font-mono tracked text-[10px] text-[var(--muted)] mb-1.5">
+                {condition.gene} · {condition.inheritance}
+              </div>
+              <div className="font-display text-[26px] leading-tight">
+                {condition.name}
+              </div>
+            </div>
+            <span className="font-mono tracked text-[9px] text-[var(--muted)] border border-[var(--rule)] rounded-sm px-2 py-1 whitespace-nowrap">
+              Not lab-confirmed
+            </span>
+          </div>
+
+          {/* Big pedigree glyph — signature moment */}
+          <div className="flex flex-col items-center py-6 border-y border-[var(--rule-soft)]">
+            <svg width="140" height="140" viewBox="0 0 140 140">
+              <PedigreeDefs />
+              <PedigreeGlyph cx={70} cy={70} r={54} statuses={statuses} />
+            </svg>
+            <div className="font-display text-[22px] mt-4" style={{ color: meta.color }}>
+              {meta.label}
+            </div>
+          </div>
+
+          <div className="mt-7 space-y-5">
+            <div>
+              <div className="font-mono tracked text-[10px] text-[var(--muted)] mb-1.5">Reported</div>
+              <p className="text-[14px] text-[var(--ink-soft)] leading-relaxed">
+                {inferred.reported}
+              </p>
+            </div>
+            <div>
+              <div className="font-mono tracked text-[10px] text-[var(--muted)] mb-1.5">Estimated pattern</div>
+              <p className="text-[14px] text-[var(--ink-soft)] leading-relaxed">
+                {inferred.estimated}
+              </p>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function SelectedSection({ person }) {
+      return (
+        <section className="max-w-5xl mx-auto px-6 mb-20">
+          <div className="border-b border-[var(--rule)] pb-3 mb-10 flex items-baseline gap-4">
+            <h2 className="font-mono tracked-lg text-xs text-[var(--ink-soft)]">Selected</h2>
+            <span className="font-display text-[22px] italic text-[var(--ink)]">
+              {person.name}
+            </span>
+          </div>
+          <div className="grid md:grid-cols-2 gap-6">
+            {CONDITIONS.map(c => (
+              <SpecimenCard key={c.id} person={person} condition={c} />
+            ))}
+          </div>
+        </section>
+      );
+    }
+
+    function RosterSection({ selectedId, onSelect }) {
+      return (
+        <section className="max-w-5xl mx-auto px-6 mb-24">
+          <div className="border-b border-[var(--rule)] pb-3 mb-2">
+            <h2 className="font-mono tracked-lg text-xs text-[var(--ink-soft)]">Family members</h2>
+          </div>
+          <div className="divide-y divide-[var(--rule-soft)]">
+            {PEOPLE.map(person => {
+              const isSelected = selectedId === person.id;
+              return (
+                <button
+                  key={person.id}
+                  onClick={() => onSelect(person.id)}
+                  className="w-full flex flex-wrap items-center gap-x-6 gap-y-2 py-5 px-2 -mx-2 text-left transition hover:bg-[var(--paper-2)]"
+                >
+                  <span
+                    aria-hidden="true"
+                    className={`font-mono text-sm w-4 ${isSelected ? 'text-[var(--accent)]' : 'text-[var(--rule)]'}`}
+                  >
+                    {isSelected ? '▶' : '·'}
+                  </span>
+                  <span className="font-display text-[19px] flex-1 min-w-[100px]">
+                    {person.name}
+                  </span>
+                  <span className="font-mono tracked text-[10px] text-[var(--muted)] w-14">
+                    {person.role}
+                  </span>
+                  <div className="flex items-center gap-6 ml-auto">
+                    {CONDITIONS.map(c => {
+                      const st = person.reportedStatus[c.id];
+                      return (
+                        <div key={c.id} className="flex items-center gap-2 min-w-[150px]">
+                          <span className="font-mono tracked text-[10px] text-[var(--muted)]">{c.short}</span>
+                          <span
+                            className="text-[13px] font-semibold"
+                            style={{ color: STATUS_META[st].color }}
+                          >
+                            {STATUS_META[st].label}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </section>
+      );
+    }
+
+    function Footer() {
+      return (
+        <footer className="border-t border-[var(--rule)]">
+          <div className="max-w-5xl mx-auto px-6 py-6 text-[11px] font-mono tracked text-[var(--muted)]">
+            Educational only · estimates from reported history, not lab-confirmed diagnoses
+          </div>
+        </footer>
+      );
+    }
+
+    function App() {
+      const [selectedId, setSelectedId] = useState('c1');
+      const selectedPerson = PEOPLE.find(p => p.id === selectedId);
+      return (
+        <div className="min-h-screen">
+          <Disclaimer />
+          <Masthead />
+          <PedigreeSection selectedId={selectedId} onSelect={setSelectedId} />
+          <SelectedSection person={selectedPerson} />
+          <RosterSection selectedId={selectedId} onSelect={setSelectedId} />
+          <Footer />
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

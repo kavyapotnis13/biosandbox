@@ -3,11 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="assets/iconic.png">
   <title>Mitosis — BioSandbox</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/auth-gate.js"></script>
 </head>
 <body data-module="mitosis">
   <a href="#main" class="skip-link">Skip to main content</a>
@@ -20,12 +24,9 @@
       <button class="track-option" data-track="middle" type="button">Middle</button>
       <button class="track-option" data-track="high" type="button">High</button>
     </div>
-    <div class="nav-links">
-      <a href="index.html" class="nav-link nav-link-icon" aria-label="Home" title="Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12 L12 3 L22 12 L20 12 L20 21 L4 21 L4 12 Z" fill="#F07C99" stroke="#2D2154" stroke-width="1.8" stroke-linejoin="round"/><rect x="10" y="14" width="4" height="7" fill="#2D2154" rx="0.5"/></svg></a>
-    </div>
   </header>
 
-  <nav class="breadcrumb"><a href="index.html">Home</a> / Mitosis</nav>
+  <nav class="breadcrumb"><a href="index.html" aria-label="Home" title="Home" class="breadcrumb-home"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12 L12 3 L22 12 L20 12 L20 21 L4 21 L4 12 Z" fill="#7a1f1f" stroke="#2D2154" stroke-width="1.8" stroke-linejoin="round"/><rect x="10" y="14" width="4" height="7" fill="#2D2154" rx="0.5"/></svg></a> / Mitosis</nav>
 
   <main id="main">
     <div class="mitosis-layout">
