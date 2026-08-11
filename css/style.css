@@ -7928,3 +7928,116 @@ body[data-page="tutor"] {
 @media (max-width: 640px) {
   .checkin-slot-row { grid-template-columns: 1fr; gap: 0.35rem; }
 }
+
+/* =========================================================
+   Cell Explorer check-in modal
+   The Cell Explorer isn't deck-based, so its check-in runs in
+   an on-demand overlay that hosts the flashcard DOM the shared
+   engine expects.
+   ========================================================= */
+
+.cell-checkin-btn {
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--color-ink, #1a1a1a);
+  background: transparent;
+  border: 1px solid var(--color-border, #ddd);
+  border-radius: 0.5rem;
+  padding: 0.55rem 1rem;
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
+}
+.cell-checkin-btn:hover {
+  background: #faf3f3;
+  border-color: #7a1f1f;
+  color: #7a1f1f;
+}
+.cell-checkin-btn:focus-visible {
+  outline: 2px solid #7a1f1f;
+  outline-offset: 2px;
+}
+
+.cell-checkin-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 15, 15, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  z-index: 1000;
+  animation: cell-checkin-fade 140ms ease;
+}
+@keyframes cell-checkin-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.cell-checkin-modal-panel {
+  position: relative;
+  background: var(--color-card, #fff);
+  border: 1px solid var(--color-border, #ddd);
+  border-radius: 0.9rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-width: 640px;
+  max-height: calc(100vh - 3rem);
+  overflow-y: auto;
+  padding: 1.6rem 1.8rem 1.8rem;
+}
+
+.cell-checkin-close {
+  position: absolute;
+  top: 0.55rem;
+  right: 0.75rem;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--color-muted, #666);
+  background: transparent;
+  border: none;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+}
+.cell-checkin-close:hover {
+  background: #f4eeee;
+  color: #7a1f1f;
+}
+
+.cell-checkin-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1.1rem;
+  padding-right: 2rem;
+}
+.cell-checkin-title {
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--color-muted, #666);
+}
+
+.cell-checkin-deck .flashcard-title {
+  font-family: var(--font-serif, 'Newsreader', serif);
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--color-ink, #1a1a1a);
+  margin: 0 0 1rem;
+}
+.cell-checkin-deck .flashcard-body {
+  font-family: var(--font-sans, 'Inter', sans-serif);
+}
+
+@media (max-width: 640px) {
+  .cell-checkin-modal { padding: 0.75rem; }
+  .cell-checkin-modal-panel { padding: 1.2rem 1.2rem 1.4rem; }
+}

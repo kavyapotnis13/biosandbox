@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
   bindTourButton();
   listenForTrackChange();
   refreshExploredCounter();
+  bindCheckinButton();
 });
 
 /* ---------- Organelle click + keyboard ---------- */
@@ -196,4 +197,68 @@ function listenForTrackChange() {
   window.addEventListener('trackchanged', () => {
     if (currentSelected) selectOrganelle(currentSelected);
   });
+}
+
+/* ---------- Check-in modal (plant vs animal quiz) ----------
+   The Cell Explorer isn't deck-based, so it can't share the
+   inline flashcard container the other modules use. Instead we
+   mount a modal with the same DOM shape the shared engine expects
+   (#flashcard-deck, .flashcard-title, .flashcard-body, .flashcard-nav,
+   #section-label, #section-back), let startCheckin drive it, and
+   tear it down on completion. */
+
+function bindCheckinButton() {
+  const btn = document.getElementById('cell-checkin-btn');
+  if (btn) btn.addEventListener('click', launchCellCheckin);
+}
+
+function launchCellCheckin() {
+  if (typeof CELL_CHECKINS === 'undefined' || typeof startCheckin !== 'function') return;
+  const questions = CELL_CHECKINS['plant-vs-animal'];
+  if (!questions || !questions.length) return;
+
+  mountCheckinModal();
+  startCheckin(questions, {
+    slug:      'cell:plant-vs-animal',
+    title:     'Check-in — Plant vs animal cells',
+    nextLabel: 'Close →',
+    onDone:    unmountCheckinModal
+  });
+}
+
+function mountCheckinModal() {
+  if (document.getElementById('cell-checkin-modal')) return;
+  const modal = document.createElement('div');
+  modal.id = 'cell-checkin-modal';
+  modal.className = 'cell-checkin-modal';
+  modal.setAttribute('role', 'dialog');
+  modal.setAttribute('aria-modal', 'true');
+  modal.setAttribute('aria-labelledby', 'section-label');
+  modal.innerHTML = `
+    <div class="cell-checkin-modal-panel">
+      <button type="button" class="cell-checkin-close" id="cell-checkin-close" aria-label="Close check-in">×</button>
+      <div class="cell-checkin-header">
+        <button type="button" id="section-back" hidden>← Back</button>
+        <span id="section-label" class="cell-checkin-title"></span>
+      </div>
+      <div id="flashcard-deck" class="cell-checkin-deck">
+        <h3 class="flashcard-title"></h3>
+        <div class="flashcard-body"></div>
+        <div class="flashcard-nav"></div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  document.getElementById('cell-checkin-close').addEventListener('click', unmountCheckinModal);
+  document.addEventListener('keydown', onCheckinKeydown);
+}
+
+function unmountCheckinModal() {
+  const m = document.getElementById('cell-checkin-modal');
+  if (m) m.remove();
+  document.removeEventListener('keydown', onCheckinKeydown);
+}
+
+function onCheckinKeydown(e) {
+  if (e.key === 'Escape') unmountCheckinModal();
 }
