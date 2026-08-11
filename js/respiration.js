@@ -61,13 +61,14 @@ function activeCards() {
 }
 
 function moveCard(delta) {
+  if (typeof isCheckinActive === 'function' && isCheckinActive()) return;
   const cards = activeCards();
   const next  = cardIndex + delta;
 
   if (next >= cards.length) {
-    if (deckMode === DECK_INTRO)      enterDeck(DECK_GLY,   0);
-    else if (deckMode === DECK_GLY)   enterDeck(DECK_KREBS, 0);
-    else if (deckMode === DECK_KREBS) enterDeck(DECK_ETC,   0);
+    if (deckMode === DECK_INTRO)      launchCheckinR(DECK_INTRO, DECK_GLY);
+    else if (deckMode === DECK_GLY)   launchCheckinR(DECK_GLY,   DECK_KREBS);
+    else if (deckMode === DECK_KREBS) launchCheckinR(DECK_KREBS, DECK_ETC);
     return;
   }
 
@@ -89,6 +90,14 @@ function enterDeck(mode, index) {
   applySceneFor(mode);
   applyPhaseState(currentPhase());
   renderCard();
+}
+
+function launchCheckinR(fromDeck, toDeck) {
+  const qs = (typeof RESP_CHECKINS !== 'undefined') && RESP_CHECKINS[fromDeck];
+  if (!qs || !qs.length || typeof startCheckin !== 'function') { enterDeck(toDeck, 0); return; }
+  const titles = { intro: 'Check-in — Respiration basics', gly: 'Check-in — Glycolysis', krebs: 'Check-in — Krebs cycle' };
+  const next   = { intro: 'Continue to Glycolysis →', gly: 'Continue to Krebs cycle →', krebs: 'Continue to Electron transport chain →' };
+  startCheckin(qs, { slug: `respiration:${fromDeck}`, title: titles[fromDeck], nextLabel: next[fromDeck], onDone: () => enterDeck(toDeck, 0) });
 }
 
 function currentPhase() {

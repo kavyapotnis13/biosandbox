@@ -299,11 +299,12 @@ function cardsFor(mode) {
 function activeCards() { return cardsFor(deckMode); }
 
 function moveCard(delta) {
+  if (typeof isCheckinActive === 'function' && isCheckinActive()) return;
   const cards = activeCards();
   const next  = cardIndex + delta;
   if (next >= cards.length) {
     const i = DECK_E_ORDER.indexOf(deckMode);
-    if (i < DECK_E_ORDER.length - 1) enterDeck(DECK_E_ORDER[i + 1], 0);
+    if (i < DECK_E_ORDER.length - 1) launchCheckinE(deckMode, DECK_E_ORDER[i + 1]);
     return;
   }
   if (next < 0) {
@@ -321,6 +322,14 @@ function moveCard(delta) {
 function enterDeck(mode, index) {
   deckMode = mode; cardIndex = index;
   renderCard();
+}
+
+function launchCheckinE(fromDeck, toDeck) {
+  const qs = (typeof ENZYME_CHECKINS !== 'undefined') && ENZYME_CHECKINS[fromDeck];
+  if (!qs || !qs.length || typeof startCheckin !== 'function') { enterDeck(toDeck, 0); return; }
+  const titles = { intro: 'Check-in — Enzyme basics', active: 'Check-in — Active site', factors: 'Check-in — Temperature & pH' };
+  const next   = { intro: 'Continue to Active site →', active: 'Continue to Factors →', factors: 'Continue to Pathways →' };
+  startCheckin(qs, { slug: `enzymes:${fromDeck}`, title: titles[fromDeck], nextLabel: next[fromDeck], onDone: () => enterDeck(toDeck, 0) });
 }
 
 function renderCard() {

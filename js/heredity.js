@@ -66,14 +66,15 @@ function activeCards() {
 }
 
 function moveCard(delta) {
+  if (typeof isCheckinActive === 'function' && isCheckinActive()) return;
   const cards = activeCards();
   const next  = cardIndex + delta;
 
   if (next >= cards.length) {
     if (deckMode === DECK_INTRO) {
-      enterDeck(DECK_PUNNETT, 0);
+      launchCheckinH(DECK_INTRO, DECK_PUNNETT);
     } else if (deckMode === DECK_PUNNETT) {
-      enterDeck(DECK_BEYOND, 0);
+      launchCheckinH(DECK_PUNNETT, DECK_BEYOND);
     }
     return;
   }
@@ -97,6 +98,14 @@ function enterDeck(mode, index) {
   cardIndex = index;
   applyPhaseHighlight();
   renderCard();
+}
+
+function launchCheckinH(fromDeck, toDeck) {
+  const qs = (typeof HEREDITY_CHECKINS !== 'undefined') && HEREDITY_CHECKINS[fromDeck];
+  if (!qs || !qs.length || typeof startCheckin !== 'function') { enterDeck(toDeck, 0); return; }
+  const titles = { intro: 'Check-in — Heredity basics', punnett: 'Check-in — Punnett squares' };
+  const next   = { intro: 'Continue to the Punnett square →', punnett: 'Continue to Beyond Mendel →' };
+  startCheckin(qs, { slug: `heredity:${fromDeck}`, title: titles[fromDeck], nextLabel: next[fromDeck], onDone: () => enterDeck(toDeck, 0) });
 }
 
 function restartWalkthrough() {

@@ -248,12 +248,13 @@ function cardsForB(mode) {
 function activeCardsB() { return cardsForB(deckModeB); }
 
 function moveCardB(delta) {
+  if (typeof isCheckinActive === 'function' && isCheckinActive()) return;
   const cards = activeCardsB();
   const next  = cardIndexB + delta;
 
   if (next >= cards.length) {
     const i = DECK_ORDER_B.indexOf(deckModeB);
-    if (i < DECK_ORDER_B.length - 1) enterDeckB(DECK_ORDER_B[i + 1], 0);
+    if (i < DECK_ORDER_B.length - 1) launchCheckinBio(deckModeB, DECK_ORDER_B[i + 1]);
     return;
   }
   if (next < 0) {
@@ -273,6 +274,14 @@ function enterDeckB(mode, index) {
   deckModeB  = mode;
   cardIndexB = index;
   renderCardB();
+}
+
+function launchCheckinBio(fromDeck, toDeck) {
+  const qs = (typeof BIODIVERSITY_CHECKINS !== 'undefined') && BIODIVERSITY_CHECKINS[fromDeck];
+  if (!qs || !qs.length || typeof startCheckin !== 'function') { enterDeckB(toDeck, 0); return; }
+  const titles = { intro: 'Check-in — What biodiversity is', tree: 'Check-in — Tree of life', hotspots: 'Check-in — Where diversity lives' };
+  const next   = { intro: 'Continue to Tree of life →', tree: 'Continue to Hotspots →', hotspots: 'Continue to Threats & conservation →' };
+  startCheckin(qs, { slug: `biodiversity:${fromDeck}`, title: titles[fromDeck], nextLabel: next[fromDeck], onDone: () => enterDeckB(toDeck, 0) });
 }
 
 function renderCardB() {

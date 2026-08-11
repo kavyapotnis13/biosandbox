@@ -104,11 +104,12 @@ function cardsFor(mode) {
 }
 function activeCards() { return cardsFor(deckMode); }
 function moveCard(delta) {
+  if (typeof isCheckinActive === 'function' && isCheckinActive()) return;
   const cards = activeCards();
   const next  = cardIndex + delta;
   if (next >= cards.length) {
     const i = DECK_T_ORDER.indexOf(deckMode);
-    if (i < DECK_T_ORDER.length - 1) enterDeck(DECK_T_ORDER[i + 1], 0);
+    if (i < DECK_T_ORDER.length - 1) launchCheckinT(deckMode, DECK_T_ORDER[i + 1]);
     return;
   }
   if (next < 0) {
@@ -123,6 +124,14 @@ function moveCard(delta) {
   renderCard();
 }
 function enterDeck(mode, index) { deckMode = mode; cardIndex = index; renderCard(); }
+
+function launchCheckinT(fromDeck, toDeck) {
+  const qs = (typeof TRANSPORT_CHECKINS !== 'undefined') && TRANSPORT_CHECKINS[fromDeck];
+  if (!qs || !qs.length || typeof startCheckin !== 'function') { enterDeck(toDeck, 0); return; }
+  const titles = { intro: 'Check-in — Membrane basics', passive: 'Check-in — Passive transport', tonicity: 'Check-in — Osmosis & tonicity' };
+  const next   = { intro: 'Continue to Passive transport →', passive: 'Continue to Tonicity →', tonicity: 'Continue to Active transport →' };
+  startCheckin(qs, { slug: `transport:${fromDeck}`, title: titles[fromDeck], nextLabel: next[fromDeck], onDone: () => enterDeck(toDeck, 0) });
+}
 function renderCard() {
   const backBtn = document.getElementById('section-back');
   if (backBtn) backBtn.hidden = (deckMode === DECK_T_INTRO);

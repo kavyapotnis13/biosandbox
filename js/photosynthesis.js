@@ -58,14 +58,15 @@ function activeCards() {
 }
 
 function moveCard(delta) {
+  if (typeof isCheckinActive === 'function' && isCheckinActive()) return;
   const cards = activeCards();
   const next  = cardIndex + delta;
 
   if (next >= cards.length) {
     if (deckMode === DECK_INTRO) {
-      enterDeck(DECK_LIGHT, 0);
+      launchCheckinP(DECK_INTRO, DECK_LIGHT);
     } else if (deckMode === DECK_LIGHT) {
-      enterDeck(DECK_CALVIN, 0);
+      launchCheckinP(DECK_LIGHT, DECK_CALVIN);
     }
     return;
   }
@@ -90,6 +91,14 @@ function enterDeck(mode, index) {
   applySceneFor(mode);
   applyPhaseState(currentPhase());
   renderCard();
+}
+
+function launchCheckinP(fromDeck, toDeck) {
+  const qs = (typeof PHOTO_CHECKINS !== 'undefined') && PHOTO_CHECKINS[fromDeck];
+  if (!qs || !qs.length || typeof startCheckin !== 'function') { enterDeck(toDeck, 0); return; }
+  const titles = { intro: 'Check-in — Photosynthesis basics', light: 'Check-in — Light reactions' };
+  const next   = { intro: 'Continue to Light reactions →', light: 'Continue to Calvin cycle →' };
+  startCheckin(qs, { slug: `photosynthesis:${fromDeck}`, title: titles[fromDeck], nextLabel: next[fromDeck], onDone: () => enterDeck(toDeck, 0) });
 }
 
 function currentPhase() {

@@ -210,6 +210,7 @@ function activeCards() {
 }
 
 function moveCard(delta) {
+  if (typeof isCheckinActive === 'function' && isCheckinActive()) return;
   if (deckMode === DECK_GAME) return;  // game doesn't use deck navigation
 
   const cards = activeCards();
@@ -218,10 +219,7 @@ function moveCard(delta) {
   // Forward past the end of a section -> transition to next section.
   if (next >= cards.length) {
     if (deckMode === DECK_INTRO) {
-      deckMode  = DECK_REPLICATION;
-      cardIndex = 0;
-      applyPhaseState(0);
-      renderCard();
+      launchCheckinD();
     } else if (deckMode === DECK_REPLICATION) {
       enterGame();
     }
@@ -242,6 +240,20 @@ function moveCard(delta) {
   cardIndex = next;
   if (deckMode === DECK_REPLICATION) applyPhaseState(cardIndex);
   renderCard();
+}
+
+function launchCheckinD() {
+  const qs = (typeof DNA_CHECKINS !== 'undefined') && DNA_CHECKINS.intro;
+  if (!qs || !qs.length || typeof startCheckin !== 'function') {
+    deckMode = DECK_REPLICATION; cardIndex = 0; applyPhaseState(0); renderCard();
+    return;
+  }
+  startCheckin(qs, {
+    slug: 'dna:intro',
+    title: 'Check-in — DNA basics',
+    nextLabel: 'Continue to Replication →',
+    onDone: () => { deckMode = DECK_REPLICATION; cardIndex = 0; applyPhaseState(0); renderCard(); }
+  });
 }
 
 /* ---------- CTA + back button ---------- */

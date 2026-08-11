@@ -430,12 +430,15 @@ function cardsFor(mode) {
 function activeCards() { return cardsFor(deckMode); }
 
 function moveCard(delta) {
+  if (typeof isCheckinActive === 'function' && isCheckinActive()) return;
   const cards = activeCards();
   const next  = cardIndex + delta;
 
   if (next >= cards.length) {
     const i = DECK_ORDER_C.indexOf(deckMode);
-    if (i < DECK_ORDER_C.length - 1) enterDeck(DECK_ORDER_C[i + 1], 0);
+    if (i < DECK_ORDER_C.length - 1) {
+      launchCheckinThen(deckMode, DECK_ORDER_C[i + 1]);
+    }
     return;
   }
 
@@ -456,6 +459,35 @@ function enterDeck(mode, index) {
   deckMode  = mode;
   cardIndex = index;
   renderCard();
+}
+
+// Fires a sub-unit check-in for the deck we're leaving, then jumps to the
+// next deck once the visitor clicks Continue. If check-in data is missing,
+// falls back to the direct jump so a broken data file can't strand anyone.
+function launchCheckinThen(fromDeck, toDeck) {
+  const questions = (typeof CHEMISTRY_CHECKINS !== 'undefined') && CHEMISTRY_CHECKINS[fromDeck];
+  if (!questions || !questions.length || typeof startCheckin !== 'function') {
+    enterDeck(toDeck, 0);
+    return;
+  }
+  const titles = {
+    intro:    'Check-in — Elements & bonds',
+    water:    'Check-in — Water',
+    building: 'Check-in — Building macromolecules',
+    macro:    'Check-in — The four macromolecule families'
+  };
+  const nextLabels = {
+    intro:    'Continue to Water →',
+    water:    'Continue to Building macromolecules →',
+    building: 'Continue to The 4 macromolecule families →',
+    macro:    'Continue →'
+  };
+  startCheckin(questions, {
+    slug:      `chemistry:${fromDeck}`,
+    title:     titles[fromDeck] || 'Check-in',
+    nextLabel: nextLabels[fromDeck] || 'Continue →',
+    onDone:    () => enterDeck(toDeck, 0)
+  });
 }
 
 function renderCard() {

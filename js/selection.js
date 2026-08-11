@@ -85,12 +85,13 @@ function cardsFor(mode) {
 function activeCards() { return cardsFor(deckMode); }
 
 function moveCard(delta) {
+  if (typeof isCheckinActive === 'function' && isCheckinActive()) return;
   const cards = activeCards();
   const next  = cardIndex + delta;
 
   if (next >= cards.length) {
     const i = DECK_ORDER.indexOf(deckMode);
-    if (i < DECK_ORDER.length - 1) enterDeck(DECK_ORDER[i + 1], 0);
+    if (i < DECK_ORDER.length - 1) launchCheckinSel(deckMode, DECK_ORDER[i + 1]);
     return;
   }
 
@@ -111,6 +112,14 @@ function enterDeck(mode, index) {
   deckMode  = mode;
   cardIndex = index;
   renderCard();
+}
+
+function launchCheckinSel(fromDeck, toDeck) {
+  const qs = (typeof SELECTION_CHECKINS !== 'undefined') && SELECTION_CHECKINS[fromDeck];
+  if (!qs || !qs.length || typeof startCheckin !== 'function') { enterDeck(toDeck, 0); return; }
+  const titles = { intro: 'Check-in — Evolution basics', mechanisms: 'Check-in — Mechanisms of evolution', hw: 'Check-in — Hardy-Weinberg' };
+  const next   = { intro: 'Continue to Mechanisms →', mechanisms: 'Continue to Hardy-Weinberg →', hw: 'Continue to Speciation →' };
+  startCheckin(qs, { slug: `selection:${fromDeck}`, title: titles[fromDeck], nextLabel: next[fromDeck], onDone: () => enterDeck(toDeck, 0) });
 }
 
 function backToIntro() {

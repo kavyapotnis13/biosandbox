@@ -243,12 +243,13 @@ function cardsFor(mode) {
 function activeCards() { return cardsFor(deckMode); }
 
 function moveCard(delta) {
+  if (typeof isCheckinActive === 'function' && isCheckinActive()) return;
   const cards = activeCards();
   const next  = cardIndex + delta;
 
   if (next >= cards.length) {
     const i = DECK_ORDER_E.indexOf(deckMode);
-    if (i < DECK_ORDER_E.length - 1) enterDeck(DECK_ORDER_E[i + 1], 0);
+    if (i < DECK_ORDER_E.length - 1) launchCheckinEco(deckMode, DECK_ORDER_E[i + 1]);
     return;
   }
 
@@ -269,6 +270,14 @@ function enterDeck(mode, index) {
   deckMode  = mode;
   cardIndex = index;
   renderCard();
+}
+
+function launchCheckinEco(fromDeck, toDeck) {
+  const qs = (typeof ECOLOGY_CHECKINS !== 'undefined') && ECOLOGY_CHECKINS[fromDeck];
+  if (!qs || !qs.length || typeof startCheckin !== 'function') { enterDeck(toDeck, 0); return; }
+  const titles = { intro: 'Check-in — Ecology basics', energy: 'Check-in — Energy flow', populations: 'Check-in — Population ecology' };
+  const next   = { intro: 'Continue to Energy flow →', energy: 'Continue to Populations →', populations: 'Continue to Communities →' };
+  startCheckin(qs, { slug: `ecology:${fromDeck}`, title: titles[fromDeck], nextLabel: next[fromDeck], onDone: () => enterDeck(toDeck, 0) });
 }
 
 function backToIntro() { enterDeck(DECK_INTRO_E, 0); }

@@ -209,11 +209,12 @@ function cardsFor(mode) {
 }
 function activeCards() { return cardsFor(deckMode); }
 function moveCard(delta) {
+  if (typeof isCheckinActive === 'function' && isCheckinActive()) return;
   const cards = activeCards();
   const next  = cardIndex + delta;
   if (next >= cards.length) {
     const i = DECK_R_ORDER.indexOf(deckMode);
-    if (i < DECK_R_ORDER.length - 1) enterDeck(DECK_R_ORDER[i + 1], 0);
+    if (i < DECK_R_ORDER.length - 1) launchCheckinReg(deckMode, DECK_R_ORDER[i + 1]);
     return;
   }
   if (next < 0) {
@@ -228,6 +229,14 @@ function moveCard(delta) {
   renderCard();
 }
 function enterDeck(mode, index) { deckMode = mode; cardIndex = index; renderCard(); }
+
+function launchCheckinReg(fromDeck, toDeck) {
+  const qs = (typeof REG_CHECKINS !== 'undefined') && REG_CHECKINS[fromDeck];
+  if (!qs || !qs.length || typeof startCheckin !== 'function') { enterDeck(toDeck, 0); return; }
+  const titles = { mutation: 'Check-in — Mutations', prokaryote: 'Check-in — Prokaryotic regulation', eukaryote: 'Check-in — Eukaryotic regulation' };
+  const next   = { mutation: 'Continue to Prokaryotic regulation →', prokaryote: 'Continue to Eukaryotic regulation →', eukaryote: 'Continue to Biotech tools →' };
+  startCheckin(qs, { slug: `regulation:${fromDeck}`, title: titles[fromDeck], nextLabel: next[fromDeck], onDone: () => enterDeck(toDeck, 0) });
+}
 function renderCard() {
   const backBtn = document.getElementById('section-back');
   if (backBtn) backBtn.hidden = (deckMode === DECK_R_MUTATION);

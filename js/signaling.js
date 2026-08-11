@@ -110,11 +110,12 @@ function cardsFor(mode) {
 }
 function activeCards() { return cardsFor(deckMode); }
 function moveCard(delta) {
+  if (typeof isCheckinActive === 'function' && isCheckinActive()) return;
   const cards = activeCards();
   const next  = cardIndex + delta;
   if (next >= cards.length) {
     const i = DECK_S_ORDER.indexOf(deckMode);
-    if (i < DECK_S_ORDER.length - 1) enterDeck(DECK_S_ORDER[i + 1], 0);
+    if (i < DECK_S_ORDER.length - 1) launchCheckinS(deckMode, DECK_S_ORDER[i + 1]);
     return;
   }
   if (next < 0) {
@@ -129,6 +130,14 @@ function moveCard(delta) {
   renderCard();
 }
 function enterDeck(mode, index) { deckMode = mode; cardIndex = index; renderCard(); }
+
+function launchCheckinS(fromDeck, toDeck) {
+  const qs = (typeof SIGNAL_CHECKINS !== 'undefined') && SIGNAL_CHECKINS[fromDeck];
+  if (!qs || !qs.length || typeof startCheckin !== 'function') { enterDeck(toDeck, 0); return; }
+  const titles = { intro: 'Check-in — Signaling basics', reception: 'Check-in — Reception', cascade: 'Check-in — Signal cascades' };
+  const next   = { intro: 'Continue to Reception →', reception: 'Continue to Signal cascades →', cascade: 'Continue to Signaling & cancer →' };
+  startCheckin(qs, { slug: `signaling:${fromDeck}`, title: titles[fromDeck], nextLabel: next[fromDeck], onDone: () => enterDeck(toDeck, 0) });
+}
 function renderCard() {
   const backBtn = document.getElementById('section-back');
   if (backBtn) backBtn.hidden = (deckMode === DECK_S_INTRO);

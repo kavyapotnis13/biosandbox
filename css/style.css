@@ -7682,3 +7682,249 @@ body[data-page="tutor"] {
 /* Congressional App Challenge branding toggle.
    To bring the branding back, delete the ONE line below this comment. */
 .app-challenge-branding { display: none; }
+
+/* =========================================================
+   Sub-unit check-in quizzes (js/checkin.js)
+   Rendered inside .flashcard-body between decks in a module.
+   ========================================================= */
+.checkin-q {
+  font-family: var(--font-serif, 'Newsreader', serif);
+  font-size: 1.15rem;
+  font-weight: 500;
+  line-height: 1.35;
+  margin: 0 0 1.2rem;
+  color: var(--color-ink, #1a1a1a);
+}
+.checkin-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.checkin-tf {
+  display: flex;
+  gap: 0.8rem;
+}
+.checkin-tf .checkin-choice { flex: 1; }
+.checkin-choice {
+  text-align: left;
+  padding: 0.75rem 0.95rem;
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--color-ink, #1a1a1a);
+  background: var(--color-card, #fff);
+  border: 1px solid var(--color-border, #ddd);
+  border-radius: 0.4rem;
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease, transform 80ms ease;
+}
+.checkin-choice:hover:not(:disabled) {
+  border-color: #7a1f1f;
+  background: #faf3f3;
+}
+.checkin-choice:active:not(:disabled) { transform: translateY(1px); }
+.checkin-choice:disabled { cursor: default; opacity: 0.85; }
+.checkin-choice.is-correct {
+  background: color-mix(in srgb, var(--color-success, #4a8b6f) 12%, #fff);
+  border-color: var(--color-success, #4a8b6f);
+  color: var(--color-ink, #1a1a1a);
+}
+.checkin-choice.is-wrong {
+  background: color-mix(in srgb, #a53324 8%, #fff);
+  border-color: #a53324;
+  color: #a53324;
+}
+
+/* Match pairs — slot + chip layout */
+.checkin-match-hint {
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.82rem;
+  color: var(--color-muted, #666);
+  margin: -0.75rem 0 0.9rem;
+  line-height: 1.4;
+}
+.checkin-slots {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin-bottom: 1.1rem;
+}
+.checkin-slot-row {
+  display: grid;
+  grid-template-columns: minmax(6rem, 10rem) 1fr;
+  gap: 0.75rem;
+  align-items: stretch;
+}
+.checkin-slot-term {
+  display: flex;
+  align-items: center;
+  padding: 0.55rem 0.7rem;
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-ink, #1a1a1a);
+  background: transparent;
+}
+.checkin-slot {
+  min-height: 2.6rem;
+  padding: 0.5rem 0.75rem;
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.88rem;
+  color: var(--color-ink, #1a1a1a);
+  background: color-mix(in srgb, #7a1f1f 3%, #fff);
+  border: 1.5px dashed color-mix(in srgb, #7a1f1f 30%, #ddd);
+  border-radius: 0.4rem;
+  cursor: pointer;
+  text-align: left;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+.checkin-slot:hover:not(:disabled):not(.is-filled) {
+  background: #faf3f3;
+  border-color: #7a1f1f;
+}
+.checkin-slot.is-filled {
+  border-style: solid;
+  border-color: #7a1f1f;
+  background: #fff;
+}
+.checkin-slot-placeholder {
+  color: var(--color-muted, #666);
+  font-style: italic;
+  font-size: 0.82rem;
+}
+.checkin-slot-chip {
+  color: #7a1f1f;
+  font-weight: 600;
+}
+.checkin-slot.is-correct {
+  border-color: var(--color-success, #4a8b6f);
+  background: color-mix(in srgb, var(--color-success, #4a8b6f) 10%, #fff);
+}
+.checkin-slot.is-correct .checkin-slot-chip { color: var(--color-ink, #1a1a1a); }
+.checkin-slot.is-wrong {
+  border-color: #a53324;
+  background: color-mix(in srgb, #a53324 8%, #fff);
+}
+.checkin-slot.is-wrong .checkin-slot-chip { color: #a53324; }
+
+/* Chip pool */
+.checkin-chip-pool {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  margin-bottom: 0.6rem;
+  border: 1px solid var(--color-border, #ddd);
+  border-radius: 0.4rem;
+  background: color-mix(in srgb, #7a1f1f 2%, #fff);
+}
+.checkin-chip {
+  padding: 0.45rem 0.75rem;
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.85rem;
+  color: var(--color-ink, #1a1a1a);
+  background: #fff;
+  border: 1px solid var(--color-border, #ddd);
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease, transform 80ms ease;
+}
+.checkin-chip:hover:not(:disabled):not(.is-placed) {
+  border-color: #7a1f1f;
+  background: #faf3f3;
+}
+.checkin-chip:active:not(:disabled):not(.is-placed) { transform: translateY(1px); }
+.checkin-chip.is-selected {
+  border-color: #7a1f1f;
+  background: #7a1f1f;
+  color: #fff;
+}
+.checkin-chip.is-placed {
+  opacity: 0.25;
+  cursor: default;
+  pointer-events: none;
+}
+.checkin-chip:disabled { cursor: default; }
+
+@media (max-width: 640px) {
+  .checkin-slot-row { grid-template-columns: minmax(5rem, 8rem) 1fr; }
+}
+
+/* Feedback + advance */
+.checkin-submit,
+.checkin-next {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.65rem 1.1rem;
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fff;
+  background: #7a1f1f;
+  border: none;
+  border-radius: 0.4rem;
+  cursor: pointer;
+}
+.checkin-submit:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.checkin-submit:hover:not(:disabled),
+.checkin-next:hover { background: #601818; }
+
+.checkin-feedback {
+  margin-top: 1rem;
+  padding: 0.8rem 0.95rem;
+  border-radius: 0.4rem;
+  border: 1px solid var(--color-border, #ddd);
+  background: #f7f4ef;
+}
+.checkin-feedback.is-right {
+  border-color: var(--color-success, #4a8b6f);
+  background: color-mix(in srgb, var(--color-success, #4a8b6f) 8%, #fff);
+}
+.checkin-feedback.is-wrong {
+  border-color: #a53324;
+  background: color-mix(in srgb, #a53324 5%, #fff);
+}
+.checkin-feedback-head {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.4rem;
+}
+.checkin-feedback.is-right .checkin-feedback-head { color: var(--color-success, #4a8b6f); }
+.checkin-feedback.is-wrong .checkin-feedback-head { color: #a53324; }
+.checkin-feedback-body {
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  margin: 0;
+  color: var(--color-ink, #1a1a1a);
+}
+
+/* Summary */
+.checkin-summary {
+  text-align: center;
+  padding: 1rem 0;
+}
+.checkin-score {
+  font-family: var(--font-serif, 'Newsreader', serif);
+  font-size: 3.5rem;
+  font-weight: 500;
+  color: #7a1f1f;
+  line-height: 1;
+  margin-bottom: 0.6rem;
+}
+.checkin-summary-note {
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.95rem;
+  color: var(--color-muted, #666);
+  margin: 0 0 1.4rem;
+}
+
+@media (max-width: 640px) {
+  .checkin-slot-row { grid-template-columns: 1fr; gap: 0.35rem; }
+}

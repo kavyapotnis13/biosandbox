@@ -64,6 +64,7 @@ function activeCards() {
 }
 
 function moveCard(delta) {
+  if (typeof isCheckinActive === 'function' && isCheckinActive()) return;
   if (deckMode === DECK_GAME) return;
 
   const cards = activeCards();
@@ -72,9 +73,9 @@ function moveCard(delta) {
   // Forward off the end of a deck → move to the next section.
   if (next >= cards.length) {
     if (deckMode === DECK_INTRO) {
-      enterDeck(DECK_TRANSCRIPTION, 0);
+      launchCheckinPr(DECK_INTRO, DECK_TRANSCRIPTION);
     } else if (deckMode === DECK_TRANSCRIPTION) {
-      enterDeck(DECK_TRANSLATION, 0);
+      launchCheckinPr(DECK_TRANSCRIPTION, DECK_TRANSLATION);
     } else if (deckMode === DECK_TRANSLATION) {
       enterGame();
     }
@@ -102,6 +103,14 @@ function enterDeck(mode, index) {
   applySceneFor(mode);
   applyPhaseState(currentPhase());
   renderCard();
+}
+
+function launchCheckinPr(fromDeck, toDeck) {
+  const qs = (typeof PROTEIN_CHECKINS !== 'undefined') && PROTEIN_CHECKINS[fromDeck];
+  if (!qs || !qs.length || typeof startCheckin !== 'function') { enterDeck(toDeck, 0); return; }
+  const titles = { intro: 'Check-in — Protein synthesis basics', transcription: 'Check-in — Transcription' };
+  const next   = { intro: 'Continue to Transcription →', transcription: 'Continue to Translation →' };
+  startCheckin(qs, { slug: `protein:${fromDeck}`, title: titles[fromDeck], nextLabel: next[fromDeck], onDone: () => enterDeck(toDeck, 0) });
 }
 
 function currentPhase() {

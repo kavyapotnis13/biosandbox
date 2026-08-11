@@ -45,15 +45,13 @@ function activeCards() {
 }
 
 function moveCard(delta) {
+  if (typeof isCheckinActive === 'function' && isCheckinActive()) return;
   const cards = activeCards();
   const next  = cardIndex + delta;
 
   if (next >= cards.length) {
     if (deckMode === DECK_INTRO) {
-      deckMode  = DECK_PHASES;
-      cardIndex = 0;
-      applyPhaseState(0);
-      renderCard();
+      launchCheckinM(DECK_INTRO, DECK_PHASES);
     }
     return;
   }
@@ -71,6 +69,20 @@ function moveCard(delta) {
   cardIndex = next;
   if (deckMode === DECK_PHASES) applyPhaseState(cardIndex);
   renderCard();
+}
+
+function launchCheckinM(fromDeck, toDeck) {
+  const qs = (typeof MITOSIS_CHECKINS !== 'undefined') && MITOSIS_CHECKINS[fromDeck];
+  if (!qs || !qs.length || typeof startCheckin !== 'function') {
+    deckMode = toDeck; cardIndex = 0; applyPhaseState(0); renderCard();
+    return;
+  }
+  startCheckin(qs, {
+    slug: `mitosis:${fromDeck}`,
+    title: 'Check-in — Mitosis basics',
+    nextLabel: 'Continue to the phase walkthrough →',
+    onDone: () => { deckMode = toDeck; cardIndex = 0; applyPhaseState(0); renderCard(); }
+  });
 }
 
 function restartWalkthrough() {
