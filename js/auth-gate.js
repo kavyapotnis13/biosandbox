@@ -19,6 +19,7 @@ function mountLogoutButton(user) {
   const initial = (user.email || '?').charAt(0).toUpperCase();
 
   const wrap = document.createElement('div');
+  wrap.id = 'auth-wrap';
   wrap.style.cssText = "position:fixed;top:1rem;right:1rem;z-index:1000;font-family:'Inter',sans-serif;";
   wrap.innerHTML = `
     <button type="button" id="auth-avatar" aria-label="Account menu"
