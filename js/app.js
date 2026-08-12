@@ -4,6 +4,31 @@
    js/progress.js so it can use MODULES, THEMES, getTrack(), etc.
    ========================================================= */
 
+/* ---------- Usage analytics ----------
+   Two lightweight trackers, both free:
+   - Microsoft Clarity: heatmaps + session replay
+   - Vercel Web Analytics: page views + referrers (only fires on
+     Vercel-hosted deploys; the script 404s harmlessly on localhost)
+
+   Disclosed in the footer / About page. No cookies from Vercel
+   Analytics; Clarity uses cookies for session grouping.
+   ---------------------------------------------------------- */
+
+// Microsoft Clarity
+(function(c,l,a,r,i,t,y){
+  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+  t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "y0ycxol28g");
+
+// Vercel Web Analytics
+(function() {
+  var s = document.createElement('script');
+  s.defer = true;
+  s.src = '/_vercel/insights/script.js';
+  document.head.appendChild(s);
+})();
+
 /* ---------- Audience track toggle (in nav) ---------- */
 
 function initTrackToggle() {
