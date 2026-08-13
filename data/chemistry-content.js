@@ -4,14 +4,17 @@
    Each card has a `body: { middle, high }`. The renderer
    picks the right version based on the user's audience track.
 
-   Four card decks:
+   Five card decks:
      CHEM_INTRO_CARDS       — elements of life (CHNOPS), bonds
      CHEM_WATER_CARDS       — polarity, H-bonds, 4 amazing props
      CHEM_BUILDING_CARDS    — dehydration synthesis vs hydrolysis,
                                 monomers → polymers
-     CHEM_MACRO_CARDS       — the 4 macromolecule families
-                                (carbs, lipids, proteins, nucleic
-                                acids) and what each one does
+     CHEM_FUNCTIONAL_CARDS  — the 7 functional groups + isomers
+                                (structural + cis/trans + enantiomers)
+     CHEM_MACRO_CARDS       — the 4 macromolecule families with
+                                per-family "deep chemistry" cards
+                                covering the specific bond, isomers,
+                                and structure of each
    ========================================================= */
 
 const CHEM_INTRO_CARDS = [
@@ -247,6 +250,118 @@ const CHEM_BUILDING_CARDS = [
   }
 ];
 
+const CHEM_FUNCTIONAL_CARDS = [
+  {
+    title: "Functional groups — the personality atoms",
+    body: {
+      middle: `
+        <p>A carbon skeleton is the <em>frame</em> of a biological molecule. But the frame by itself is pretty boring — it doesn't react with much and it doesn't dissolve in anything.</p>
+        <p>What gives a molecule its personality — whether it dissolves in water, whether it's an acid, what it reacts with — is the little clusters of atoms hanging off the frame. Those clusters are called <strong>functional groups</strong>.</p>
+        <p>Same frame + different functional groups = totally different molecule. It's like the same car body with different engines bolted in.</p>
+      `,
+      high: `
+        <p>A carbon skeleton by itself is chemically pretty inert. What makes a biomolecule <em>do</em> anything — dissolve, react, catalyze, signal — is the small clusters of atoms attached to the skeleton, called <strong>functional groups</strong>.</p>
+        <p>Functional groups behave predictably: wherever you see a <code>—COOH</code>, expect the molecule to act like an acid. Wherever you see <code>—NH₂</code>, expect it to act like a base. That predictability is why memorizing 7 functional groups unlocks most of organic chemistry.</p>
+      `
+    }
+  },
+  {
+    title: "The 7 functional groups to know",
+    body: {
+      middle: `
+        <ul>
+          <li><strong>Hydroxyl (—OH)</strong> — polar. Makes sugars and alcohols dissolve in water.</li>
+          <li><strong>Carbonyl (C=O)</strong> — a carbon double-bonded to oxygen. Found in every sugar.</li>
+          <li><strong>Carboxyl (—COOH)</strong> — acidic. Every amino acid and every fatty acid has one.</li>
+          <li><strong>Amino (—NH₂)</strong> — basic (the opposite of acidic). Every amino acid has one of these too.</li>
+          <li><strong>Sulfhydryl (—SH)</strong> — two of these can form a bridge that holds proteins in shape. It's what makes hair curly.</li>
+          <li><strong>Phosphate (—OPO₃²⁻)</strong> — carries energy in ATP; also part of the DNA backbone.</li>
+          <li><strong>Methyl (—CH₃)</strong> — nonpolar. Cells stick these onto DNA and proteins as chemical "tags" to switch genes on and off.</li>
+        </ul>
+      `,
+      high: `
+        <ul>
+          <li><strong>Hydroxyl —OH</strong> — polar. Makes alcohols, sugars, and any molecule containing it more water-soluble.</li>
+          <li><strong>Carbonyl C=O</strong> — polar. Distinguishes <em>aldehydes</em> (terminal C=O) from <em>ketones</em> (internal C=O); every monosaccharide has one.</li>
+          <li><strong>Carboxyl —COOH</strong> — <em>acidic</em>. Donates H⁺ in water (→ —COO⁻). Defines fatty acids and one end of every amino acid.</li>
+          <li><strong>Amino —NH₂</strong> — <em>basic</em>. Accepts H⁺ (→ —NH₃⁺). Defines the other end of every amino acid.</li>
+          <li><strong>Sulfhydryl —SH</strong> — two —SH groups can form a covalent <em>disulfide bridge</em> (—S—S—). Locks tertiary protein structure; permanent waves work by rearranging them.</li>
+          <li><strong>Phosphate —OPO₃²⁻</strong> — negatively charged. The energy in ATP lives in the bonds between its three phosphates. Also forms the backbone of DNA/RNA.</li>
+          <li><strong>Methyl —CH₃</strong> — nonpolar. A common chemical "tag" — cells methylate DNA and histones to regulate which genes are expressed.</li>
+        </ul>
+      `
+    }
+  },
+  {
+    title: "Structural isomers — same atoms, different molecule",
+    body: {
+      middle: `
+        <p>Two molecules can be built from the <em>exact same atoms</em> and still be completely different molecules — because those atoms are hooked together in different ways. Molecules like that are called <strong>isomers</strong>.</p>
+        <p>Classic example: <strong>glucose</strong>, <strong>fructose</strong>, and <strong>galactose</strong> all have the formula <code>C₆H₁₂O₆</code>. Same atoms, same count. But they're shaped differently, so:</p>
+        <ul>
+          <li>Glucose is what your blood carries around for energy.</li>
+          <li>Fructose is what makes fruit taste sweet.</li>
+          <li>Galactose is part of the sugar in milk.</li>
+        </ul>
+        <p>Same ingredients, different molecules, different jobs. Structure matters more than formula.</p>
+      `,
+      high: `
+        <p><strong>Isomers</strong> are molecules with the same molecular formula but different structures. <strong>Structural (constitutional) isomers</strong> differ in how the atoms are connected.</p>
+        <p>Classic example — three sugars, all <code>C₆H₁₂O₆</code>:</p>
+        <ul>
+          <li><strong>Glucose</strong> — aldose (aldehyde on C1). Blood sugar; the fuel your cells burn.</li>
+          <li><strong>Fructose</strong> — ketose (ketone on C2). Fruit sugar; sweeter on the tongue than glucose.</li>
+          <li><strong>Galactose</strong> — differs from glucose only at C4. Half of lactose (milk sugar).</li>
+        </ul>
+        <p>Same atoms, different connectivity → different taste, different enzymes required to metabolize, different biological roles. This is why chemistry cares about <em>structure</em>, not just formula.</p>
+      `
+    }
+  },
+  {
+    title: "Stereoisomers — same connections, different shape in space",
+    body: {
+      middle: `
+        <p>Some isomers have the same atoms connected in the same order, but they're arranged differently <em>in 3D</em>. Two kinds matter in biology:</p>
+        <p><strong>1. Cis vs trans</strong> — happens around a C=C double bond that can't rotate. The groups on the two carbons can stick out on the <em>same</em> side (<strong>cis</strong>, which puts a kink in the chain) or on <em>opposite</em> sides (<strong>trans</strong>, which keeps the chain straight).</p>
+        <p>This is why natural vegetable oils (cis, kinked) are liquid, but "trans fats" (straightened out by industrial processing) pack into solids and are terrible for your arteries.</p>
+        <p><strong>2. Enantiomers</strong> — mirror images of each other, like your left and right hands. They look identical but you can't stack one perfectly onto the other. Amino acids come in "L" and "D" versions, but nearly all life on Earth uses only <strong>L-amino acids</strong>. Nobody's totally sure why.</p>
+      `,
+      high: `
+        <p><strong>Stereoisomers</strong> have the same connectivity but differ in spatial arrangement. Two types matter for biology:</p>
+        <p><strong>1. Cis-trans (geometric) isomers</strong> — around a double bond that can't freely rotate. In fatty acids, natural unsaturated fats are <em>cis</em> (Hs on the same side → chain kinks → stays liquid). Industrial hydrogenation can produce <em>trans</em> configurations (Hs on opposite sides → chain stays straight → packs solid). Trans fats raise LDL and damage cardiovascular health — the FDA banned artificial trans fats from the U.S. food supply in 2018.</p>
+        <p><strong>2. Enantiomers</strong> — non-superimposable mirror images (like left and right hands). Amino acids come in L and D forms; life on Earth uses almost exclusively <strong>L-amino acids</strong> and <strong>D-sugars</strong>. Enzymes are themselves chiral, so they recognize only one enantiomer — which is why the two versions of the same molecule can smell or taste different (carvone: one enantiomer smells like spearmint, the other like caraway).</p>
+      `
+    }
+  },
+  {
+    title: "Why this matters for the macromolecules",
+    body: {
+      middle: `
+        <p>Here's the payoff. When you learn the 4 macromolecules next, you'll notice that <strong>almost everything they do comes from their functional groups and their shape</strong>.</p>
+        <ul>
+          <li>Why does a sugar dissolve in water? Hydroxyls.</li>
+          <li>Why does a fat float on it? No polar groups on the tail.</li>
+          <li>Why can we digest starch but not cellulose? Same sugar, different bond geometry.</li>
+          <li>Why do trans fats clog arteries but olive oil doesn't? Cis vs trans.</li>
+          <li>Why does hair curl? Disulfide bridges from —SH groups.</li>
+        </ul>
+        <p>Same handful of atoms doing wildly different things — because of how they're arranged.</p>
+      `,
+      high: `
+        <p>This is the point where organic chemistry stops feeling like memorization and starts feeling like a language.</p>
+        <p>Every macromolecule you're about to see is a carbon skeleton decorated with the same short list of functional groups. Once you know what each group does, you can predict:</p>
+        <ul>
+          <li><strong>Solubility</strong> — count the polar groups (—OH, —COOH, —NH₂, phosphate). Lots of them = water-soluble.</li>
+          <li><strong>Charge at physiological pH</strong> — carboxyls give up their H⁺ (→ —COO⁻), aminos grab one (→ —NH₃⁺).</li>
+          <li><strong>Reactivity</strong> — where a new bond will form or an old one will break (dehydration synthesis always removes —OH + —H).</li>
+          <li><strong>Recognition</strong> — enzymes bind specific shapes and specific groups.</li>
+        </ul>
+        <p>Learn the groups and the isomers, and every macromolecule that follows becomes readable.</p>
+      `
+    }
+  }
+];
+
 const CHEM_MACRO_CARDS = [
   {
     title: "Carbohydrates — quick energy",
@@ -273,6 +388,28 @@ const CHEM_MACRO_CARDS = [
     }
   },
   {
+    title: "Carbs — the bond that makes fiber uneatable",
+    body: {
+      middle: `
+        <p>Every time two sugars link up, the —OH from one meets the —H from the other and a <strong>glycosidic bond</strong> forms. Standard dehydration synthesis: one water released per bond.</p>
+        <p>But here's a twist: glucose can link two different ways — with the connection pointing "down" (called <strong>α</strong>) or "up" (called <strong>β</strong>). Same atoms, tiny 3D flip, huge consequence:</p>
+        <ul>
+          <li><strong>α-glucose chains</strong> = <strong>starch</strong> (in bread and potatoes). You have enzymes that break these apart, so you can digest them.</li>
+          <li><strong>β-glucose chains</strong> = <strong>cellulose</strong> (the tough fiber in vegetables and wood). Your body has NO enzyme that can cut a β-bond, so cellulose passes right through you — that's what "fiber" is.</li>
+        </ul>
+        <p>Cows and termites can digest cellulose only because they carry bacteria in their gut that supply the missing enzyme.</p>
+      `,
+      high: `
+        <p>The bond between two monosaccharides is a <strong>glycosidic bond</strong>, formed by dehydration synthesis between two hydroxyls (one water out per bond). But its <em>geometry</em> comes in two flavors:</p>
+        <ul>
+          <li><strong>α-1,4 glycosidic bonds</strong> — the linkage points "down" from C1. Chains of α-glucose form <strong>starch</strong> (plant storage) and <strong>glycogen</strong> (animal storage, more branched via α-1,6). Human amylase hydrolyzes α-1,4 links, so we digest them.</li>
+          <li><strong>β-1,4 glycosidic bonds</strong> — the linkage points "up." Chains of β-glucose form <strong>cellulose</strong>. Humans lack cellulase, so cellulose is <em>dietary fiber</em> — indigestible but essential for gut function. Cows and termites host gut microbes that supply the enzyme.</li>
+        </ul>
+        <p>Also remember: glucose, fructose, and galactose are all <code>C₆H₁₂O₆</code> — <strong>structural isomers</strong>. Same formula, different shape, different biology. Sucrose = glucose + fructose; lactose = glucose + galactose; maltose = glucose + glucose.</p>
+      `
+    }
+  },
+  {
     title: "Lipids — long-term storage + membranes",
     body: {
       middle: `
@@ -293,6 +430,31 @@ const CHEM_MACRO_CARDS = [
           <li><strong>Steroids</strong> — 4 fused rings. Includes cholesterol and all the sex hormones (testosterone, estrogen).</li>
         </ul>
         <p>Fatty acid tails can be <em>saturated</em> (no double bonds, straight, solid at room temp = butter) or <em>unsaturated</em> (one or more double bonds, kinked, liquid = olive oil).</p>
+      `
+    }
+  },
+  {
+    title: "Lipids — ester bonds, kinks, and split personalities",
+    body: {
+      middle: `
+        <p>A triglyceride is built from <strong>glycerol</strong> (a 3-carbon alcohol with 3 —OH groups) plus <strong>3 fatty acids</strong>. Each fatty acid attaches via an <strong>ester bond</strong> — the —OH from glycerol meets the —COOH from the fatty acid, and one water pops out. Three attachments → three waters.</p>
+        <p>The fatty acid tails come in three flavors:</p>
+        <ul>
+          <li><strong>Saturated</strong> — no double bonds, straight tail. Packs tight → solid at room temp. Butter, lard.</li>
+          <li><strong>Unsaturated (cis)</strong> — has C=C double bonds with a natural kink. Can't pack → liquid oils.</li>
+          <li><strong>Trans</strong> — same double bond straightened out by industrial processing. Packs like saturated → solid but sneaky. Bad for arteries.</li>
+        </ul>
+        <p>Then there are <strong>phospholipids</strong>: same idea as a triglyceride but with one fatty acid tail swapped for a phosphate group. The phosphate end loves water; the two tails hate it. That split personality is what lets phospholipids self-assemble into the two-layer sheet that surrounds every cell.</p>
+      `,
+      high: `
+        <p><strong>Triglyceride formation</strong>: glycerol (3 carbons, 3 hydroxyls) + 3 fatty acids (—COOH heads with long hydrocarbon tails). Each glycerol —OH meets a fatty acid —COOH, forming an <strong>ester bond</strong> (—O—CO—) and releasing water. Three ester bonds per triglyceride.</p>
+        <p>Fatty acid tail geometry:</p>
+        <ul>
+          <li><strong>Saturated</strong> — no C=C → straight chain → packs tightly → solid (animal fats).</li>
+          <li><strong>Unsaturated cis</strong> — one or more C=C, H's on the same side → kinked → can't pack → liquid (plant oils).</li>
+          <li><strong>Trans</strong> — artificially isomerized so the H's are on opposite sides → straight configuration → packs like saturated. Raises LDL, banned from the U.S. food supply in 2018.</li>
+        </ul>
+        <p><strong>Phospholipids</strong>: replace one fatty acid tail with a phosphate group. Result: a molecule with a <em>polar hydrophilic head</em> and two <em>nonpolar hydrophobic tails</em> — <strong>amphipathic</strong>. In water, phospholipids spontaneously form a bilayer (heads out, tails in) — the structural basis of every cell membrane.</p>
       `
     }
   },
@@ -327,6 +489,35 @@ const CHEM_MACRO_CARDS = [
     }
   },
   {
+    title: "Proteins — peptide bonds and 4 levels of shape",
+    body: {
+      middle: `
+        <p>Every amino acid has the same basic skeleton: a central carbon with an <strong>amino group (—NH₂)</strong> on one side, a <strong>carboxyl group (—COOH)</strong> on the other, and an <strong>R-group</strong> hanging off that makes it unique. There are 20 different R-groups → 20 amino acids.</p>
+        <p>Two amino acids join when the —COOH of one meets the —NH₂ of the next: a <strong>peptide bond</strong> forms and one water leaves.</p>
+        <p>Proteins have <strong>4 levels of structure</strong>, like nesting dolls:</p>
+        <ul>
+          <li><strong>Primary</strong> — the exact order of amino acids in the chain.</li>
+          <li><strong>Secondary</strong> — the chain twists into a spring (α-helix) or folds into a sheet (β-sheet), held together by hydrogen bonds.</li>
+          <li><strong>Tertiary</strong> — the whole chain folds into a 3D blob, with R-groups tucked wherever they fit best.</li>
+          <li><strong>Quaternary</strong> — some proteins snap together with other protein chains. Hemoglobin is 4 chains locked together.</li>
+        </ul>
+        <p>Heat, acid, or the wrong chemicals can <strong>denature</strong> a protein — unfold it — and once unfolded it usually can't do its job. That's what happens when you cook an egg: the clear part goes white and solid because the proteins have unfolded and tangled.</p>
+      `,
+      high: `
+        <p>An amino acid = central α-carbon + amino group (—NH₂) + carboxyl (—COOH) + a variable <strong>R-group (side chain)</strong>. 20 R-groups → 20 amino acids. Side chains sort into <em>nonpolar</em>, <em>polar</em>, <em>acidic</em>, and <em>basic</em> — that classification predicts how each amino acid will behave in a folded protein.</p>
+        <p>The <strong>peptide bond</strong> is a covalent —CO—NH— link formed when the carboxyl of one amino acid dehydrates with the amino of the next. Peptide bonds have partial double-bond character, so they can't rotate freely — which is what makes protein folding predictable enough to work.</p>
+        <p>Four levels of structure:</p>
+        <ul>
+          <li><strong>Primary (1°)</strong> — the amino acid sequence, dictated by DNA.</li>
+          <li><strong>Secondary (2°)</strong> — local folding into <em>α-helices</em> and <em>β-pleated sheets</em>, stabilized by backbone H-bonds.</li>
+          <li><strong>Tertiary (3°)</strong> — the full 3D fold. Driven by R-group interactions: hydrophobic clustering, H-bonds, ionic bonds, and <strong>disulfide bridges</strong> (—S—S— between two cysteines).</li>
+          <li><strong>Quaternary (4°)</strong> — multiple polypeptide subunits assembled into one functional protein (hemoglobin = 4 subunits).</li>
+        </ul>
+        <p><strong>Denaturation</strong> — heat, extreme pH, or reducing agents disrupt these bonds and unfold the protein. Since function follows form, a denatured protein is a broken protein. Sickle-cell anemia comes from a single primary-structure change (Glu → Val at position 6 of β-hemoglobin) that ruins the quaternary fold.</p>
+      `
+    }
+  },
+  {
     title: "Nucleic acids — the information",
     body: {
       middle: `
@@ -346,6 +537,31 @@ const CHEM_MACRO_CARDS = [
           <li><strong>ATP</strong> — a single nucleotide that's the cell's main energy currency. Cells consume and regenerate body-weight quantities of it every day.</li>
         </ul>
         <p>The fact that DNA's information system is universal across all life — bacterium, plant, jellyfish, human — is some of the strongest evidence for common ancestry.</p>
+      `
+    }
+  },
+  {
+    title: "Nucleic acids — phosphodiester bonds and base pairing",
+    body: {
+      middle: `
+        <p>Every nucleotide has three parts stuck together: a <strong>5-carbon sugar</strong>, a <strong>phosphate group</strong>, and a <strong>nitrogen base</strong> (A, T, G, C, or U).</p>
+        <p>To make a strand, the phosphate on one nucleotide connects to the sugar of the next through a <strong>phosphodiester bond</strong>. The result is a long alternating sugar-phosphate backbone with the bases sticking out to one side.</p>
+        <p>The bases come in two shapes:</p>
+        <ul>
+          <li><strong>Purines</strong> (bigger, two rings): <strong>A</strong> and <strong>G</strong></li>
+          <li><strong>Pyrimidines</strong> (smaller, one ring): <strong>C</strong>, <strong>T</strong>, <strong>U</strong></li>
+        </ul>
+        <p>In double-stranded DNA, the two strands hold together because the bases pair up perfectly: <strong>A always pairs with T</strong> (2 H-bonds), <strong>G always pairs with C</strong> (3 H-bonds). Each strand carries the recipe for the other — that's why DNA can be copied so accurately every time a cell divides.</p>
+      `,
+      high: `
+        <p>A nucleotide = pentose sugar (deoxyribose in DNA, ribose in RNA) + phosphate + nitrogenous base. Strand directionality matters: sugar carbons are numbered <strong>1′ to 5′</strong>, and phosphates link the 3′ carbon of one sugar to the 5′ carbon of the next via a <strong>phosphodiester bond</strong>. Every strand has a distinct <strong>5′ end</strong> (free phosphate) and <strong>3′ end</strong> (free —OH); DNA polymerase can only add new nucleotides to the 3′ end.</p>
+        <p>Base categories:</p>
+        <ul>
+          <li><strong>Purines</strong> (double ring): <strong>A</strong>denine, <strong>G</strong>uanine</li>
+          <li><strong>Pyrimidines</strong> (single ring): <strong>C</strong>ytosine, <strong>T</strong>hymine (DNA only), <strong>U</strong>racil (RNA only)</li>
+        </ul>
+        <p><strong>Chargaff's rules / base pairing</strong>: A pairs with T (or U in RNA) via 2 H-bonds; G pairs with C via 3 H-bonds. G–C pairs are stronger. A purine <em>always</em> pairs with a pyrimidine — that's what keeps the double helix a uniform width.</p>
+        <p>The two strands run <strong>antiparallel</strong> (5′→3′ on one, 3′→5′ on the other), and each is a complementary template for the other — the structural basis of semiconservative replication.</p>
       `
     }
   }

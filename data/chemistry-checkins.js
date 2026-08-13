@@ -113,6 +113,40 @@ const CHEM_CHECKIN_BUILDING = [
   }
 ];
 
+const CHEM_CHECKIN_FUNCTIONAL = [
+  {
+    type: 'mc',
+    q: "Which functional group makes a molecule acidic in water?",
+    choices: ['Hydroxyl (—OH)', 'Carboxyl (—COOH)', 'Amino (—NH₂)', 'Methyl (—CH₃)'],
+    correct: 1,
+    explanation: "Carboxyl groups donate their H⁺ in water (becoming —COO⁻). That's why fatty acids and one end of every amino acid are acidic."
+  },
+  {
+    type: 'tf',
+    q: "Glucose, fructose, and galactose all share the formula C₆H₁₂O₆ but are different molecules.",
+    correct: true,
+    explanation: "They're structural isomers — same atoms, different arrangement. That's why they taste different, need different enzymes, and do different jobs in the body."
+  },
+  {
+    type: 'match',
+    q: "Match each functional group to what it does.",
+    pairs: [
+      { left: 'Hydroxyl (—OH)',       right: 'Adds polarity — dissolves in water' },
+      { left: 'Carboxyl (—COOH)',     right: 'Acidic head of every fatty acid' },
+      { left: 'Amino (—NH₂)',         right: 'Basic; found in every amino acid' },
+      { left: 'Phosphate (—OPO₃²⁻)',  right: 'Carries energy in ATP; part of DNA backbone' }
+    ],
+    explanation: "Functional groups are the switches on a carbon skeleton — memorize the seven and you can predict how almost any biomolecule behaves."
+  },
+  {
+    type: 'mc',
+    q: "Trans fats are unhealthy partly because the geometry of their carbon-carbon double bonds keeps the chain...",
+    choices: ['Kinked, like natural oils', 'Straight, like saturated fats', 'Ring-shaped', 'Positively charged'],
+    correct: 1,
+    explanation: "Natural unsaturated fats are cis — the double bond puts a kink in the chain (liquid oil). Trans fats have straightened chains that pack tightly like saturated fats, raising LDL cholesterol."
+  }
+];
+
 const CHEM_CHECKIN_MACRO = [
   {
     type: 'mc',
@@ -148,8 +182,9 @@ const CHEM_CHECKIN_MACRO = [
 ];
 
 const CHEMISTRY_CHECKINS = {
-  intro:    CHEM_CHECKIN_INTRO,
-  water:    CHEM_CHECKIN_WATER,
-  building: CHEM_CHECKIN_BUILDING,
-  macro:    CHEM_CHECKIN_MACRO
+  intro:      CHEM_CHECKIN_INTRO,
+  water:      CHEM_CHECKIN_WATER,
+  building:   CHEM_CHECKIN_BUILDING,
+  functional: CHEM_CHECKIN_FUNCTIONAL,
+  macro:      CHEM_CHECKIN_MACRO
 };

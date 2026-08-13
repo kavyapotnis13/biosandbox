@@ -19,11 +19,12 @@
    Depends on: data/chemistry-content.js
    ========================================================= */
 
-const DECK_INTRO_C   = 'intro';
-const DECK_WATER     = 'water';
-const DECK_BUILDING  = 'building';
-const DECK_MACRO     = 'macro';
-const DECK_ORDER_C   = [DECK_INTRO_C, DECK_WATER, DECK_BUILDING, DECK_MACRO];
+const DECK_INTRO_C    = 'intro';
+const DECK_WATER      = 'water';
+const DECK_BUILDING   = 'building';
+const DECK_FUNCTIONAL = 'functional';
+const DECK_MACRO      = 'macro';
+const DECK_ORDER_C    = [DECK_INTRO_C, DECK_WATER, DECK_BUILDING, DECK_FUNCTIONAL, DECK_MACRO];
 
 const LIPID_SLOTS = 3;
 
@@ -419,11 +420,12 @@ function pickBody(body) {
 
 function cardsFor(mode) {
   switch (mode) {
-    case DECK_INTRO_C:  return CHEM_INTRO_CARDS;
-    case DECK_WATER:    return CHEM_WATER_CARDS;
-    case DECK_BUILDING: return CHEM_BUILDING_CARDS;
-    case DECK_MACRO:    return CHEM_MACRO_CARDS;
-    default:            return [];
+    case DECK_INTRO_C:    return CHEM_INTRO_CARDS;
+    case DECK_WATER:      return CHEM_WATER_CARDS;
+    case DECK_BUILDING:   return CHEM_BUILDING_CARDS;
+    case DECK_FUNCTIONAL: return CHEM_FUNCTIONAL_CARDS;
+    case DECK_MACRO:      return CHEM_MACRO_CARDS;
+    default:              return [];
   }
 }
 
@@ -471,16 +473,18 @@ function launchCheckinThen(fromDeck, toDeck) {
     return;
   }
   const titles = {
-    intro:    'Check-in — Elements & bonds',
-    water:    'Check-in — Water',
-    building: 'Check-in — Building macromolecules',
-    macro:    'Check-in — The four macromolecule families'
+    intro:      'Check-in — Elements & bonds',
+    water:      'Check-in — Water',
+    building:   'Check-in — Building macromolecules',
+    functional: 'Check-in — Functional groups & isomers',
+    macro:      'Check-in — The four macromolecule families'
   };
   const nextLabels = {
-    intro:    'Continue to Water →',
-    water:    'Continue to Building macromolecules →',
-    building: 'Continue to The 4 macromolecule families →',
-    macro:    'Continue →'
+    intro:      'Continue to Water →',
+    water:      'Continue to Building macromolecules →',
+    building:   'Continue to Functional groups & isomers →',
+    functional: 'Continue to The 4 macromolecule families →',
+    macro:      'Continue →'
   };
   startCheckin(questions, {
     slug:      `chemistry:${fromDeck}`,
@@ -512,9 +516,10 @@ function renderCard() {
     const atLast = (cardIndex === cards.length - 1);
     nextBtn.disabled = (deckMode === DECK_MACRO && atLast);
     const nextDeckLabel = {
-      [DECK_INTRO_C]:  'Water & life →',
-      [DECK_WATER]:    'Building polymers →',
-      [DECK_BUILDING]: 'The 4 macromolecules →'
+      [DECK_INTRO_C]:    'Water & life →',
+      [DECK_WATER]:      'Building polymers →',
+      [DECK_BUILDING]:   'Functional groups →',
+      [DECK_FUNCTIONAL]: 'The 4 macromolecules →'
     }[deckMode];
     if (atLast && nextDeckLabel) {
       nextBtn.textContent = nextDeckLabel;
@@ -527,10 +532,11 @@ function renderCard() {
 
   if (label) {
     label.textContent = ({
-      [DECK_INTRO_C]:  'Atoms & bonds',
-      [DECK_WATER]:    'Water & life',
-      [DECK_BUILDING]: 'Building polymers',
-      [DECK_MACRO]:    'The 4 macromolecules'
+      [DECK_INTRO_C]:    'Atoms & bonds',
+      [DECK_WATER]:      'Water & life',
+      [DECK_BUILDING]:   'Building polymers',
+      [DECK_FUNCTIONAL]: 'Functional groups & isomers',
+      [DECK_MACRO]:      'The 4 macromolecules'
     })[deckMode];
   }
 
