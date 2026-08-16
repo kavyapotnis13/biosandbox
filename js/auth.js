@@ -20,6 +20,16 @@ async function signIn(email, password) {
   return await sb.auth.signInWithPassword({ email, password });
 }
 
+// Kick off Google OAuth. Supabase redirects the browser to Google, then back
+// to `redirectTo` with the session in the URL hash — the SDK picks it up
+// automatically when the target page loads.
+async function signInWithGoogle() {
+  return await sb.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: window.location.origin + '/index.html' }
+  });
+}
+
 async function signOut() {
   await sb.auth.signOut();
   window.location.href = 'login.html';
